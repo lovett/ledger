@@ -1,18 +1,9 @@
 # Ledger
 
-To start your Phoenix server:
+A web application for balance tracking and financial history.
 
-  * Run `mix setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+# Dev Setup
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+The dev server runs on [`localhost:4002`](http://localhost:4002).
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+Run it via `mix phx.server` or `iex -S mix.phx.server`
