@@ -17,7 +17,15 @@ defmodule LedgerWeb do
   those modules here.
   """
 
-  def static_paths, do: ~w(assets fonts images ledger.svg robots.txt)
+  def static_paths, do: ~w(app.component.css.map
+  ledger.svg
+  main.js
+  main.js.map
+  polyfills.js
+  polyfills.js.map
+  robots.txt
+  styles.css
+  styles.css.map)
 
   def router do
     quote do

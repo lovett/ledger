@@ -21,7 +21,7 @@ defmodule LedgerWeb.Endpoint do
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: :ledger,
+    from: {:ledger, "priv/angular/browser"},
     gzip: false,
     only: LedgerWeb.static_paths()
 

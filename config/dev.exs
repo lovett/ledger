@@ -52,7 +52,7 @@ config :ledger, LedgerWeb.Endpoint,
 config :ledger, LedgerWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r"priv/static/(?!uploads/).*(js|css|png|jpeg|jpg|gif|svg)$",
+      ~r"priv/angular/browser/.*(js|css|svg)$",
       ~r"priv/gettext/.*(po)$",
       ~r"lib/ledger_web/(controllers|live|components)/.*(ex|heex)$"
     ]
