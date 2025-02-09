@@ -22,7 +22,7 @@ config :ledger, LedgerWeb.Endpoint,
   debug_errors: true,
   secret_key_base: "Jmvka0Jw94kg8ZkjyK4T8iVl2vARvSGTe/OwyKG0eUc2wSoL+Rx8E/7mlcpVfZPM",
   watchers: [
-    esbuild: {Esbuild, :install_and_run, [:ledger, ~w(--sourcemap=inline --watch)]}
+    node: ["angular/node_modules/@angular/cli/bin/ng.js", "build", "--watch", "--configuration", "development"]
   ]
 
 # ## SSL Support
