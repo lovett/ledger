@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "node -e \"console.error('Run mix phx.server from the repository root instead.')\"",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "watch": "node -e \"console.error('Run mix phx.server from the repository root instead.')\"",
     "test": "ng test"
   },
   "private": true,
