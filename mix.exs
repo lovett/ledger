@@ -60,14 +60,24 @@ defmodule Ledger.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ecto.setup", "angular.install"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": [],
-      "assets.build": [],
+      "angular.build": [
+        "angular.ng build --configuration production"
+      ],
+      "angular.test": [
+        "angualr.ng test"
+      ],
+      "angular.e2e": [
+        "angular.ng e2e"
+      ],
+      "angular.clean": [
+        "phx.digest.clean --all -o priv/angular/browser"
+      ],
       "assets.deploy": [
-        "phx.digest"
+        "phx.digest priv/angular/browser"
       ]
     ]
   end
