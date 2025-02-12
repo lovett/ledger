@@ -65,7 +65,8 @@ defmodule Ledger.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "angular.build": [
-        "angular.ng build --configuration production"
+        "angular.ng build --configuration production",
+        "assets.deploy"
       ],
       "angular.test": [
         "angualr.ng test"
