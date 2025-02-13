@@ -19,17 +19,20 @@ defmodule Mix.Tasks.Tmux.Workspace do
     # 0: Server
     IO.puts("tmux new-session -d -s '#{@session_name}' -n 'server' 'mix phx.server'")
 
-    # 1: Editor
+    # 1: Ng
+    IO.puts("tmux new-window -a -t '#{@session_name}' -c 'angular' -n 'ng' 'npm run watch'")
+
+    # 2: Editor
     IO.puts("tmux new-window -a -t '#{@session_name}' '#{shell}'")
     IO.puts("tmux send-keys -t '#{@session_name}' '#{editor} .' C-m")
 
-    # 2: Shell
+    # 3: Shell
     IO.puts("tmux new-window -a -t '#{@session_name}' '#{shell}'")
 
-    # 3: iex
+    # 4: iex
     IO.puts("tmux new-window -a -t '#{@session_name}' -n 'iex' 'iex -S mix'")
 
-    # 4: Database
+    # 5: Database
     IO.puts("tmux new-window -a -t '#{@session_name}' -n 'database' 'sqlite3 ledger_dev.db'")
 
     IO.puts("tmux select-window -t '#{@session_name}:server'")

@@ -4,8 +4,8 @@
   "scripts": {
     "ng": "ng",
     "start": "node -e \"console.error('Run mix phx.server from the repository root instead.')\"",
-    "build": "ng build",
-    "watch": "node -e \"console.error('Run mix phx.server from the repository root instead.')\"",
+    "build": "node -e \"console.error('Run mix build from the repository root instead.')\"",
+    "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
   "private": true,
