@@ -25,24 +25,25 @@ defmodule Ledger.Repo.Migrations.InitialSchema do
   def change do
     create table(:accounts) do
       add :name, :string
-      add :opened_on, :date
-      add :closed_on,  :date
-      add :url, :string
-      add :note, :string
-      add :logo, :binary
-      add :logo_mime, :string
+      add :opened_on, :date, null: true
+      add :closed_on,  :date, null: true
+      add :url, :string, null: true
+      add :note, :string, null: true
+      add :logo, :binary, null: true
+      add :logo_mime, :string, null: true
+      timestamps(type: :utc_datetime)
     end
 
     create table(:transactions) do
       add :account_id, references(:accounts, on_delete: :delete_all), null: false
-      add :destination_id, references(:acounts, on_delete: :delete_all), null: false, default: 0
+      add :destination_id, references(:accounts, on_delete: :delete_all), default: nil
       add :occurred_on, :date
-      add :cleared_on, :date
+      add :cleared_on, :date, null: true
       add :amount, :integer
       add :payee, :string
-      add :note, :text
-      add :receipt, :binary
-      add :receipt_mime, :string
+      add :note, :text, null: true
+      add :receipt, :binary, null: true
+      add :receipt_mime, :string, null: true
     end
 
     create table(:tags) do
