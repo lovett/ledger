@@ -20,10 +20,10 @@ defmodule LedgerWeb.Router do
     get "/", PageController, :home
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", LedgerWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", LedgerWeb do
+    pipe_through :api
+    resources "/accounts", AccountController, except: [:new, :edit]
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:ledger, :dev_routes) do
