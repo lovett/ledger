@@ -18,6 +18,7 @@ defmodule LedgerWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    get "/accounts", PageController, :home
   end
 
   scope "/api", LedgerWeb do
