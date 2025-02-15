@@ -1,1 +1,64 @@
-<p>account-list works!</p>
+<header>
+    <!-- MIGRATION_PENDING ledger-add-button [routerLink]="['/accounts', 0, 'form']" [resourceName]="singularResourceName"></ledger-add-button>-->
+</header>
+
+<section class="accounts">
+    <h1>Accounts</h1>
+    <div class="cards">
+        @for (account of (accounts$ | async); track account.id) {
+        <div class="card" [class.inactive]="account.closed_on">
+            <div class="title">
+                {{account.name}}
+
+                <a [routerLink]="['/accounts', account.id, 'form']">
+                    <svg class="icon"><use xlink:href="#edit"></use></svg>
+                </a>
+            </div>
+
+            @if (account.logo_mime) {
+            <img src="/api/accounts/{{ account.id}}/logo" alt="{{ account.name }} Logo" title="" />
+            }
+
+            <ul>
+                @if (account.closed_on) {
+                <li>Closed {{ account.closed_on|date:'longDate' }}</li>
+                } @else {
+                <li class="balance">{{ account.balance! | currency }}</li>
+                }
+
+                @if (account.total_pending! > 0) {
+                <li class="deposit">{{ account.total_pending! | currency }} pending</li>
+                }
+
+                @if (account.total_pending! < 0) {
+                <li class="withdrawl">{{ account.total_pending! | currency }} pending</li>
+                }
+
+                <li>
+                    @if (account.url) {
+                    <a href="{{ account.url }}" target="_blank" rel="noopener noreferer">Log In</a>
+                    }
+                </li>
+            </ul>
+
+            <footer>
+                <p>
+                    <a [routerLink]="['/transactions']" [queryParams]="{q: 'account:' + account.id}">
+                        Transactions
+                    </a>
+                </p>
+
+                @if (account.opened_on) {
+                <p>Opened {{ account.opened_on|date: 'longDate' }}</p>
+                }
+
+                @if (account.note) {
+                <p>{{ account.note }}</p>
+                }
+            </footer>
+        </div>
+        } @empty {
+        <p>There are no accounts.</p>
+        }
+    </div>
+</section>
