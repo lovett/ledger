@@ -22,7 +22,13 @@ defmodule LedgerWeb do
   by Angular except for index.html. The commentary in
   angular/src/index.html explains why.
   """
-  def static_paths, do: ~w(browser)
+  def static_paths, do: ~w(
+    account
+    ledger.svg
+    main.js
+    polyfills.js
+    styles.css
+  )
 
   def router do
     quote do

@@ -15,15 +15,15 @@ defmodule LedgerWeb.Endpoint do
     websocket: [connect_info: [session: @session_options]],
     longpoll: [connect_info: [session: @session_options]]
 
-  # Serve at "/" the static files from "priv/static" directory.
+  # Serve at "/" the static files from "priv/static/browser" directory.
   #
   # You should set gzip to true if you are running phx.digest
   # when deploying your static files in production.
   plug Plug.Static,
     at: "/",
-    from: {:ledger, "priv/angular"},
+    from: {:ledger, "priv/angular/browser"},
     gzip: false,
-    only: LedgerWeb.static_paths()
+    only_matching: LedgerWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.

@@ -6,12 +6,12 @@
     <meta name="csrf-token" content={get_csrf_token()} />
     <base href="/">
     <.live_title default="Ledger">{assigns[:page_title]}</.live_title>
-    <link href={~p"/browser/ledger.svg"} rel="shortcut icon" />
-    <link phx-track-static rel="stylesheet" href={~p"/browser/styles.css"} />
+    <link href={~p"/ledger.svg"} rel="shortcut icon" />
+    <link phx-track-static rel="stylesheet" href={~p"/styles.css"} />
   </head>
   <body>
     {@inner_content}
-    <script phx-track-static type="module" src={~p"/browser/polyfills.js"}></script>
-    <script phx-track-static type="module" src={~p"/browser/main.js"}></script>
+    <script phx-track-static type="module" src={~p"/polyfills.js"}></script>
+    <script phx-track-static type="module" src={~p"/main.js"}></script>
   </body>
 </html>
