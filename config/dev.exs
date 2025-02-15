@@ -52,7 +52,7 @@ config :ledger, LedgerWeb.Endpoint,
     patterns: [
       ~r"priv/angular/browser/.*(js|css|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/ledger_web/(controllers|live|components)/.*(ex|heex)$"
+      ~r"lib/ledger_web/(controllers|live|components)/[^.#].*(ex|heex)$"
     ]
   ]
 
