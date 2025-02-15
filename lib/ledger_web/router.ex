@@ -23,7 +23,9 @@ defmodule LedgerWeb.Router do
 
   scope "/api", LedgerWeb do
     pipe_through :api
-    resources "/accounts", AccountController, except: [:new, :edit]
+    resources "/accounts", AccountController, except: [:new, :edit] do
+      resources "/logo", LogoController, only: [:show], singleton: true
+    end
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
