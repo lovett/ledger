@@ -2,6 +2,10 @@ BODY {
     font-family: system-ui, sans-serif;
 }
 
+MAIN {
+    padding-top: 2em;
+}
+
 #shell {
     display: grid;
     grid-template-columns: 15em 1fr;

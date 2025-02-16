@@ -4,22 +4,23 @@ import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Account } from '../account';
 import { AccountService } from '../account.service';
+import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-account-list',
-  imports: [CurrencyPipe, DatePipe, RouterLink, AsyncPipe],
+  imports: [CurrencyPipe, DatePipe, RouterLink, AsyncPipe, ButtonComponent],
   templateUrl: './account-list.component.html',
   styleUrl: './account-list.component.css'
 })
 export class AccountListComponent {
-  singularResourceName: string;
+  addAction: string;
   accounts$: Observable<Account[]>;
 
   constructor(
     private accountService: AccountService
 
   ) {
-    this.singularResourceName = 'account';
+    this.addAction = 'Add account';
     this.accounts$ = this.accountService.getAccounts();
   }
 }
