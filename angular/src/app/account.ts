@@ -1,111 +1,104 @@
 import {AccountRecord} from './app.types';
 
 export class Account {
-    id: number = 0;
-    name: string = '';
-    opened_on: Date = new Date();
-    closed_on?: Date;
-    url?: string;
-    note?: string;
-    balance: number = 0;
-    total_pending: number = 0;
-    last_active?: Date;
-    logo_mime?: string;
-    logo?: File;
+  id: number = 0;
+  name: string = '';
+  opened_on?: Date;
+  closed_on?: Date;
+  url?: string;
+  note?: string;
+  balance: number = 0;
+  total_pending: number = 0;
+  last_active?: Date;
+  logo_mime?: string;
+  logo_upload?: File;
+  existing_logo_action: string = 'keep';
 
-    constructor() {
+  constructor() {
+  }
+
+  static fromRecord(record: AccountRecord): Account {
+    const a = new Account();
+    a.id = record.id;
+    a.name = record.name;
+    a.balance = record.balance;
+    a.total_pending = record.total_pending;
+
+    if (record.opened_on) {
+      a.opened_on = new Date(`${record.opened_on}T00:00:00.0000`);
     }
 
-    static fromRecord(record: AccountRecord): Account {
-      const a = new Account();
-      a.id = record.id;
-      a.name = record.name;
-      a.balance = record.balance;
-      a.total_pending = record.total_pending;
-
-      if (record.opened_on) {
-        a.opened_on = new Date(`${record.opened_on}T00:00:00.0000`);
-      }
-
-      if (record.closed_on) {
-        a.closed_on = new Date(`${record.closed_on}T00:00:00.0000`);
-      }
-
-      if (record.last_active) {
-        a.last_active = new Date(`${record.last_active}T00:00:00.0000`);
-      }
-
-      if (record.url) {
-        a.url = record.url;
-      }
-
-      if (record.note) {
-        a.note = record.note;
-      }
-
-      if (record.logo_mime) {
-        a.logo_mime = record.logo_mime;
-      }
-
-      return a;
+    if (record.closed_on) {
+      a.closed_on = new Date(`${record.closed_on}T00:00:00.0000`);
     }
 
-    // MIGRATION_PENDING
-    // static clone(account: Account): Account {
-    //     const a = new Account();
-    //     a.id = account.id;
-    //     a.name = account.name;
-    //     a.opened_on = account.opened_on;
-    //     a.closed_on = account.closed_on;
-    //     a.url = account.url;
-    //     a.note = account.note;
-    //     a.balance = account.balance;
-    //     a.total_pending = account.total_pending;
-    //     a.last_active = account.last_active;
-    //     a.logo = account.logo;
-    //     return a;
-    // }
-
-    asFormData(): FormData {
-        const formData = new FormData();
-        formData.set('name', this.name);
-        formData.set('opened_on', this.opened_on.toString());
-
-        if (this.closed_on) {
-            formData.set('closed_on', this.closed_on.toString());
-        }
-
-        if (this.url) {
-            formData.set('url', this.url);
-        }
-
-        if (this.note) {
-            formData.set('note', this.note);
-        }
-
-        if (this.logo) {
-            formData.set('logo', this.logo);
-        }
-
-        return formData;
-
+    if (record.last_active) {
+      a.last_active = new Date(`${record.last_active}T00:00:00.0000`);
     }
 
+    if (record.url) {
+      a.url = record.url;
+    }
 
-    // MIGRATION_PENDING
-    // openedOnYMD(): string {
-    //     return this.dateValue(this.opened_on);
-    // }
+    if (record.note) {
+      a.note = record.note;
+    }
 
-    // closedOnYMD(): string {
-    //     return this.dateValue(this.closed_on);
-    // }
+    if (record.logo_mime) {
+      a.logo_mime = record.logo_mime;
+    }
 
-    // dateValue(d?: Date): string {
-    //     if (d) {
-    //         return d.toISOString().split('T')[0];
-    //     }
+    return a;
+  }
 
-    //     return '';
-    // }
+  ymd(d?: Date) {
+    if (!d) return '';
+    return d.toISOString().substring(0, 10);
+  }
+
+  get formValues(): object {
+    return {
+      id: this.id.toString(),
+      name: this.name,
+      url: this.url,
+      opened_on: this.ymd(this.opened_on),
+      closed_on: this.ymd(this.closed_on),
+      note: this.note,
+      logo_url: this.logo_mime ? this.logoUrl : '',
+    }
+  }
+
+  get logoUrl(): string {
+    if (!this.logo_mime) return '';
+    return `/api/accounts/${this.id}/logo`;
+  }
+
+  get formData(): FormData {
+    const formData = new FormData();
+    formData.set('id', this.id.toString() || "0");
+
+    formData.set('account[name]', this.name);
+    if (this.opened_on) {
+      formData.set('account[opened_on]', this.ymd(this.opened_on));
+    }
+
+    if (this.closed_on) {
+      formData.set('account[closed_on]', this.ymd(this.closed_on));
+    }
+
+    if (this.url) {
+      formData.set('account[url]', this.url);
+    }
+
+    if (this.note) {
+      formData.set('account[note]', this.note);
+    }
+
+    if (this.logo_upload) {
+      formData.set('account[logo_upload]', this.logo_upload);
+    }
+
+    formData.set('account[existing_logo_action]', this.existing_logo_action);
+    return formData;
+  }
 }

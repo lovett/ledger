@@ -1,4 +1,4 @@
-<button>
+<button [disabled]="disabled()" (click)="onClick($event)">
     @if (icon()) {
     <svg class="icon"><use [attr.xlink:href]="'#' + icon()"></use></svg>
     }

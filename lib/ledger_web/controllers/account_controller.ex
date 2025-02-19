@@ -26,10 +26,17 @@ defmodule LedgerWeb.AccountController do
   end
 
   def update(conn, %{"id" => id, "account" => account_params}) do
+    IO.inspect(account_params, label: "account_params")
     account = Accounts.get_account!(id)
 
-    with {:ok, %Account{} = account} <- Accounts.update_account(account, account_params) do
-      render(conn, :show, account: account)
+    updates = account_params
+    |> Map.put_new("opened_on", nil)
+    |> Map.put_new("closed_on", nil)
+    |> discard_existing_logo()
+    |> merge_logo_fields()
+
+    with {:ok, %Account{} = _} <- Accounts.update_account(account, updates) do
+      send_resp(conn, :no_content, "")
     end
   end
 
@@ -40,4 +47,26 @@ defmodule LedgerWeb.AccountController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def merge_logo_fields(%{"logo_upload" => %Plug.Upload{} = logo_upload} = account_params) do
+    case File.read(logo_upload.path) do
+      {:ok, contents} ->
+        account_params
+        |> Map.put("logo_mime", logo_upload.content_type)
+        |> Map.put("logo", contents)
+      {:error, reason} ->
+        IO.inspect(reason, label: "receive_logo error reason")
+        account_params
+    end
+  end
+
+  def merge_logo_fields(account_params), do: account_params
+
+  def discard_existing_logo(%{"existing_logo_action" => "discard"} = account_params) do
+    account_params
+    |> Map.put("logo_mime", nil)
+    |> Map.put("logo", nil)
+  end
+
+  def discard_existing_logo(account_params), do: account_params
 end

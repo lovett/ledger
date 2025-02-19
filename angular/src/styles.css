@@ -1,5 +1,5 @@
 BODY {
-    font-family: system-ui, sans-serif;
+    font: 18px system-ui, sans-serif;
 }
 
 MAIN {
@@ -44,4 +44,72 @@ MAIN {
 
 .active {
     font-weight: bold;
+}
+
+FIELDSET {
+    padding: 0;
+    border: 0;
+    margin: 0;
+}
+
+LABEL {
+    display: block;
+    margin: .5em 0;
+}
+
+.invalid label {
+    font-weight: bold;
+}
+
+.validation-message {
+    padding-left: 1em;
+    color: #C42333;
+}
+
+.validation-message.arrow-down:before {
+    content: '🡇';
+    padding-right: .5em;
+}
+
+.validation-message.arrow-up:before {
+    content: '🡅';
+    padding-right: .5em;
+}
+
+input, textarea {
+    font-size: inherit;
+    border: 1px solid currentColor;
+    box-sizing: border-box;
+    padding: 0.5em;
+    width: 100%;
+}
+
+input[type=file] {
+    border: 0;
+    padding-left: 0;
+}
+
+textarea {
+    height: 10em;
+}
+
+.shortcuts {
+    display: flex;
+    gap: 1em;
+    font-size: .85em;
+    padding-top: .5em;
+}
+
+
+input.ng-invalid:not(.ng-pristine) {
+    border: 1px solid #C42333;
+    outline-color: #C42333;
+}
+
+.ng-pristine .validation-message {
+    display: none;
+}
+
+.ng-pristine .invalid label {
+    font-weight: normal;
 }

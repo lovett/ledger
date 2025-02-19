@@ -1,0 +1,24 @@
+HEADER {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 3em;
+}
+
+FOOTER {
+    display: flex;
+    align-items: center;
+}
+
+FOOTER > * {
+    margin-right: 1em;
+}
+
+FORM {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3em;
+}
+
+#currentLogo {
+    max-height: 5em;
+}

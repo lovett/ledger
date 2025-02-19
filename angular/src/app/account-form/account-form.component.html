@@ -1,0 +1,85 @@
+<header>
+    <a [routerLink]="returnRoute">Cancel</a>
+
+    @if (canDelete()) {
+    <app-button label="Delete account" icon="minus" confirmationMessage="Delete this account?" (confirmed)="delete()"></app-button>
+    }
+</header>
+
+
+<form (ngSubmit)="save()" [formGroup]="accountForm" autocomplete="off">
+    <input type="hidden" formControlName="id" />
+    <fieldset [class.invalid]="name?.invalid">
+        <label for="accountName">
+            Name
+            @if (name?.hasError('required')) {
+            <span class="validation-message arrow-down">This field is required.</span>
+            }
+
+            @if (name?.hasError('unique')) {
+            <span class="validation-message arrow-down">An account with this name already exists.</span>
+            }
+        </label>
+        <input id="accountName" type="text" formControlName="name" />
+    </fieldset>
+
+    <fieldset [class.invalid]="url?.invalid">
+        <label for="accountUrl">URL</label>
+        <input id="accountUrl" type="url" formControlName="url" />
+    </fieldset>
+
+    <fieldset [class.invalid]="openedOn?.invalid">
+        <label for="accountOpened">
+            Opened On
+
+            @if (accountForm.hasError('accountDates')) {
+            <span class="validation-message arrow-down">Open date must be before close date.</span>
+            }
+
+        </label>
+        <input id="accountOpened" type="date" formControlName="opened_on" max="today" />
+        <div class="shortcuts">
+            <a href="#" (click)="clear($event, 'opened_on')">Clear</a>
+        </div>
+    </fieldset>
+
+    <fieldset [class.invalid]="closedOn?.invalid">
+        <label for="accountClosed">
+            Closed On
+
+            @if (accountForm.hasError('accountDates')) {
+            <span class="validation-message arrow-down">Close date must be after open date.</span>
+            }
+
+        </label>
+        <input id="accountClosed" type="date" formControlName="closed_on" max="today" />
+        <div class="shortcuts">
+            <a href="#" (click)="clear($event, 'closed_on')">Clear</a>
+        </div>
+    </fieldset>
+
+    <fieldset [class.invalid]="note?.invalid">
+        <label for="accountNote">Notes</label>
+        <textarea id="accountNote" type="text" formControlName="note" ></textarea>
+    </fieldset>
+
+    <fieldset>
+        <label for="accountLogo">Logo</label>
+
+        @if (canShowLogo()) {
+        <img id="currentLogo" src="{{ logo_url!.value }}" alt="Logo" title="" />
+        }
+
+        <input id="accountLogo" type="file" (change)="onFileChange($event)" />
+
+        <div class="shortcuts">
+            @if (canShowLogo()) {
+            <a href="#" (click)="discardLogo($event)">Discard</a>
+            }
+        </div>
+    </fieldset>
+
+    <footer>
+        <app-button [disabled]="accountForm.invalid || accountForm.pristine" [label]="'Save'"></app-button>
+    </footer>
+</form>

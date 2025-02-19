@@ -1,5 +1,5 @@
 <header>
-    <app-button [routerLink]="['/accounts', 0, 'form']" [label]="addAction" [icon]="'add'"></app-button>
+    <app-button [routerLink]="'/accounts/new'" [label]="addAction" [icon]="'add'"></app-button>
 </header>
 
 <section class="accounts">
@@ -10,13 +10,13 @@
             <div class="title">
                 {{account.name}}
 
-                <a [routerLink]="['/accounts', account.id, 'form']">
+                <a [routerLink]="['/accounts', account.id, 'edit']">
                     <svg class="icon"><use xlink:href="#edit"></use></svg>
                 </a>
             </div>
 
-            @if (account.logo_mime) {
-            <img src="/api/accounts/{{ account.id}}/logo" alt="{{ account.name }} Logo" title="" />
+            @if (account.logoUrl) {
+            <img src="{{ account.logoUrl }}" alt="{{ account.name }} Logo" title="" />
             }
 
             <ul>
