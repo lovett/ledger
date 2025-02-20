@@ -54,26 +54,22 @@ FIELDSET {
 
 LABEL {
     display: block;
-    margin: .5em 0;
-}
-
-.invalid label {
+    margin-bottom: .1em;
     font-weight: bold;
 }
 
 .validation-message {
+    font-style: italic;
     padding-left: 1em;
-    color: #C42333;
+    color: #B80300;
+    font-weight: normal;
 }
 
-.validation-message.arrow-down:before {
-    content: '🡇';
-    padding-right: .5em;
-}
-
-.validation-message.arrow-up:before {
-    content: '🡅';
-    padding-right: .5em;
+.validation-message svg {
+    margin-top: -.25em;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: bottom;
 }
 
 input, textarea {
@@ -96,20 +92,19 @@ textarea {
 .shortcuts {
     display: flex;
     gap: 1em;
-    font-size: .85em;
     padding-top: .5em;
+}
+
+.shortcuts a {
+    font-size: .85em;
 }
 
 
 input.ng-invalid:not(.ng-pristine) {
-    border: 1px solid #C42333;
-    outline-color: #C42333;
+    border: 1px solid #B80300;
+    outline-color: #B80300;
 }
 
-.ng-pristine .validation-message {
+.ng-untouched .validation-message {
     display: none;
-}
-
-.ng-pristine .invalid label {
-    font-weight: normal;
 }

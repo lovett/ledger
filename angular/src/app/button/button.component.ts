@@ -8,6 +8,7 @@ import { Component, input, Output, EventEmitter } from '@angular/core';
 export class ButtonComponent {
   @Output() confirmed = new EventEmitter<string>();
 
+  type = input<string>('');
   label = input<string>('Button');
   icon = input<string>();
   disabled = input<boolean>(false);

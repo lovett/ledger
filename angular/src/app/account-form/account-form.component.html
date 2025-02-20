@@ -2,7 +2,7 @@
     <a [routerLink]="returnRoute">Cancel</a>
 
     @if (canDelete()) {
-    <app-button label="Delete account" icon="minus" confirmationMessage="Delete this account?" (confirmed)="delete()"></app-button>
+    <app-button type="delete" label="Delete account" icon="bolt" confirmationMessage="Delete this account?" (confirmed)="delete()"></app-button>
     }
 </header>
 
@@ -13,11 +13,11 @@
         <label for="accountName">
             Name
             @if (name?.hasError('required')) {
-            <span class="validation-message arrow-down">This field is required.</span>
+            <span class="validation-message"><svg><use xlink:href="#warning" /></svg> The account must have a name</span>
             }
 
             @if (name?.hasError('unique')) {
-            <span class="validation-message arrow-down">An account with this name already exists.</span>
+            <span class="validation-message"><svg><use xlink:href="#warning" /></svg> This name is already used</span>
             }
         </label>
         <input id="accountName" type="text" formControlName="name" />
@@ -74,12 +74,12 @@
 
         <div class="shortcuts">
             @if (canShowLogo()) {
-            <a href="#" (click)="discardLogo($event)">Discard</a>
+            <app-button type="trash" (click)="discardLogo($event)" icon="trash" [label]="'Discard current logo'"></app-button>
             }
         </div>
     </fieldset>
 
     <footer>
-        <app-button [disabled]="accountForm.invalid || accountForm.pristine" [label]="'Save'"></app-button>
+        <app-button type="save" icon="floppy" [disabled]="accountForm.invalid || accountForm.pristine" [label]="'Save account'"></app-button>
     </footer>
 </form>

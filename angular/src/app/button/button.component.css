@@ -2,20 +2,69 @@ BUTTON {
     font-size: inherit;
     border: 0;
     margin: 0;
-    display: flex;
-    gap: 0.25em;
-    align-items: center;
     padding: .5em 1em;
-    border-radius: .5em;
-    background-color: #eee;
-    box-shadow: 1px 1px 1px 1px rgba(0,0,0,1);
-}
-
-BUTTON:hover {
-    background-color: #ddd;
+    display: flex;
+    gap: 0.5em;
+    align-items: center;
+    border-radius: .75em;
+    background-color: #5F816A;
+    color: #fff;
     cursor: pointer;
 }
 
+BUTTON:hover {
+    background-color: #72977E;
+}
+
 BUTTON:active {
-    box-shadow: 1px 1px 1px 1px rgba(0,0,0,.5);
+    background-color: #95B19E;
+}
+
+BUTTON[disabled], BUTTON[disabled]:hover, BUTTON[disabled]:active {
+    background-color: #666;
+    color: currentColor;
+    opacity: .5;
+}
+
+
+.delete {
+    font-size: .9em;
+    background-color: #B80300;
+    color: #fff;
+}
+
+.delete:hover {
+    background-color: #FF221F;
+}
+
+.delete:active {
+    background-color: #FF4747;
+}
+
+.save {
+    font-size: 1.25em;
+    background-color: #2A68A2;
+    color: #fff;
+}
+
+.save:hover {
+    background-color: #327DC3;
+}
+
+.save:active {
+    background-color: #5D9BD5;
+}
+
+.trash {
+    font-size: .75em;
+    background-color: #2D0320;
+    color: #fff;
+}
+
+.trash:hover {
+    background-color: #600643;
+}
+
+.trash:active {
+    background-color: #730751;
 }
