@@ -19,7 +19,7 @@ export class Transaction {
   static fromRecord(record: TransactionRecord): Transaction {
     const t = new Transaction();
     t.id = record.id;
-    t.amount = t.centsToDollars(record.amount);
+    t.amount = record.amount / 100;
     t.payee = record.payee ?? '';
     t.note = record.note ?? '';
     t.receipt_mime = record.receipt_mime ?? ''
@@ -59,13 +59,4 @@ export class Transaction {
       selected: this.selected
     }
   }
-
-  centsToDollars(cents: number): number {
-    return cents / 100;
-  }
-
-  dollarsToCents(dollars: number): number {
-    return dollars * 100;
-  }
-
 }
