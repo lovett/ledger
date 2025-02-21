@@ -18,16 +18,12 @@ HEADER {
     background-color: #fff;
     border: 1px solid #ccc;
     border-radius: 10px 10px 0 0;
-    display: flex;
-    flex-flow: column nowrap;
+    display: grid;
+    grid-template-rows: 3em 5em auto;
 }
 
 .card.inactive {
     background-color: #ccc;
-}
-
-.card.inactive IMG {
-    opacity: 0.25;
 }
 
 .card .title {
@@ -45,22 +41,15 @@ HEADER {
     color: inherit;
 }
 
-.card IMG {
-    display: block;
-    margin: 1em auto 0 auto;
-    max-height: 5em;
-}
-
 .card ul {
     list-style-type: none;
     margin: 0;
-    padding: 1em;
-    flex-grow: 2;
+    padding: 0;
 }
 
 .card li {
     margin: 0;
-    padding: 0.25em 0;
+    padding: .25em 0;
     text-align: center;
 }
 
@@ -79,10 +68,17 @@ HEADER {
     white-space: pre-line;
 }
 
-.deposit {
-    color: green;
+.logo {
+    margin-top: 1em;
 }
 
-.withdrawl {
-    color: red;
+.logo > * {
+    max-width: 100%;
+    height: 100%;
+    margin: auto;
+    display: block;
+}
+
+.inactive .logo {
+    opacity: 0.25;
 }

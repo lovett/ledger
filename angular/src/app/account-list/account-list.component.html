@@ -15,16 +15,16 @@
                 </a>
             </div>
 
-            @if (account.logoUrl) {
-            <img src="{{ account.logoUrl }}" alt="{{ account.name }} Logo" title="" />
-            }
+            <div class="logo">
+                @if (account.logoUrl) {
+                <img src="{{ account.logoUrl }}" alt="{{ account.name }} Logo" title="" />
+                } @else {
+                <svg><use xlink:href="#bank"></use></svg>
+                }
+            </div>
 
             <ul>
-                @if (account.closed_on) {
-                <li>Closed {{ account.closed_on|date:'longDate' }}</li>
-                } @else {
                 <li class="balance">{{ account.balance! | currency }}</li>
-                }
 
                 @if (account.total_pending! > 0) {
                 <li class="deposit">{{ account.total_pending! | currency }} pending</li>
@@ -34,11 +34,11 @@
                 <li class="withdrawl">{{ account.total_pending! | currency }} pending</li>
                 }
 
+                @if (account.url) {
                 <li>
-                    @if (account.url) {
                     <a href="{{ account.url }}" target="_blank" rel="noopener noreferer">Log In</a>
-                    }
                 </li>
+                }
             </ul>
 
             <footer>
@@ -48,12 +48,14 @@
                     </a>
                 </p>
 
-                @if (account.opened_on) {
-                <p>Opened {{ account.opened_on|date: 'longDate' }}</p>
+                @if (account.closed_on) {
+                <p>Closed on {{ account.opened_on|date: 'longDate' }}</p>
+                } @else {
+                <p>Since  {{ account.opened_on|date:'longDate' }}</p>
                 }
 
                 @if (account.note) {
-                <p>{{ account.note }}</p>
+                <p><em>{{ account.note }}</em></p>
                 }
             </footer>
         </div>
