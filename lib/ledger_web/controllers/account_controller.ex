@@ -2,12 +2,15 @@ defmodule LedgerWeb.AccountController do
   use LedgerWeb, :controller
 
   alias Ledger.Accounts
+  alias Ledger.Transactions
   alias Ledger.Accounts.Account
 
   action_fallback LedgerWeb.FallbackController
 
   def index(conn, _params) do
+    balances = Transactions.list_balances()
     accounts = Accounts.list_accounts()
+    |> Enum.map(fn account -> %{account | balance: Map.get(balances, account.id, 0)} end)
     render(conn, :index, accounts: accounts)
   end
 
@@ -26,7 +29,6 @@ defmodule LedgerWeb.AccountController do
   end
 
   def update(conn, %{"id" => id, "account" => account_params}) do
-    IO.inspect(account_params, label: "account_params")
     account = Accounts.get_account!(id)
 
     updates = account_params

@@ -28,7 +28,6 @@ defmodule Ledger.Accounts do
                     :note,
                     :logo_mime,
                   ]
-    Repo.all(Account)
   end
 
   @doc """
@@ -45,7 +44,25 @@ defmodule Ledger.Accounts do
       ** (Ecto.NoResultsError)
 
   """
-  def get_account!(id), do: Repo.get!(Account, id)
+  def get_account!(id) do
+    Repo.one! from a in Account,
+                   select: [
+                     :id,
+                     :name,
+                     :url,
+                     :opened_on,
+                     :closed_on,
+                     :note,
+                     :logo_mime
+                   ],
+                   where: a.id == ^id
+  end
+
+  def get_account_logo!(id) do
+    Repo.one! from a in Account,
+                   select: [:logo, :logo_mime],
+                   where: a.id == ^id
+  end
 
   @doc """
   Creates a account.

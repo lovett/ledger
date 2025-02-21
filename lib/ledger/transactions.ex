@@ -37,6 +37,36 @@ defmodule Ledger.Transactions do
                   preload: [account: ^account_query, destination: ^account_query]
   end
 
+  def list_balances do
+    deposits = tally_deposits()
+    withdrawls = tally_withdrawls()
+
+    deposit_map = Enum.into(deposits, %{}, fn %{account_id: account_id, total_amount: total_amount} ->
+      {account_id, total_amount}
+    end)
+
+    withdrawl_map = Enum.into(withdrawls, %{}, fn %{account_id: account_id, total_amount: total_amount} ->
+      {account_id, total_amount}
+    end)
+
+    Map.merge(deposit_map, withdrawl_map, fn _k, total_deposit, total_withdrawl ->
+      total_deposit - total_withdrawl
+    end)
+  end
+
+  def tally_deposits do
+    Repo.all from t in Transaction,
+                  group_by: t.destination_id,
+                  select: %{account_id: t.destination_id, total_amount: sum(t.amount)}
+  end
+
+  def tally_withdrawls do
+    Repo.all from t in Transaction,
+                  group_by: t.account_id,
+                  select: %{account_id: t.account_id, total_amount: sum(t.amount)}
+  end
+
+
   @doc """
   Gets a single transaction.
 

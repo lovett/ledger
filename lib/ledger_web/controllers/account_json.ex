@@ -23,7 +23,8 @@ defmodule LedgerWeb.AccountJSON do
       closed_on: account.closed_on,
       url: account.url,
       note: account.note,
-      logo_mime: account.logo_mime
+      logo_mime: account.logo_mime,
+      balance: account.balance
     }
   end
 end

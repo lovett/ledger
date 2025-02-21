@@ -21,7 +21,7 @@ export class Account {
     const a = new Account();
     a.id = record.id ?? 0;
     a.name = record.name ?? '';
-    a.balance = record.balance ?? 0;
+    a.balance = a.centsToDollars(record.balance ?? 0);
 
     a.total_pending = record.total_pending ?? 0;
 
@@ -94,4 +94,13 @@ export class Account {
     formData.set('account[existing_logo_action]', this.existing_logo_action);
     return formData;
   }
+
+  centsToDollars(cents: number): number {
+    return cents / 100;
+  }
+
+  dollarsToCents(dollars: number): number {
+    return dollars * 100;
+  }
+
 }
