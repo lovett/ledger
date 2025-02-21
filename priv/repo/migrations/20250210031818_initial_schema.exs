@@ -35,8 +35,8 @@ defmodule Ledger.Repo.Migrations.InitialSchema do
     end
 
     create table(:transactions) do
-      add :account_id, references(:accounts, on_delete: :delete_all), null: false
-      add :destination_id, references(:accounts, on_delete: :delete_all), default: nil
+      add :account_id, references(:accounts, on_delete: :delete_all), null: true
+      add :destination_id, references(:accounts, on_delete: :delete_all), null: true
       add :occurred_on, :date
       add :cleared_on, :date, null: true
       add :amount, :integer

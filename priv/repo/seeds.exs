@@ -49,20 +49,19 @@ Repo.insert! %Account{
 
 Repo.insert! %Transaction{
   id: 1,
-  account_id: 1,
-  destination_id: 2,
+  destination_id: 1,
   occurred_on: ~D[2000-02-01],
   cleared_on: ~D[2000-02-02],
-  amount: 12345,
-  payee: "Test Payee",
-  note: "Seeded transaction 1"
+  amount: 10001,
+  payee: "Opending Balance",
+  note: "Initial deposit of $100.01 into account 1"
 }
 
 Repo.insert! %Transaction{
   id: 2,
   account_id: 1,
+  destination_id: 2,
   occurred_on: ~D[2000-03-01],
-  amount: 3499,
-  payee: "Test Payee 2",
-  note: "Seeded transaction 2"
+  amount: 1001,
+  note: "Transfer of $10.01 to account 2"
 }
