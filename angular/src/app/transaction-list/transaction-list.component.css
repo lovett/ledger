@@ -18,6 +18,8 @@ table {
     font-size: .85em;
     border-collapse: collapse;
     overflow: hidden;
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
 }
 
 th {
@@ -35,7 +37,11 @@ td {
     padding: .75em;
     word-break: break-word;
     vertical-align: top;
-    border: 1px solid var(--black);
+    border: 1px solid #333;
+}
+
+td p {
+    margin-top: 0;
 }
 
 tr, td {
@@ -44,11 +50,7 @@ tr, td {
 }
 
 tr {
-    border-bottom: 1px solid var(--black);
-}
-
-tr:last-child {
-    border-bottom: none;
+    border-bottom: 1px solid #333;
 }
 
 .align-right {

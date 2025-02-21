@@ -33,7 +33,7 @@
             <th>Account</th>
             <th>Type</th>
             <th>Details</th>
-            <th>Status</th>
+            <th class="align-center">Status</th>
         </tr>
     </thead>
     }
@@ -47,7 +47,6 @@
         <td class="nowrap">
             {{ transaction.occurred_on|date:'longDate' }}
         </td>
-        @if (transaction.account) {
         <td class="nowrap">
             @if (transaction.account) {
             {{ transaction.account.name }}
@@ -61,10 +60,13 @@
             {{ transaction.destination.name }}
             }
         </td>
-        }
         <td class="nowrap">{{ transaction.transactionType }}</td>
         <td>
-            {{ transaction.payee }}
+            @if (transaction.payee) {
+            <p>{{ transaction.payee }}</p>
+            } @else {
+            <p>No payee</p>
+            }
 
             @if (transaction.note) {
             <p><em>{{ transaction.note }}</em></p>
@@ -85,12 +87,12 @@
                  </li>
                  </ul> -->
         </td>
-        <td>
+        <td class="align-center">
             @if (transaction.cleared_on) {
             <div class="minibanner">Cleared</div>
             } @else {
             <div class="minibanner">Pending</div>
-            <p><a href="#" (click)="clearTransaction($event, transaction)">Clear Now</a></p>
+            <p><a href="#" (click)="clearTransaction($event, transaction)">Mark cleared</a></p>
             }
         </td>
     </tr>
@@ -99,8 +101,6 @@
         <td><p>There are no transactions to display.</p></td>
     </tr>
     }
-</table>
-
 </table>
 
 <!-- MIGRATION_PENDING
