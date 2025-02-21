@@ -5,24 +5,25 @@ export class Account {
   name: string = '';
   opened_on?: Date;
   closed_on?: Date;
-  url?: string;
-  note?: string;
+  url: string = '';
+  note: string = '';
   balance: number = 0;
   total_pending: number = 0;
   last_active?: Date;
-  logo_mime?: string;
+  logo_mime: string = '';
   logo_upload?: File;
   existing_logo_action: string = 'keep';
 
   constructor() {
   }
 
-  static fromRecord(record: AccountRecord): Account {
+  static fromRecord(record: AccountRecord | Partial<AccountRecord>): Account {
     const a = new Account();
-    a.id = record.id;
-    a.name = record.name;
-    a.balance = record.balance;
-    a.total_pending = record.total_pending;
+    a.id = record.id ?? 0;
+    a.name = record.name ?? '';
+    a.balance = record.balance ?? 0;
+
+    a.total_pending = record.total_pending ?? 0;
 
     if (record.opened_on) {
       a.opened_on = new Date(`${record.opened_on}T00:00:00.0000`);
@@ -36,17 +37,9 @@ export class Account {
       a.last_active = new Date(`${record.last_active}T00:00:00.0000`);
     }
 
-    if (record.url) {
-      a.url = record.url;
-    }
-
-    if (record.note) {
-      a.note = record.note;
-    }
-
-    if (record.logo_mime) {
-      a.logo_mime = record.logo_mime;
-    }
+    a.url = record.url ?? '';
+    a.note = record.note ?? '';
+    a.logo_mime = record.logo_mime ?? '';
 
     return a;
   }

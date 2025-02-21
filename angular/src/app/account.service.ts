@@ -16,7 +16,8 @@ export class AccountService {
     return this.http.get<ApiResponse<AccountRecord[]>>('/api/accounts').pipe(
       map((response) => {
         return response.data.map(record => Account.fromRecord(record));
-      })
+      }),
+      catchError(this.handleError)
     );
   }
 

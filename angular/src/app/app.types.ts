@@ -14,3 +14,16 @@ export type AccountRecord = {
     last_active?: string,
     logo_mime?: string,
 }
+
+
+export type TransactionRecord = {
+  id: number,
+  occurred_on: string,
+  cleared_on?: string,
+  amount: number,
+  payee?: string,
+  note?: string,
+  receipt_mime?: string,
+  account: Partial<AccountRecord>
+  destination: Partial<AccountRecord>
+}

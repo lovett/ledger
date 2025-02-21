@@ -18,6 +18,16 @@ defmodule Ledger.Accounts do
 
   """
   def list_accounts do
+    Repo.all from a in Account,
+                  select: [
+                    :id,
+                    :name,
+                    :url,
+                    :opened_on,
+                    :closed_on,
+                    :note,
+                    :logo_mime,
+                  ]
     Repo.all(Account)
   end
 

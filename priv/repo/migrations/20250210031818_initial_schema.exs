@@ -44,6 +44,7 @@ defmodule Ledger.Repo.Migrations.InitialSchema do
       add :note, :text, null: true
       add :receipt, :binary, null: true
       add :receipt_mime, :string, null: true
+      timestamps(type: :utc_datetime)
     end
 
     create table(:tags) do

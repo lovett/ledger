@@ -1,0 +1,33 @@
+#shell {
+    display: grid;
+    grid-template-columns: 15em 1fr;
+    grid-column-gap: 1em;
+    max-width: 75em;
+    margin: auto;
+}
+
+#shell nav a {
+    text-decoration: none;
+}
+
+#shell nav a.active {
+    color: currentColor;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#shell nav ul {
+    position: sticky;
+    top: 1em;
+    list-style-type: none;
+    margin-left: 0;
+    padding-left: 0;
+}
+
+#shell nav li {
+    margin-bottom: 1em;
+}
+
+#shell > svg {
+    display: none;
+}

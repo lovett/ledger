@@ -6,32 +6,8 @@ MAIN {
     padding-top: 2em;
 }
 
-#shell {
-    display: grid;
-    grid-template-columns: 15em 1fr;
-    grid-column-gap: 1em;
-    max-width: 75em;
-    margin: auto;
-}
-
 #app-logo {
     width: 5em;
-}
-
-#shell NAV UL {
-    position: sticky;
-    top: 1em;
-    list-style-type: none;
-    margin-left: 0;
-    padding-left: 0;
-}
-
-#shell NAV LI {
-    margin-bottom: 1em;
-}
-
-#shelll > svg {
-    display: none;
 }
 
 .icon {
@@ -40,10 +16,6 @@ MAIN {
     vertical-align: middle;
     pointer-events: none;
     font-weight: normal;
-}
-
-.active {
-    font-weight: bold;
 }
 
 FIELDSET {

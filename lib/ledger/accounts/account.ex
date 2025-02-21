@@ -1,7 +1,9 @@
 defmodule Ledger.Accounts.Account do
   use Ecto.Schema
+  alias Ledger.Transactions.Transaction
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, only: [:id, :name, :logo_mime]}
   schema "accounts" do
     field :name, :string
     field :url, :string
@@ -10,7 +12,8 @@ defmodule Ledger.Accounts.Account do
     field :note, :string
     field :logo, :binary
     field :logo_mime, :string
-
+    has_many :transactions, Transaction
+    has_many :destination_transactions, Transaction, foreign_key: :destination_id
     timestamps(type: :utc_datetime)
   end
 
