@@ -59,4 +59,6 @@ export class Transaction {
       selected: this.selected
     }
   }
+
+
 }

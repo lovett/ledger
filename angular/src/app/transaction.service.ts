@@ -1,8 +1,12 @@
 import { Observable, map, throwError, catchError } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Transaction } from './transaction';
 import { TransactionRecord, ApiResponse } from './app.types';
+
+type TransactionList = [Transaction[], number, string];
+type ListResponse = ApiResponse<TransactionRecord[]>;
+
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +16,27 @@ export class TransactionService {
   constructor(private http: HttpClient) {
   }
 
-  getTransactions(): Observable<Transaction[]> {
-    return this.http.get<ApiResponse<TransactionRecord[]>>('/api/transactions').pipe(
-      map((response) => {
-        return response.data.map(record => Transaction.fromRecord(record));
+  getTransactions(offset = 0, account = 0): Observable<TransactionList> {
+    let params = new HttpParams();
+
+    // if (query) {
+    //   params.set("query", query);
+    // }
+
+    if (account > 0) {
+      params = params.set("account", account);
+    }
+
+    if (offset > 0) {
+      params = params.set("offset", offset);
+    }
+
+    return this.http.get<ListResponse>('/api/transactions', {params, }).pipe(
+      map((response): TransactionList => {
+        const transactions = response.data.map(record => Transaction.fromRecord(record));
+        const count = response.count;
+        const title = response.title;
+        return [transactions, count, title]
       }),
       catchError(this.handleError)
     );

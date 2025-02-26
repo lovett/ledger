@@ -1,10 +1,22 @@
-BODY {
+body {
     font: 18px system-ui, sans-serif;
 }
 
-MAIN {
+main {
     padding-top: 2em;
 }
+
+h1 {
+    font-size: 2em;
+    margin: 0 0 1em 0;
+}
+
+header {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 1em;
+}
+
 
 #app-logo {
     width: 5em;

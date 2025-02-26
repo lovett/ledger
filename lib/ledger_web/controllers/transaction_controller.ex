@@ -2,13 +2,19 @@ defmodule LedgerWeb.TransactionController do
   use LedgerWeb, :controller
 
   alias Ledger.Transactions
+  alias Ledger.Accounts;
   alias Ledger.Transactions.Transaction
 
   action_fallback LedgerWeb.FallbackController
 
-  def index(conn, _params) do
-    transactions = Transactions.list_transactions()
-    render(conn, :index, transactions: transactions)
+  def index(conn, params) do
+    offset = Map.get(params, "offset", 0)
+    account = Map.get(params, "account", 0)
+    limit = 100
+    transactions = Transactions.list_transactions(account, offset, limit)
+    count = Transactions.count_transactions(account)
+    title = page_title(account)
+    render(conn, :index, transactions: transactions, count: count, offset: offset, title: title)
   end
 
   def create(conn, %{"transaction" => transaction_params}) do
@@ -38,6 +44,15 @@ defmodule LedgerWeb.TransactionController do
 
     with {:ok, %Transaction{}} <- Transactions.delete_transaction(transaction) do
       send_resp(conn, :no_content, "")
+    end
+  end
+
+  def page_title(account_id \\ 0) do
+    if (account_id == 0) do
+      "Transactions"
+    else
+      account = Accounts.get_account!(account_id)
+      "#{account.name} Transactions"
     end
   end
 end

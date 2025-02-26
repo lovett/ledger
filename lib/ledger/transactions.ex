@@ -18,7 +18,8 @@ defmodule Ledger.Transactions do
       [%Transaction{}, ...]
 
   """
-  def list_transactions do
+  @spec list_transactions(account:: integer, offet:: integer, limit:: integer) :: Ecto.Query.t()
+  def list_transactions(account \\ 0, offset \\ 0, limit \\ 50) do
     account_query = from a in Account,
                          select: [:id, :name, :logo_mime]
     Repo.all from t in Transaction,
@@ -33,9 +34,38 @@ defmodule Ledger.Transactions do
                     :account_id,
                     :destination_id
                   ],
+                  where: ^filter_account(account),
                   order_by: [desc: :occurred_on],
+                  limit: ^limit,
+                  offset: ^offset,
                   preload: [account: ^account_query, destination: ^account_query]
   end
+
+  @doc """
+  Returns a count of transactions.
+
+  ## Examples
+
+      iex> count_transactions()
+      1
+
+  """
+  @spec count_transactions(account:: integer) :: Ecto.Query.t()
+  def count_transactions(account \\ 0) do
+    Repo.one from t in Transaction,
+                  select: count(),
+                  where: ^filter_account(account)
+  end
+
+  @spec filter_account(id:: integer) :: Ecto.Query.t()
+  def filter_account(id \\ 0) do
+    if id == 0 do
+      dynamic(true)
+    else
+      dynamic([t], t.account_id == ^id or t.destination_id == ^id)
+    end
+  end
+
 
   def list_balances do
     deposits = tally_deposits()

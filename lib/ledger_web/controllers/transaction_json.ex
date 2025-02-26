@@ -2,10 +2,15 @@ defmodule LedgerWeb.TransactionJSON do
   alias Ledger.Transactions.Transaction
 
   @doc """
-  Renders a list of transactions.
+  Renders a list of transactions with pagination details.
   """
-  def index(%{transactions: transactions}) do
-    %{data: for(transaction <- transactions, do: data(transaction))}
+  def index(%{transactions: transactions, count: count, offset: offset, title: title}) do
+    %{
+      data: for(transaction <- transactions, do: data(transaction)),
+      count: count,
+      offset: offset,
+      title: title,
+    }
   end
 
   @doc """

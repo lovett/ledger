@@ -13,14 +13,25 @@
     <app-button label="Add transaction" icon="add" routerLink="/transactions/new"></app-button>
 </header>
 
-<!-- MIGRATION_PENDING <h1 *ngIf="tag || activeQuery">Transaction Search Results</h1>
-     <h1 *ngIf="!tag && !activeQuery">Transactions</h1>
+<h1>{{ title }}</h1>
 
-     <div class="pager">
-     <div></div>
-     <div *ngIf="count > 0">{{ this.offset + 1}} to {{ this.offset + transactions.length }} of {{ count|number }}</div>
-     <div></div>
-     </div>-->
+
+<div class="paging">
+    <div>
+    @if (account > 0) {
+    <a class="all" routerLink="/transactions">Show all</a>
+    }
+    </div>
+
+    <div>
+        @if (paging.isVisible) {
+        {{ paging.displayStart | number }} to {{ paging.displayEnd | number }} of {{ paging.total | number }}, newest first
+        } @else {
+        0 of {{ paging.total | number }}
+        }
+    </div>
+</div>
+
 <table>
     @for (transaction of (transactions$ | async); track transaction.id) {
 
@@ -49,7 +60,9 @@
         </td>
         <td class="nowrap">
             @if (transaction.account) {
-            {{ transaction.account.name }}
+            <a [routerLink]="[]" [queryParams]="{account: transaction.account.id}" queryParamsHandling="merge">
+                {{ transaction.account.name }}
+            </a>
             }
 
             @if (transaction.isTransfer) {
@@ -57,7 +70,9 @@
             }
 
             @if (transaction.destination) {
-            {{ transaction.destination.name }}
+            <a [routerLink]="[]" [queryParams]="{account: transaction.destination.id}" queryParamsHandling="merge">
+                {{ transaction.destination.name }}
+            </a>
             }
         </td>
         <td class="nowrap">{{ transaction.transactionType }}</td>
@@ -97,31 +112,36 @@
         </td>
     </tr>
     } @empty {
-    <tr>
-        <td><p>There are no transactions to display.</p></td>
+    <tr class="empty">
+        <td><p>Nothing found.</p></td>
     </tr>
     }
 </table>
 
-<!-- MIGRATION_PENDING
+@if (paging.total > 0) {
 <div class="pager">
-    <div>
-        <a *ngIf="this.offset > 0" [routerLink]="[]" [queryParams]="{offset: 0}" queryParamsHandling="merge">
-            ⏪️  <span>Newest</span>
-        </a>
-        <a *ngIf="this.offset > 0" [routerLink]="[]" [queryParams]="{offset: previousOffset}" queryParamsHandling="merge">
-            ⬅️  <span>Newer</span>
-        </a>
-    </div>
-    <div></div>
-    <div>
-        <a *ngIf="nextOffset < count" [routerLink]="[]" [queryParams]="{offset: nextOffset}" queryParamsHandling="merge">
-            <span>Older</span> ➡️
-        </a>
-        <a *ngIf="nextOffset < count" [routerLink]="[]" [queryParams]="{offset: count - transactions.length}" queryParamsHandling="merge">
-            <span>Oldest</span> ⏩
-        </a>
-    </div>
-</div>
+    @if (paging.canNavigateToFirstPage) {
+    <a [routerLink]="[]" [queryParams]="{offset: paging.firstOffset}" queryParamsHandling="merge">
+        <span>Newest</span>
+    </a>
+    }
 
--->
+    @if (paging.canNavigateToPreviousPage) {
+    <a [routerLink]="[]" [queryParams]="{offset: paging.previousOffset}" queryParamsHandling="merge">
+        <span>Newer</span>
+    </a>
+    }
+
+    @if (paging.canNavigateToNextPage) {
+    <a [routerLink]="[]" [queryParams]="{offset: paging.nextOffset}" queryParamsHandling="merge">
+        <span>Older</span>
+    </a>
+    }
+
+    @if (paging.canNavigateToLastPage) {
+    <a [routerLink]="[]" [queryParams]="{offset: paging.lastOffset}" queryParamsHandling="merge">
+        <span>Oldest</span>
+    </a>
+    }
+</div>
+}
