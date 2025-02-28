@@ -1,24 +1,24 @@
 <header>
-    <!-- MIGRATION_PENDING <form (ngSubmit)="search()" [formGroup]="searchForm" autocomplete="off">
-         <div class="field">
-         <input type="search" formControlName="query"/>
-         </div>
-         <div class="field">
-         <button [disabled]="searchForm.invalid">Search</button>
-         </div>
-         <div *ngIf="query.value" class="field reset">
-         <a href="#" (click)="clearSearch($event)">Clear Search</a>
-         </div>
-         </form> -->
+    <div></div>
     <app-button label="Add transaction" icon="add" routerLink="/transactions/new"></app-button>
+    <h1>{{ title }}</h1>
 </header>
 
-<h1>{{ title }}</h1>
+<form (ngSubmit)="search()" [formGroup]="searchForm" autocomplete="off">
+    <fieldset>
+        <input type="search" formControlName="query"/>
+        <button [disabled]="searchForm.invalid" type="submit"><svg><use xlink:href="#search" /></svg></button>
+
+        @if (query.value) {
+        <a href="#" (click)="clearSearch($event)">Clear Search</a>
+        }
+    </fieldset>
+</form>
 
 
 <div class="paging">
     <div>
-    @if (account > 0) {
+    @if (account_id > 0) {
     <a class="all" routerLink="/transactions">Show all</a>
     }
     </div>
@@ -39,11 +39,10 @@
     <thead>
         <tr>
             <th>ID</th>
-            <th class="align-right">Amount</th>
             <th>Date</th>
             <th>Account</th>
-            <th>Type</th>
             <th>Details</th>
+            <th class="align-right">Amount</th>
             <th class="align-center">Status</th>
         </tr>
     </thead>
@@ -51,9 +50,6 @@
     <tr [class]="transaction.rowClasses" (click)="toggleSelection($event, transaction)">
         <td>
             <a class="nowrap" [routerLink]="['/transactions', transaction.id, 'edit']">{{ transaction.id }}</a>
-        </td>
-        <td class="align-right nowrap">
-            {{ transaction.amount | currency }}
         </td>
         <td class="nowrap">
             {{ transaction.occurred_on|date:'longDate' }}
@@ -75,7 +71,6 @@
             </a>
             }
         </td>
-        <td class="nowrap">{{ transaction.transactionType }}</td>
         <td>
             @if (transaction.payee) {
             <p>{{ transaction.payee }}</p>
@@ -102,12 +97,16 @@
                  </li>
                  </ul> -->
         </td>
+        <td class="align-right nowrap">
+            {{ transaction.amount | currency }}
+            <div class="transaction-type">{{ transaction.transactionType }}</div>
+        </td>
         <td class="align-center">
             @if (transaction.cleared_on) {
             <div class="minibanner">Cleared</div>
             } @else {
             <div class="minibanner">Pending</div>
-            <p><a href="#" (click)="clearTransaction($event, transaction)">Mark cleared</a></p>
+            <p><a href="#" (click)="clearTransaction($event, transaction)">Clear</a></p>
             }
         </td>
     </tr>

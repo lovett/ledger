@@ -9,11 +9,13 @@ defmodule LedgerWeb.TransactionController do
 
   def index(conn, params) do
     offset = Map.get(params, "offset", 0)
-    account = Map.get(params, "account", 0)
+    account_id = Map.get(params, "account_id", 0)
+    query = Map.get(params, "query", "")
+    IO.inspect(query, label: "query from params map")
     limit = 100
-    transactions = Transactions.list_transactions(account, offset, limit)
-    count = Transactions.count_transactions(account)
-    title = page_title(account)
+    transactions = Transactions.list_transactions(account_id, query, offset, limit)
+    count = Transactions.count_transactions(account_id, query)
+    title = page_title(account_id, query)
     render(conn, :index, transactions: transactions, count: count, offset: offset, title: title)
   end
 
@@ -47,12 +49,16 @@ defmodule LedgerWeb.TransactionController do
     end
   end
 
-  def page_title(account_id \\ 0) do
-    if (account_id == 0) do
-      "Transactions"
-    else
-      account = Accounts.get_account!(account_id)
-      "#{account.name} Transactions"
+  @spec page_title(account_id:: integer, query:: String.t()):: String.t()
+  def page_title(account_id \\ 0, query \\ "") do
+    account = if (account_id == 0), do: nil, else: Accounts.get_account!(account_id)
+
+    has_query = String.trim(query) != ""
+
+    cond do
+      account && has_query -> "#{account.name} Transactions"
+      has_query  -> "Transaction Search Results"
+      true -> "Transactions"
     end
   end
 end

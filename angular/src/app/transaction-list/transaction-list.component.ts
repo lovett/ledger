@@ -1,7 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
 import { CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe } from '@angular/common';
-import { RouterLink, ActivatedRoute, ParamMap } from '@angular/router';
+import { RouterLink, Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { TransactionService } from '../transaction.service';
 import { Observable, of, map, tap } from 'rxjs';
 import { Transaction } from '../transaction';
@@ -14,7 +15,7 @@ import { Paging } from '../paging';
 
 @Component({
   selector: 'app-transaction-list',
-  imports: [RouterLink, CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, ButtonComponent],
+  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, ButtonComponent],
   templateUrl: './transaction-list.component.html',
   styleUrl: './transaction-list.component.css'
 })
@@ -22,21 +23,23 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   transactions$: Observable<Transaction[]> = of([]);
   // @Output() selection = new EventEmitter<Transaction>();
 
-  // searchForm: FormGroup;
+  searchForm = new FormGroup({
+    query: new FormControl('')
+  });
+
   // tag = '';
-  searchQuery = '';
   offset = 0;
-  account = 0;
+  account_id = 0;
   paging: Paging;
-  title = '';
+  title = 'Transactions';
   // transactions: Transaction[] = [];
   // singularResourceName: string;
 
   constructor(
     private transactionService: TransactionService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
     //     private formBuilder: FormBuilder,
-    //     private router: Router,
+    private router: Router,
   ) {
     this.paging = Paging.blank();
 
@@ -62,11 +65,13 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.queryParamMap.subscribe((paramMap: ParamMap) => {
       this.offset = Number(paramMap.get("offset") ?? 0);
-      this.account = Number(paramMap.get("account") ?? 0);
+      this.account_id = Number(paramMap.get("account_id") ?? 0);
+      this.searchForm.patchValue({query: paramMap.get("query") ?? '' });
 
       this.transactions$ = this.transactionService.getTransactions(
         this.offset,
-        this.account,
+        this.account_id,
+        this.query.value
       ).pipe(
         tap(data => this.paging = new Paging(data[0].length, data[1], this.offset)),
         tap(data => this.title = data[2]),
@@ -79,9 +84,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     // this.ledgerService.transactionSelection(null);
   }
 
-  // get query() {
-  //     return this.searchForm.controls['query'];
-  // }
+  get query() { return this.searchForm.get("query") as FormControl }
 
   // getTransactions() {
   //     this.ledgerService.getTransactions(this.query.value, this.limit, this.offset, this.account, this.tag).subscribe({
@@ -103,24 +106,24 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   //     });
   // }
 
-  // clearSearch(event: Event) {
-  //     event.preventDefault();
-  //     this.ledgerService.clearSelections();
-  //     this.searchForm.patchValue({query: ''});
-  //     this.router.navigate([], {
-  //         relativeTo: this.route,
-  //         queryParams: {q: null, tag: null, offset: null },
-  //         queryParamsHandling: 'merge',
-  //     });
-  // }
+  clearSearch(event: Event) {
+      event.preventDefault();
+      // this.ledgerService.clearSelections();
+      this.searchForm.patchValue({query: ''});
+      this.router.navigate([], {
+          relativeTo: this.route,
+          queryParams: {query: null, tag: null },
+          queryParamsHandling: 'merge',
+      });
+  }
 
-  // search() {
-  //     this.router.navigate([], {
-  //         relativeTo: this.route,
-  //         queryParams: { q: this.query.value, offset: 0 },
-  //         queryParamsHandling: 'merge',
-  //     });
-  // }
+  search() {
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: { query: this.query.value, offset: 0 },
+      queryParamsHandling: 'merge',
+    });
+  }
 
   clearTransaction(event: MouseEvent, transaction: Transaction){
     //     event.preventDefault();

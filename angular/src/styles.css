@@ -1,59 +1,25 @@
 body {
-    font: 18px system-ui, sans-serif;
+    font-family: system-ui, sans-serif;
+    margin: 0 5em 5em 5em;
 }
 
-main {
-    padding-top: 2em;
-}
-
-h1 {
-    font-size: 2em;
-    margin: 0 0 1em 0;
-}
-
-header {
-    display: flex;
-    justify-content: flex-end;
-    margin-bottom: 1em;
-}
-
-
-#app-logo {
-    width: 5em;
-}
-
-.icon {
-    width: 1.5em;
-    height: 1.5em;
-    vertical-align: middle;
-    pointer-events: none;
-    font-weight: normal;
-}
-
-FIELDSET {
+fieldset {
     padding: 0;
     border: 0;
     margin: 0;
 }
 
-LABEL {
-    display: block;
-    margin-bottom: .1em;
-    font-weight: bold;
+h1 {
+    font-size: 2em;
+    line-height: 1;
+    margin: 0;
 }
 
-.validation-message {
-    font-style: italic;
-    padding-left: 1em;
-    color: #B80300;
-    font-weight: normal;
-}
-
-.validation-message svg {
-    margin-top: -.25em;
-    width: 1.5em;
-    height: 1.5em;
-    vertical-align: bottom;
+header {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    margin-bottom: 2em;
 }
 
 input, textarea {
@@ -69,8 +35,39 @@ input[type=file] {
     padding-left: 0;
 }
 
+input.ng-invalid:not(.ng-pristine) {
+    border: 1px solid #B80300;
+    outline-color: #B80300;
+}
+
+label {
+    display: block;
+    margin-bottom: .1em;
+    font-weight: bold;
+}
+
+main {
+    padding-top: 2em;
+}
+
 textarea {
     height: 10em;
+}
+
+#app-logo {
+    width: 5em;
+}
+
+.icon {
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: middle;
+    pointer-events: none;
+    font-weight: normal;
+}
+
+.ng-untouched .validation-message {
+    display: none;
 }
 
 .shortcuts {
@@ -83,12 +80,16 @@ textarea {
     font-size: .85em;
 }
 
-
-input.ng-invalid:not(.ng-pristine) {
-    border: 1px solid #B80300;
-    outline-color: #B80300;
+.validation-message {
+    font-style: italic;
+    padding-left: 1em;
+    color: #B80300;
+    font-weight: normal;
 }
 
-.ng-untouched .validation-message {
-    display: none;
+.validation-message svg {
+    margin-top: -.25em;
+    width: 1.5em;
+    height: 1.5em;
+    vertical-align: bottom;
 }

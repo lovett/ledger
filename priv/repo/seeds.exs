@@ -1,14 +1,6 @@
 # Script for populating the database. Run it as:
 #
 #     mix run priv/repo/seeds.exs
-#
-# Inside the script, you can read and write to any of your
-# repositories directly:
-#
-#     Ledger.Repo.insert!(%Ledger.SomeSchema{})
-#
-# We recommend using the bang functions (`insert!`, `update!`
-# and so on) as they will fail if something goes wrong.
 
 alias Ledger.Repo
 alias Ledger.Accounts.Account
@@ -53,7 +45,7 @@ Repo.insert! %Transaction{
   occurred_on: ~D[2000-02-01],
   cleared_on: ~D[2000-02-02],
   amount: 10001,
-  payee: "Opending Balance",
+  payee: "Opening Balance",
   note: "Initial deposit of $100.01 into account 1"
 }
 

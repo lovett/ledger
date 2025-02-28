@@ -1,6 +1,6 @@
 #shell {
     display: grid;
-    grid-template-columns: 15em 1fr;
+    grid-template-columns: 10em 1fr;
     grid-column-gap: 1em;
     max-width: 75em;
     margin: auto;

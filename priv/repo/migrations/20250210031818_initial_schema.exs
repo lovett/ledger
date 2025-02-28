@@ -5,8 +5,6 @@ defmodule Ledger.Repo.Migrations.InitialSchema do
   def fts_up() do
     """
     CREATE VIRTUAL TABLE #{@fts_transactions_table} USING fts5(
-      account_id,
-      destination_id,
       occurred_on,
       amount,
       payee,
@@ -14,12 +12,76 @@ defmodule Ledger.Repo.Migrations.InitialSchema do
       content='transactions',
       content_rowid='id',
       tokenize='porter'
-    )
+    );
     """
   end
 
   def fts_down() do
     "DROP TABLE #{@fts_transactions_table}"
+  end
+
+  def after_insert_trigger_up() do
+    """
+    CREATE TRIGGER transactions_after_insert
+    AFTER INSERT ON transactions
+    BEGIN
+        INSERT INTO #{@fts_transactions_table}(
+            rowid, occurred_on,
+            amount, payee, note
+        ) VALUES (
+            new.rowid, REPLACE(new.occurred_on, '-', ''),
+            new.amount, new.payee, new.note);
+    END;
+    """
+  end
+
+  def after_insert_trigger_down() do
+    "DROP TRIGGER IF EXISTS transactions_after_insert"
+  end
+
+  def after_delete_trigger_up() do
+    """
+    CREATE TRIGGER transactions_after_delete
+    AFTER DELETE ON transactions
+    BEGIN
+        INSERT INTO #{@fts_transactions_table} (
+            #{@fts_transactions_table}, rowid, occurred_on,
+            amount, payee, note
+        ) VALUES (
+            'delete', old.rowid, old.occurred_on,
+            old.amount, old.payee, old.note);
+    END;
+    """
+  end
+
+  def after_delete_trigger_down() do
+    "DROP TRIGGER IF EXISTS transactions_after_delete"
+  end
+
+  def after_update_trigger_up() do
+    """
+    CREATE TRIGGER transactions_after_update
+    AFTER UPDATE ON transactions
+    BEGIN
+      INSERT INTO #{@fts_transactions_table} (
+          #{@fts_transactions_table}, rowid,
+          occurred_on, amount, payee, note
+      ) VALUES (
+          'delete', old.rowid, old.occurred_on,
+          old.amount, old.payee, old.note);
+
+      INSERT INTO #{@fts_transactions_table} (
+          rowid, occurred_on,
+          amount, payee, note
+      ) VALUES (
+          new.rowid, REPLACE(new.occurred_on, '-', ''),
+          new.amount, new.payee, new.note);
+    END;
+    """
+  end
+
+  def after_update_trigger_down() do
+    "DROP TRIGGER IF EXISTS transactions_after_update"
   end
 
   def change do
@@ -58,5 +120,8 @@ defmodule Ledger.Repo.Migrations.InitialSchema do
 
     create unique_index(:accounts, [:name])
     execute fts_up(), fts_down()
+    execute after_insert_trigger_up(), after_insert_trigger_down()
+    execute after_update_trigger_up(), after_update_trigger_down()
+    execute after_delete_trigger_up(), after_delete_trigger_down()
   end
 end

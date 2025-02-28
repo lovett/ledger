@@ -1,8 +1,9 @@
 <header>
+    <div></div>
     <app-button [routerLink]="'/accounts/new'" label="Add account" [icon]="'add'"></app-button>
+    <h1>Accounts</h1>
 </header>
 
-    <h1>Accounts</h1>
     <div class="cards">
         @for (account of (accounts$ | async); track account.id) {
         <div class="card" [class.inactive]="account.closed_on">
@@ -42,7 +43,7 @@
 
             <footer>
                 <p>
-                    <a [routerLink]="['/transactions']" [queryParams]="{account: account.id}">
+                    <a [routerLink]="['/transactions']" [queryParams]="{account_id: account.id}">
                         Transactions
                     </a>
                 </p>
