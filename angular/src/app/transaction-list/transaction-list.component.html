@@ -8,19 +8,19 @@
     <fieldset>
         <input type="search" formControlName="query"/>
         <button [disabled]="searchForm.invalid" type="submit"><svg><use xlink:href="#search" /></svg></button>
-
-        @if (query.value) {
-        <a href="#" (click)="clearSearch($event)">Clear Search</a>
-        }
     </fieldset>
 </form>
 
 
 <div class="paging">
-    <div>
-    @if (account_id > 0) {
-    <a class="all" routerLink="/transactions">Show all</a>
-    }
+    <div class="resets">
+        @if (query.value.trim().length > 0) {
+        <a href="#" (click)="clearSearch($event)">Clear search</a>
+        }
+
+        @if (account_id > 0) {
+        <a href="#" (click)="clearAccount($event)">All accounts</a>
+        }
     </div>
 
     <div>
@@ -56,7 +56,7 @@
         </td>
         <td class="nowrap">
             @if (transaction.account) {
-            <a [routerLink]="[]" [queryParams]="{account: transaction.account.id}" queryParamsHandling="merge">
+            <a [routerLink]="[]" [queryParams]="{account_id: transaction.account.id}" queryParamsHandling="merge">
                 {{ transaction.account.name }}
             </a>
             }

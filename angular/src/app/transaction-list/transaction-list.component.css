@@ -5,6 +5,7 @@ fieldset {
     flex-flow: row nowrap;
     align-items: center;
     gap: 1em;
+    margin-bottom: 1em;
 }
 
 input[type="search"] ~ button {
@@ -58,6 +59,12 @@ td p {
 .nowrap {
     white-space: nowrap;
 }
+
+.resets {
+    display: flex;
+    gap: 2em;
+}
+
 
 .tag-list {
     margin: 1em 0 0 0;

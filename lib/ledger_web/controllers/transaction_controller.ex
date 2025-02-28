@@ -8,10 +8,9 @@ defmodule LedgerWeb.TransactionController do
   action_fallback LedgerWeb.FallbackController
 
   def index(conn, params) do
-    offset = Map.get(params, "offset", 0)
-    account_id = Map.get(params, "account_id", 0)
+    offset = String.to_integer(Map.get(params, "offset", "0"))
+    account_id = String.to_integer(Map.get(params, "account_id", "0"))
     query = Map.get(params, "query", "")
-    IO.inspect(query, label: "query from params map")
     limit = 100
     transactions = Transactions.list_transactions(account_id, query, offset, limit)
     count = Transactions.count_transactions(account_id, query)
@@ -56,7 +55,8 @@ defmodule LedgerWeb.TransactionController do
     has_query = String.trim(query) != ""
 
     cond do
-      account && has_query -> "#{account.name} Transactions"
+      account && has_query -> "Transaction Search Results in #{account.name}"
+      account -> "#{account.name} Transactions"
       has_query  -> "Transaction Search Results"
       true -> "Transactions"
     end

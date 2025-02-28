@@ -16,15 +16,15 @@ export class TransactionService {
   constructor(private http: HttpClient) {
   }
 
-  getTransactions(offset = 0, account = 0, query = ''): Observable<TransactionList> {
+  getTransactions(offset = 0, account_id = 0, query = ''): Observable<TransactionList> {
     let params = new HttpParams();
 
     if (query) {
       params = params.set("query", query);
     }
 
-    if (account > 0) {
-      params = params.set("account", account);
+    if (account_id > 0) {
+      params = params.set("account_id", account_id);
     }
 
     if (offset > 0) {

@@ -111,10 +111,19 @@ export class TransactionListComponent implements OnInit, OnDestroy {
       // this.ledgerService.clearSelections();
       this.searchForm.patchValue({query: ''});
       this.router.navigate([], {
-          relativeTo: this.route,
-          queryParams: {query: null, tag: null },
-          queryParamsHandling: 'merge',
+        relativeTo: this.route,
+        queryParams: {query: null, tag: null, offset: null },
+        queryParamsHandling: 'merge',
       });
+  }
+
+  clearAccount(event: Event) {
+    event.preventDefault();
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {account_id: null, offset: null},
+      queryParamsHandling: 'merge'
+    });
   }
 
   search() {
