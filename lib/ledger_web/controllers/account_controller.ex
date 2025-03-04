@@ -57,7 +57,7 @@ defmodule LedgerWeb.AccountController do
         |> Map.put("logo_mime", logo_upload.content_type)
         |> Map.put("logo", contents)
       {:error, reason} ->
-        IO.inspect(reason, label: "receive_logo error reason")
+        IO.inspect(reason, label: "logo upload error")
         account_params
     end
   end

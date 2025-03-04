@@ -1,0 +1,102 @@
+<header>
+    <a [routerLink]="returnRoute">Cancel</a>
+
+    @if (canDelete()) {
+    <app-button
+        (confirmed)="delete()"
+        type="delete"
+        label="Delete transaction"
+        icon="bolt"
+        confirmationMessage="Delete this transaction?"></app-button>
+    }
+</header>
+
+<form (ngSubmit)="save()" [formGroup]="transactionForm" autocomplete="off">
+    <input type="hidden" formControlName="id" />
+
+    <div>
+        <app-label [control]="payee" text="Payee" />
+        <input id="payee" type="text" formControlName="payee" />
+        <!-- MIGRATION_PENDING <p *ngIf="autocompleteFrom"><a href="#" (click)="applyAutocompletedTransaction($event)">Autocomplete</a> from transaction #{{ autocompleteFrom.uid }} of {{ autocompleteFrom.occurred_on |date:'longDate' }}</p> -->
+    </div>
+
+    <div>
+        <app-label [control]="amount" text="Amount" />
+        <input id="amount" type="number" formControlName="amount" pattern="[0-9.]*" min="0.01" step=".01" required />
+    </div>
+
+    <div>
+        <app-account-menu
+            [control]="accountId"
+            [block]="destinationId.value"
+            [error]="accounts.getError('atLeastOneAccount')"
+            label="Withdraw from"></app-account-menu>
+    </div>
+
+    <div>
+        <app-account-menu
+            [control]="destinationId"
+            [block]="accountId.value"
+            [error]="accounts.getError('atLeastOneAccount')"
+            label="Deposit To"></app-account-menu>
+    </div>
+
+    <div>
+        <app-label [control]="occurredOn" text="Date"/>
+        <input id="occurredOn" type="date" formControlName="occurred_on" [max]="today" />
+        <div class="shortcuts">
+            <a href="#" (click)="todayShortcut($event, 'occurred_on')">Today</a>
+        </div>
+    </div>
+
+    <div>
+        <app-label [control]="clearedOn" text="Cleared" />
+        <input id="clearedOn" type="date" formControlName="cleared_on" [max]="today" />
+        <div class="shortcuts">
+            <a href="#" (click)="todayShortcut($event, 'cleared_on')">Today</a>
+            <a href="#" (click)="clearShortcut($event, 'cleared_on')">Clear</a>
+        </div>
+    </div>
+
+    <div>
+        <app-label [control]="tags" text="Tags" />
+        <input id="tags" type="text" formControlName="tags"/>
+    </div>
+
+    <div>
+        <label for="transactionReceipt">Receipt</label>
+
+        @if (canShowReceipt()) {
+        <p>
+            <a target="_blank" href="{{ receipt_url!.value }}">Current receipt</a>
+        </p>
+        }
+
+        <input id="transactionReceipt" type="file" (change)="onFileChange($event)" />
+
+        <div class="shortcuts">
+            @if (canShowReceipt()) {
+            <app-button type="trash" (click)="discardReceipt($event)" icon="trash" label="Discard current receipt"></app-button>
+            }
+        </div>
+    </div>
+
+    <div class="double-wide">
+        <app-label [control]="note" text="Notes" />
+        <textarea
+            id="transactionNote"
+            type="text"
+            formControlName="note"></textarea>
+    </div>
+
+    <footer>
+        @if (errorMessage) {
+        <p class="validation-message">{{ errorMessage }}</p>
+        }
+        <app-button
+            [disabled]="transactionForm.invalid || transactionForm.pristine"
+            type="save"
+            icon="floppy"
+            label="Save transaction"></app-button>
+    </footer>
+</form>

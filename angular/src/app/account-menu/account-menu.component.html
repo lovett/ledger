@@ -1,0 +1,14 @@
+@if (label()) {
+<app-label [text]="label()" [control]="control()!" [customMessage]="error()" />
+}
+
+
+
+<select id="{{ fieldName }}" [formControl]="control()!">
+    <option value=""></option>
+    @for (account of (accounts$ | async); track account.id) {
+    <option [value]="account.id" [disabled]="isDisabled(account)">
+        {{ account.name }} {{ disabledReason(account) }}
+    </option>
+    }
+</select>

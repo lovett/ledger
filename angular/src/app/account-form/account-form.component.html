@@ -9,31 +9,31 @@
 
 <form (ngSubmit)="save()" [formGroup]="accountForm" autocomplete="off">
     <input type="hidden" formControlName="id" />
-    <fieldset [class.invalid]="name?.invalid">
+    <fieldset [class.invalid]="name.invalid">
         <label for="accountName">
             Name
-            @if (name?.hasError('required')) {
+            @if (name.hasError('required')) {
             <span class="validation-message"><svg><use xlink:href="#warning" /></svg> The account must have a name</span>
             }
 
-            @if (name?.hasError('unique')) {
+            @if (name.hasError('unique')) {
             <span class="validation-message"><svg><use xlink:href="#warning" /></svg> This name is already used</span>
             }
         </label>
-        <input id="accountName" type="text" formControlName="name" />
+        <input id="accountName" type="text" formControlName="name" autofocus />
     </fieldset>
 
-    <fieldset [class.invalid]="url?.invalid">
+    <fieldset [class.invalid]="url.invalid">
         <label for="accountUrl">URL</label>
         <input id="accountUrl" type="url" formControlName="url" />
     </fieldset>
 
-    <fieldset [class.invalid]="openedOn?.invalid">
+    <fieldset [class.invalid]="openedOn.invalid">
         <label for="accountOpened">
             Opened On
 
             @if (accountForm.hasError('accountDates')) {
-            <span class="validation-message arrow-down">Open date must be before close date.</span>
+            <span class="validation-message">Open date must be before close date.</span>
             }
 
         </label>
@@ -43,12 +43,12 @@
         </div>
     </fieldset>
 
-    <fieldset [class.invalid]="closedOn?.invalid">
+    <fieldset [class.invalid]="closedOn.invalid">
         <label for="accountClosed">
             Closed On
 
             @if (accountForm.hasError('accountDates')) {
-            <span class="validation-message arrow-down">Close date must be after open date.</span>
+            <span class="validation-message">Close date must be after open date.</span>
             }
 
         </label>
@@ -58,7 +58,7 @@
         </div>
     </fieldset>
 
-    <fieldset [class.invalid]="note?.invalid">
+    <fieldset [class.invalid]="note.invalid">
         <label for="accountNote">Notes</label>
         <textarea id="accountNote" type="text" formControlName="note" ></textarea>
     </fieldset>
@@ -80,6 +80,9 @@
     </fieldset>
 
     <footer>
+        @if (errorMessage) {
+        <p class="validation-message">{{ errorMessage }}</p>
+        }
         <app-button type="save" icon="floppy" [disabled]="accountForm.invalid || accountForm.pristine" [label]="'Save account'"></app-button>
     </footer>
 </form>

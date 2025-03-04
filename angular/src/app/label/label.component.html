@@ -1,0 +1,6 @@
+<label for="{{ fieldName }}">
+    {{ text() }}
+    @if (message) {
+    <span class="validation-message"><svg><use xlink:href="#warning" /></svg> {{ message }}</span>
+    }
+</label>

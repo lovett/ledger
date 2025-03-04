@@ -1,20 +1,4 @@
-HEADER {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 3em;
-}
-
-FOOTER {
-    display: flex;
-    align-items: center;
-}
-
-FOOTER > * {
-    margin-right: 1em;
-}
-
-FORM {
+form {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 3em;

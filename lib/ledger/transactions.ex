@@ -144,7 +144,26 @@ defmodule Ledger.Transactions do
       ** (Ecto.NoResultsError)
 
   """
-  def get_transaction!(id), do: Repo.get!(Transaction, id)
+  def get_transaction!(id) do
+    account_preload = from a in Account,
+                           select: [:id, :name, :logo_mime]
+
+    Repo.one! from t in Transaction,
+                   select: [
+                     :id,
+                     :payee,
+                     :amount,
+                     :occurred_on,
+                     :cleared_on,
+                     :account_id,
+                     :destination_id,
+                     :note,
+                     :receipt_mime
+                   ],
+                   where: t.id == ^id,
+                   preload: [account: ^account_preload,
+                             destination: ^account_preload]
+  end
 
   @doc """
   Creates a transaction.

@@ -7,7 +7,6 @@ import { TransactionRecord, ApiResponse } from './app.types';
 type TransactionList = [Transaction[], number, string];
 type ListResponse = ApiResponse<TransactionRecord[]>;
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -51,11 +50,32 @@ export class TransactionService {
     );
   }
 
+  saveTransaction(transaction: Transaction): Observable<void> {
+    let request = this.http.put<void>(`/api/transactions/${transaction.id}`, transaction.formData);
+    if (transaction.id === 0) {
+      request = this.http.post<void>('/api/transactions', transaction.formData);
+    }
+
+    return request.pipe(
+      catchError(this.handleError)
+    );
+  }
+
   deleteTransaction(id: number): Observable<void> {
     return this.http.delete<void>(`/api/transactions/${id}`).pipe(
       catchError(this.handleError)
     );
   }
+
+  autocompletePayee(payee: string): Observable<String[]> {
+    return this.http.get<String[]>('/ledger/autocomplete/payee', {params: {query: payee}}).pipe(
+      map((response): String[] => {
+        return response;
+      }),
+      catchError(this.handleError)
+    );
+  }
+
 
   handleError(error: HttpErrorResponse) {
     console.error('handleError', error);

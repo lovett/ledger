@@ -79,16 +79,17 @@ export class AccountFormComponent implements OnInit {
     });
   }
 
-  get name() { return this.accountForm.get('name') }
-  get openedOn() { return this.accountForm.get('opened_on') }
-  get closedOn() { return this.accountForm.get('closed_on') }
-  get note() { return this.accountForm.get('note') }
-  get url() { return this.accountForm.get('url') }
-  get logo_url() { return this.accountForm.get('logo_url') }
-  get existing_logo_action() { return this.accountForm.get('existing_logo_action') }
+  get id() { return this.accountForm.get('id') as FormControl }
+  get name() { return this.accountForm.get('name') as FormControl }
+  get openedOn() { return this.accountForm.get('opened_on') as FormControl }
+  get closedOn() { return this.accountForm.get('closed_on') as FormControl }
+  get note() { return this.accountForm.get('note') as FormControl }
+  get url() { return this.accountForm.get('url') as FormControl }
+  get logo_url() { return this.accountForm.get('logo_url') as FormControl }
+  get existing_logo_action() { return this.accountForm.get('existing_logo_action') as FormControl }
 
   delete() {
-    this.accountService.deleteAccount(this.accountForm.value.id!).subscribe({
+    this.accountService.deleteAccount(this.id.value).subscribe({
       next: () => this.router.navigate(this.returnRoute),
       error: (error) => {
         this.errorMessage = error.message;
@@ -148,7 +149,7 @@ export class AccountFormComponent implements OnInit {
   }
 
   canDelete(): boolean {
-    return this.accountForm.get('id')?.value! > 0;
+    return this.id.value > 0;
   }
 
   populate(account: Account) {
