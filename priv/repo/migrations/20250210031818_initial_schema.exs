@@ -48,7 +48,7 @@ defmodule Ledger.Repo.Migrations.InitialSchema do
             #{@fts_transactions_table}, rowid, occurred_on,
             amount, payee, note
         ) VALUES (
-            'delete', old.rowid, old.occurred_on,
+            'delete', old.rowid, REPLACE(old.occurred_on, '-', ''),
             old.amount, old.payee, old.note);
     END;
     """
@@ -67,7 +67,7 @@ defmodule Ledger.Repo.Migrations.InitialSchema do
           #{@fts_transactions_table}, rowid,
           occurred_on, amount, payee, note
       ) VALUES (
-          'delete', old.rowid, old.occurred_on,
+          'delete', old.rowid, REPLACE(old.occurred_on, '-', ''),
           old.amount, old.payee, old.note);
 
       INSERT INTO #{@fts_transactions_table} (
