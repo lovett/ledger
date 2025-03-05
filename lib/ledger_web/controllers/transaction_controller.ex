@@ -20,13 +20,14 @@ defmodule LedgerWeb.TransactionController do
 
   def create(conn, %{"transaction" => transaction_params}) do
     values = transaction_params
-    |> Map.replace("amount", String.to_integer(transaction_params["amount"]))
+    |> Map.update("account_id", nil, &String.to_integer/1)
+    |> Map.update("destination_id", nil, &String.to_integer/1)
+    |> Map.update("amount", 0, &String.to_integer/1)
     |> Map.put_new("cleared_on", nil)
     |> Map.put_new("note", nil)
     |> merge_receipt_fields()
 
-    with {:ok, %Transaction{} = transaction} <- Transactions.create_transaction(values) do
-      conn
+    with {:ok, %Transaction{} = _} <- Transactions.create_transaction(values) do
       send_resp(conn, :created, "")
     end
   end
@@ -39,18 +40,19 @@ defmodule LedgerWeb.TransactionController do
   def update(conn, %{"id" => id, "transaction" => transaction_params}) do
     transaction = Transactions.get_transaction!(id)
 
-    updates = transaction_params
-    |> Map.replace("account_id", String.to_integer(transaction_params["account_id"]))
-    |> Map.replace("destination_id", String.to_integer(transaction_params["destination_id"]))
-    |> Map.replace("amount", String.to_integer(transaction_params["amount"]))
+    values = transaction_params
+    |> Map.update("account_id", nil, &String.to_integer/1)
+    |> Map.update("destination_id", nil, &String.to_integer/1)
+    |> Map.update("amount", nil, &String.to_integer/1)
     |> Map.put_new("cleared_on", nil)
     |> Map.put_new("note", nil)
     |> discard_existing_receipt()
     |> merge_receipt_fields()
 
-    with {:ok, %Transaction{} = _} <- Transactions.update_transaction(transaction, updates) do
+    with {:ok, %Transaction{} = _} <- Transactions.update_transaction(transaction, values) do
       send_resp(conn, :no_content, "")
     end
+    send_resp(conn, :no_content, "")
   end
 
   def delete(conn, %{"id" => id}) do

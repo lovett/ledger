@@ -61,6 +61,10 @@ export class TransactionService {
     );
   }
 
+  // clearTransaction(id: number): Observable<void> {
+  //   return this.http.patch<void>(`/api/transactions/${id}`, transaction
+  // }
+
   deleteTransaction(id: number): Observable<void> {
     return this.http.delete<void>(`/api/transactions/${id}`).pipe(
       catchError(this.handleError)

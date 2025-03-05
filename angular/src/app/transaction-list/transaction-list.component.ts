@@ -135,11 +135,14 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   }
 
   clearTransaction(event: MouseEvent, transaction: Transaction){
-    //     event.preventDefault();
-    //     transaction.cleared_on = new Date();
-    //     this.ledgerService.saveTransaction(transaction).subscribe({
-    //         error: (err: Error) => console.log(err),
-    //     });
+    event.preventDefault();
+    transaction.cleared_on = new Date();
+    this.transactionService.saveTransaction(transaction).subscribe({
+      error: (error) => {
+        this.errorMessage = error.message;
+        console.error(error.message);
+      }
+    });
   }
 
   toggleSelection(event: MouseEvent, transaction: Transaction) {
