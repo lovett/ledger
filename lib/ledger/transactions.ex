@@ -39,6 +39,7 @@ defmodule Ledger.Transactions do
                   where: ^filter_account(account),
                   where: ^filter_query(query),
                   order_by: [desc: :occurred_on],
+                  order_by: [desc: :inserted_at],
                   limit: ^limit,
                   offset: ^offset,
                   preload: [account: ^account_preload, destination: ^account_preload]
