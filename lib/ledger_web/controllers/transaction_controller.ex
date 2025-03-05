@@ -19,11 +19,15 @@ defmodule LedgerWeb.TransactionController do
   end
 
   def create(conn, %{"transaction" => transaction_params}) do
-    with {:ok, %Transaction{} = transaction} <- Transactions.create_transaction(transaction_params) do
+    values = transaction_params
+    |> Map.replace("amount", String.to_integer(transaction_params["amount"]))
+    |> Map.put_new("cleared_on", nil)
+    |> Map.put_new("note", nil)
+    |> merge_receipt_fields()
+
+    with {:ok, %Transaction{} = transaction} <- Transactions.create_transaction(values) do
       conn
-      |> put_status(:created)
-      |> put_resp_header("location", ~p"/api/transactions/#{transaction}")
-      |> render(:show, transaction: transaction)
+      send_resp(conn, :created, "")
     end
   end
 
@@ -43,8 +47,6 @@ defmodule LedgerWeb.TransactionController do
     |> Map.put_new("note", nil)
     |> discard_existing_receipt()
     |> merge_receipt_fields()
-
-    IO.inspect(updates, label: "transaction updates")
 
     with {:ok, %Transaction{} = _} <- Transactions.update_transaction(transaction, updates) do
       send_resp(conn, :no_content, "")
