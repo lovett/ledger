@@ -139,7 +139,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     transaction.cleared_on = new Date();
     this.transactionService.saveTransaction(transaction).subscribe({
       error: (error) => {
-        this.errorMessage = error.message;
+        //this.errorMessage = error.message;
         console.error(error.message);
       }
     });
