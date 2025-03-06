@@ -27,11 +27,10 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     query: new FormControl('')
   });
 
-  // tag = '';
+  tag = '';
   offset = 0;
   account_id = 0;
   paging: Paging;
-  title = 'Transactions';
   // transactions: Transaction[] = [];
   // singularResourceName: string;
 
@@ -65,16 +64,17 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.queryParamMap.subscribe((paramMap: ParamMap) => {
       this.offset = Number(paramMap.get("offset") ?? 0);
-      this.account_id = Number(paramMap.get("account_id") ?? 0);
+      this.account_id = Number(paramMap.get("account") ?? 0);
       this.searchForm.patchValue({query: paramMap.get("query") ?? '' });
+      this.tag = paramMap.get("tag") || '';
 
       this.transactions$ = this.transactionService.getTransactions(
         this.offset,
         this.account_id,
+        this.tag,
         this.query.value
       ).pipe(
         tap(data => this.paging = new Paging(data[0].length, data[1], this.offset)),
-        tap(data => this.title = data[2]),
         map(data => data[0])
       )
     });
@@ -122,6 +122,15 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {account_id: null, offset: null},
+      queryParamsHandling: 'merge'
+    });
+  }
+
+  clearTag(event: Event) {
+    event.preventDefault();
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {tag: null},
       queryParamsHandling: 'merge'
     });
   }

@@ -5,9 +5,11 @@
 alias Ledger.Repo
 alias Ledger.Accounts.Account
 alias Ledger.Transactions.Transaction
+alias Ledger.Tags.Tag
 
 Repo.delete_all Account
 Repo.delete_all Transaction
+Repo.delete_all Tag
 
 Repo.insert! %Account{
   id: 1,
@@ -46,7 +48,11 @@ Repo.insert! %Transaction{
   cleared_on: ~D[2000-02-02],
   amount: 10001,
   payee: "Opening Balance",
-  note: "Initial deposit of $100.01 into account 1"
+  note: "Initial deposit of $100.01 into account 1",
+  tags: [
+    %Tag{id: 1, name: "first"},
+    %Tag{id: 2, name: "apple"},
+  ]
 }
 
 Repo.insert! %Transaction{
@@ -55,5 +61,8 @@ Repo.insert! %Transaction{
   destination_id: 2,
   occurred_on: ~D[2000-03-01],
   amount: 1001,
-  note: "Transfer of $10.01 to account 2"
+  note: "Transfer of $10.01 to account 2",
+  tags: [
+    %Tag{id: 3, name: "second"},
+  ]
 }

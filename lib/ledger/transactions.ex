@@ -7,6 +7,7 @@ defmodule Ledger.Transactions do
   alias Ledger.Repo
 
   alias Ledger.Transactions.Transaction
+  alias Ledger.Transactions.TransactionFilter
   alias Ledger.Transactions.Fts
   alias Ledger.Accounts.Account
 
@@ -19,31 +20,34 @@ defmodule Ledger.Transactions do
       [%Transaction{}, ...]
 
   """
-  @spec list_transactions(account:: integer, query:: binary, offet:: integer, limit:: integer) :: Ecto.Query.t()
-  def list_transactions(account \\ 0, query \\ "", offset \\ 0, limit \\ 50) do
-    account_preload = from a in Account,
-                           select: [:id, :name, :logo_mime]
+  @spec list_transactions(filter:: %TransactionFilter{}) :: Ecto.Query.t()
+  def list_transactions(filter) do
 
-    Repo.all from t in Transaction,
-                  select: [
-                    :id,
-                    :occurred_on,
-                    :cleared_on,
-                    :amount,
-                    :payee,
-                    :note,
-                    :receipt_mime,
-                    :account_id,
-                    :destination_id
-                  ],
-                  where: ^filter_account(account),
-                  where: ^filter_query(query),
-                  order_by: [desc: :occurred_on],
-                  order_by: [desc: :inserted_at],
-                  limit: ^limit,
-                  offset: ^offset,
-                  preload: [account: ^account_preload, destination: ^account_preload]
+    account = from a in Account, select: [:id, :name, :logo_mime]
+
+    query = from base_query(filter.tag),
+                 select: [:id, :occurred_on, :cleared_on, :amount, :payee, :note, :account_id, :destination_id],
+                 where: ^filter_account(filter.account_id),
+                 where: ^filter_search(filter.search),
+                 order_by: [desc: :occurred_on],
+                 order_by: [desc: :inserted_at],
+                 limit: ^filter.limit,
+                 offset: ^filter.offset,
+                 preload: [
+                   :tags,
+                   account: ^account,
+                   destination: ^account
+                 ]
+    Repo.all query
   end
+
+  def base_query(""), do: Transaction
+
+  def base_query(tag) do
+    from t in Transaction, join: tg in assoc(t, :tags), where: tg.name == ^tag
+  end
+
+
 
   @doc """
   Returns a count of transactions.
@@ -54,13 +58,13 @@ defmodule Ledger.Transactions do
       1
 
   """
-  @spec count_transactions(account:: integer, query:: binary) :: Ecto.Query.t()
-  def count_transactions(account \\ 0, query \\ "") do
-    Repo.one from t in Transaction,
-                  select: count(),
-                  where: ^filter_account(account),
-                  where: ^filter_query(query)
-
+  @spec count_transactions(filter:: %TransactionFilter{}) :: Ecto.Query.t()
+  def count_transactions(filter) do
+    query = from t in base_query(filter.tag),
+                 select: count(),
+                 where: ^filter_account(filter.account_id),
+                 where: ^filter_search(filter.search)
+    Repo.one query
   end
 
   @spec filter_account(id:: integer) :: Ecto.Query.t()
@@ -72,12 +76,12 @@ defmodule Ledger.Transactions do
     end
   end
 
-  @spec filter_query(query:: binary) :: Ecto.Query.t()
-  def filter_query(query \\ "") do
-    if query == "" do
+  @spec filter_search(search:: binary) :: Ecto.Query.t()
+  def filter_search(search \\ "") do
+    if search == "" do
       dynamic(true)
     else
-      dynamic([t], t.id in subquery(from(row in Fts, select: row.id, where: fragment("transactions_fts MATCH ?", ^fts_escape(query)))))
+      dynamic([t], t.id in subquery(from(row in Fts, select: row.id, where: fragment("transactions_fts MATCH ?", ^fts_escape(search)))))
     end
   end
 
@@ -99,7 +103,6 @@ defmodule Ledger.Transactions do
     |> String.replace("\"\"", "")
     |> String.trim()
   end
-
 
   def list_balances do
     deposits = tally_deposits()

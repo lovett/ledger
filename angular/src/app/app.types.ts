@@ -1,7 +1,11 @@
 export type ApiResponse<T> = {
   data: T;
   count: number
-  title: string,
+}
+
+export type TagRecord = {
+  id: number,
+  name: string,
 }
 
 export type AccountRecord = {
@@ -26,6 +30,7 @@ export type TransactionRecord = {
   payee?: string,
   note?: string,
   receipt_mime?: string,
-  account: Partial<AccountRecord>
-  destination: Partial<AccountRecord>
+  account: Partial<AccountRecord>,
+  destination: Partial<AccountRecord>,
+  tags: TagRecord[],
 }

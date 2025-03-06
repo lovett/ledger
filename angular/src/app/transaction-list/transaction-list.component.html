@@ -1,7 +1,7 @@
 <header>
     <div></div>
     <app-button label="Add transaction" icon="add" routerLink="/transactions/new"></app-button>
-    <h1>{{ title }}</h1>
+    <h1>Transactions</h1>
 </header>
 
 <form (ngSubmit)="search()" [formGroup]="searchForm" autocomplete="off">
@@ -21,6 +21,11 @@
         @if (account_id > 0) {
         <a href="#" (click)="clearAccount($event)">All accounts</a>
         }
+
+        @if (tag != "") {
+        <a href="#" (click)="clearTag($event)">All tags</a>
+        }
+
     </div>
 
     <div>
@@ -89,13 +94,19 @@
                 </a>
             </p>
             }
-            <!-- MIGRATION_PENDING
-                 <ul class="tag-list" *ngIf="transaction.tags">
-                 <li *ngFor="let tag of transaction.tags; first as isFirst">
-                 <svg *ngIf="isFirst" class="icon"><use xlink:href="#icon-tag"></use></svg>
-                 <a [routerLink]="['/transactions']" [queryParams]="{q: 'tags:' + tag}">{{ tag }}</a>
-                 </li>
-                 </ul> -->
+
+            <ul class="tag-list">
+                @for (tag of transaction.tags; track tag.id) {
+                <li>
+                    @if ($first) {
+                    <svg class="icon"><use xlink:href="#tag"></use></svg>
+                    }
+                    <a [routerLink]="['/transactions']"
+                       [queryParams]="{tag: tag.name}"
+                       queryParamsHandling="merge">{{ tag.name }}</a>
+                </li>
+                }
+            </ul>
         </td>
         <td class="align-right nowrap">
             {{ transaction.amount | currency }}

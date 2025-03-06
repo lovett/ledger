@@ -1,4 +1,5 @@
 import { Account } from './account';
+import { Tag } from './tag';
 import {TransactionRecord} from './app.types';
 
 export class Transaction {
@@ -13,6 +14,7 @@ export class Transaction {
   receipt_mime: string = '';
   receipt_upload?: File;
   existing_receipt_action: string = 'keep';
+  tags: Tag[] = [];
   selected = false;
 
   constructor() {
@@ -45,6 +47,10 @@ export class Transaction {
 
     if (record.destination) {
       t.destination = Account.fromRecord(record.destination);
+    }
+
+    for (const item  of record.tags) {
+      t.tags.push(Tag.fromRecord(item));
     }
 
     return t;

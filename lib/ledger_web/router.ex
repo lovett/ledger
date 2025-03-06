@@ -24,7 +24,6 @@ defmodule LedgerWeb.Router do
     get "/transactions", PageController, :home
     get "/transactions/new", PageController, :home
     get "/transactions/:id/edit", PageController, :home
-
   end
 
   scope "/api", LedgerWeb do
@@ -33,6 +32,7 @@ defmodule LedgerWeb.Router do
       resources "/logo", LogoController, only: [:show], singleton: true
     end
     resources "/transactions", TransactionController, except: [:new, :edit]
+    resources "/tags", TagController, except: [:new, :edit]
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

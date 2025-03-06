@@ -114,11 +114,13 @@ defmodule Ledger.Repo.Migrations.InitialSchema do
     end
 
     create table(:transactions_tags, primary_key: false) do
-      add :transaction_id, references(:transactions), null: false, primary_key: true
-      add :tag_id, references(:tags), null: false, primary_key: true
+      add :transaction_id, references(:transactions, on_delete: :delete_all), null: false, primary_key: true
+      add :tag_id, references(:tags, on_delete: :delete_all), null: false, primary_key: true
     end
 
     create unique_index(:accounts, [:name])
+    create unique_index(:tags, [:name])
+
     execute fts_up(), fts_down()
     execute after_insert_trigger_up(), after_insert_trigger_down()
     execute after_update_trigger_up(), after_update_trigger_down()

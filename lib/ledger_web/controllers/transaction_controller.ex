@@ -4,18 +4,22 @@ defmodule LedgerWeb.TransactionController do
   alias Ledger.Transactions
   alias Ledger.Accounts;
   alias Ledger.Transactions.Transaction
+  alias Ledger.Transactions.TransactionFilter
 
   action_fallback LedgerWeb.FallbackController
 
   def index(conn, params) do
-    offset = String.to_integer(Map.get(params, "offset", "0"))
-    account_id = String.to_integer(Map.get(params, "account_id", "0"))
-    query = Map.get(params, "query", "")
-    limit = 100
-    transactions = Transactions.list_transactions(account_id, query, offset, limit)
-    count = Transactions.count_transactions(account_id, query)
-    title = page_title(account_id, query)
-    render(conn, :index, transactions: transactions, count: count, offset: offset, title: title)
+    filter = %TransactionFilter{
+      account_id: String.to_integer(Map.get(params, "account_id", "0")),
+      tag: Map.get(params, "tag", ""),
+      search: Map.get(params, "query", "") |> String.trim,
+      offset: String.to_integer(Map.get(params, "offset", "0")),
+      limit: 100
+    }
+
+    transactions = Transactions.list_transactions(filter)
+    count = Transactions.count_transactions(filter)
+    render(conn, :index, transactions: transactions, count: count, offset: filter.offset)
   end
 
   def create(conn, %{"transaction" => transaction_params}) do
@@ -63,16 +67,18 @@ defmodule LedgerWeb.TransactionController do
     end
   end
 
-  @spec page_title(account_id:: integer, query:: String.t()):: String.t()
-  def page_title(account_id \\ 0, query \\ "") do
-    account = if (account_id == 0), do: nil, else: Accounts.get_account!(account_id)
-
-    has_query = String.trim(query) != ""
+  @spec page_title(filter:: %TransactionFilter{}):: String.t()
+  def page_title(filter) do
+    account = if filter.account_id > 0, do: Accounts.get_account!(filter.account_id)
+    search = if filter.search != "", do: filter.search
+    tag = if filter.tag != "", do: filter.tag
 
     cond do
-      account && has_query -> "Transaction Search Results in #{account.name}"
-      account -> "#{account.name} Transactions"
-      has_query  -> "Transaction Search Results"
+      account && search && tag -> "Transactions in #{account.name} tagged #{tag}"
+      account && search -> "Search results in #{account.name}"
+      account -> "Transactions in #{account.name}"
+      search  -> "Transaction Search Results"
+      tag -> "Transactions tagged #{tag}"
       true -> "Transactions"
     end
   end

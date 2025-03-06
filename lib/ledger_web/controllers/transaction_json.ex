@@ -4,12 +4,11 @@ defmodule LedgerWeb.TransactionJSON do
   @doc """
   Renders a list of transactions with pagination details.
   """
-  def index(%{transactions: transactions, count: count, offset: offset, title: title}) do
+  def index(%{transactions: transactions, count: count, offset: offset}) do
     %{
       data: for(transaction <- transactions, do: data(transaction)),
       count: count,
       offset: offset,
-      title: title,
     }
   end
 
@@ -29,7 +28,8 @@ defmodule LedgerWeb.TransactionJSON do
       payee: transaction.payee,
       note: transaction.note,
       account: transaction.account,
-      destination: transaction.destination
+      destination: transaction.destination,
+      tags: transaction.tags
     }
   end
 end

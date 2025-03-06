@@ -1,6 +1,7 @@
 defmodule Ledger.Transactions.Transaction do
   use Ecto.Schema
   alias Ledger.Accounts.Account
+  alias Ledger.Tags.Tag
   import Ecto.Changeset
 
   schema "transactions" do
@@ -14,6 +15,7 @@ defmodule Ledger.Transactions.Transaction do
     belongs_to :account, Account
     belongs_to :destination, Account, foreign_key: :destination_id
     timestamps(type: :utc_datetime)
+    many_to_many(:tags, Tag, join_through: "transactions_tags", on_replace: :delete)
   end
 
   @doc false
