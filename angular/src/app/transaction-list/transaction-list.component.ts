@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, output, OnDestroy, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
 import { CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe } from '@angular/common';
@@ -7,7 +7,6 @@ import { TransactionService } from '../transaction.service';
 import { Observable, of, map, tap } from 'rxjs';
 import { Transaction } from '../transaction';
 import { Paging } from '../paging';
-// import { Component, EventEmitter, Output } from '@angular/core';
 // import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 // import { Transaction } from '../models/transaction';
 // import { TransactionList } from '../types/TransactionList';
@@ -21,7 +20,7 @@ import { Paging } from '../paging';
 })
 export class TransactionListComponent implements OnInit, OnDestroy {
   transactions$: Observable<Transaction[]> = of([]);
-  // @Output() selection = new EventEmitter<Transaction>();
+  readonly selection = output<Transaction>();
 
   searchForm = new FormGroup({
     query: new FormControl('')
