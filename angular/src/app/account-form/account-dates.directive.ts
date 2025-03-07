@@ -9,5 +9,5 @@ export const accountDatesValidator: ValidatorFn = (
   if (!opened_on) return null;
   if (!closed_on) return null;
   if (closed_on > opened_on) return null;
-  return {'accountDates': true }
+  return {'accountDates': {value: 'Close date should be after open date' }}
 };

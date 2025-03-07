@@ -9,61 +9,38 @@
 
 <form (ngSubmit)="save()" [formGroup]="accountForm" autocomplete="off">
     <input type="hidden" formControlName="id" />
-    <fieldset [class.invalid]="name.invalid">
-        <label for="accountName">
-            Name
-            @if (name.hasError('required')) {
-            <span class="validation-message"><svg><use xlink:href="#warning" /></svg> The account must have a name</span>
-            }
-
-            @if (name.hasError('unique')) {
-            <span class="validation-message"><svg><use xlink:href="#warning" /></svg> This name is already used</span>
-            }
-        </label>
+    <div>
+        <app-label [control]="name" text="Name" />
         <input id="accountName" type="text" formControlName="name" autofocus />
-    </fieldset>
+    </div>
 
-    <fieldset [class.invalid]="url.invalid">
-        <label for="accountUrl">URL</label>
+    <div>
+        <app-label [control]="url" text="URL" />
         <input id="accountUrl" type="url" formControlName="url" />
-    </fieldset>
+    </div>
 
-    <fieldset [class.invalid]="openedOn.invalid">
-        <label for="accountOpened">
-            Opened On
-
-            @if (accountForm.hasError('accountDates')) {
-            <span class="validation-message">Open date must be before close date.</span>
-            }
-
-        </label>
+    <div>
+        <app-label [control]="openedOn" text="Opened On" [customMessage]="accountForm.getError('accountDates')?.value" />
         <input id="accountOpened" type="date" formControlName="opened_on" max="today" />
         <div class="shortcuts">
             <a href="#" (click)="clear($event, 'opened_on')">Clear</a>
         </div>
-    </fieldset>
+    </div>
 
-    <fieldset [class.invalid]="closedOn.invalid">
-        <label for="accountClosed">
-            Closed On
-
-            @if (accountForm.hasError('accountDates')) {
-            <span class="validation-message">Close date must be after open date.</span>
-            }
-
-        </label>
+    <div>
+        <app-label [control]="closedOn" text="Closed On" [customMessage]="accountForm.getError('accountDates')?.value" />
         <input id="accountClosed" type="date" formControlName="closed_on" max="today" />
         <div class="shortcuts">
             <a href="#" (click)="clear($event, 'closed_on')">Clear</a>
         </div>
-    </fieldset>
+    </div>
 
-    <fieldset [class.invalid]="note.invalid">
-        <label for="accountNote">Notes</label>
+    <div>
+        <app-label [control]="note" text="Notes" />
         <textarea id="accountNote" type="text" formControlName="note" ></textarea>
-    </fieldset>
+    </div>
 
-    <fieldset>
+    <div>
         <label for="accountLogo">Logo</label>
 
         @if (canShowLogo()) {
@@ -77,7 +54,7 @@
             <app-button type="trash" (click)="discardLogo($event)" icon="trash" [label]="'Discard current logo'"></app-button>
             }
         </div>
-    </fieldset>
+    </div>
 
     <footer>
         @if (errorMessage) {

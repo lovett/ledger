@@ -19,7 +19,7 @@ export class LabelComponent {
     if (control.hasError('required')) return 'This field is required';
     if (control.hasError('pattern')) return 'The amount should be numeric';
     if (control.hasError('min')) return 'Value is too small';
-
+    if (control.hasError('unique')) return 'This value is already used';
     return 'Error';
   }
 

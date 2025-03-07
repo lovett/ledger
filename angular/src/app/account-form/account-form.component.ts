@@ -5,7 +5,7 @@ import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { Account } from '../account';
 import { AccountService } from '../account.service';
 import { ButtonComponent } from '../button/button.component';
-
+import { LabelComponent } from '../label/label.component';
 import { Observable, map, of } from 'rxjs';
 
 
@@ -33,7 +33,7 @@ import { Observable, map, of } from 'rxjs';
 
 @Component({
   selector: 'app-account-form',
-  imports: [ReactiveFormsModule, ButtonComponent, RouterLink],
+  imports: [ReactiveFormsModule, ButtonComponent, LabelComponent, RouterLink],
   templateUrl: './account-form.component.html',
   styleUrl: './account-form.component.css'
 })
@@ -48,7 +48,6 @@ export class AccountFormComponent implements OnInit {
     name: new FormControl('', {
       validators: Validators.required,
       // MIGRATION_PENDING asyncValidators: uniqueName(id, this.accountService),
-      updateOn: 'blur',
     }),
     url: new FormControl(''),
     opened_on: new FormControl(''),
