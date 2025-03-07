@@ -76,7 +76,7 @@ defmodule Ledger.Transactions do
     end
   end
 
-  @spec filter_search(search:: binary) :: Ecto.Query.t()
+  @spec filter_search(search:: String.t()) :: Ecto.Query.t()
   def filter_search(search \\ "") do
     if search == "" do
       dynamic(true)
