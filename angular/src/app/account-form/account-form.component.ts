@@ -87,7 +87,8 @@ export class AccountFormComponent implements OnInit {
   get logo_url() { return this.accountForm.get('logo_url') as FormControl }
   get existing_logo_action() { return this.accountForm.get('existing_logo_action') as FormControl }
 
-  delete() {
+  delete(confirmed: boolean) {
+    if (!confirmed) return;
     this.accountService.deleteAccount(this.id.value).subscribe({
       next: () => this.router.navigate(this.returnRoute),
       error: (error) => {

@@ -1,4 +1,4 @@
-import { Component, input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   selector: 'app-button',
@@ -6,7 +6,7 @@ import { Component, input, Output, EventEmitter } from '@angular/core';
   styleUrl: './button.component.css'
 })
 export class ButtonComponent {
-  @Output() confirmed = new EventEmitter<string>();
+  readonly confirmed = output<boolean>();
 
   type = input<string>('');
   label = input<string>('Button');
@@ -19,7 +19,9 @@ export class ButtonComponent {
 
     event.preventDefault();
     if (confirm(this.confirmationMessage())) {
-      this.confirmed.emit();
+      this.confirmed.emit(true);
+    } else {
+      this.confirmed.emit(false);
     }
   }
 
