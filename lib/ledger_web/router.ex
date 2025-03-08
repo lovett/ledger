@@ -24,6 +24,7 @@ defmodule LedgerWeb.Router do
     get "/transactions", PageController, :home
     get "/transactions/new", PageController, :home
     get "/transactions/:id/edit", PageController, :home
+    get "/tags", PageController, :home
   end
 
   scope "/api", LedgerWeb do

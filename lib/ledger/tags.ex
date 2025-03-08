@@ -18,7 +18,12 @@ defmodule Ledger.Tags do
 
   """
   def list_tags do
-    Repo.all(Tag)
+    query = from tg in Tag,
+                 select: %{id: tg.id, name: tg.name, transaction_count: count(tg.id)},
+                 left_join: "transactions_tags",
+                 on: [tag_id: tg.id],
+                 group_by: tg.id
+    Repo.all(query)
   end
 
   @doc """

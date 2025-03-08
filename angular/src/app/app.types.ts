@@ -6,6 +6,8 @@ export type ApiResponse<T> = {
 export type TagRecord = {
   id: number,
   name: string,
+  transaction_count: number,
+  last_used?: string,
 }
 
 export type AccountRecord = {

@@ -5,7 +5,8 @@ defmodule LedgerWeb.TagJSON do
   Renders a list of tags.
   """
   def index(%{tags: tags}) do
-    %{data: for(tag <- tags, do: data(tag))}
+    %{data: tags}
+#for(tag <- tags, do: data(tag))}
   end
 
   @doc """
@@ -16,8 +17,11 @@ defmodule LedgerWeb.TagJSON do
   end
 
   defp data(%Tag{} = tag) do
+    IO.inspect(tag, label: "tag")
     %{
-      id: tag.id
+      id: tag.id,
+      name: tag.name,
+      transaction_count: tag.transaction_count
     }
   end
 end

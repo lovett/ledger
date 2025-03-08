@@ -3,9 +3,10 @@ defmodule Ledger.Tags.Tag do
   alias Ledger.Transactions.Transaction
   import Ecto.Changeset
 
-  @derive {Jason.Encoder, only: [:id, :name]}
+  @derive {Jason.Encoder, only: [:id, :name, :transaction_count]}
   schema "tags" do
     field :name, :string
+    field :transaction_count, :integer, virtual: true
     many_to_many(:transactions, Transaction, join_through: "transactions_tags")
   end
 

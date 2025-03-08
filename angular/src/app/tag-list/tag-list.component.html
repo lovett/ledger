@@ -1,0 +1,13 @@
+<header>
+    <h1>Tags</h1>
+</header>
+
+<ul class="tags">
+    @for (tag of (tags$ | async); track tag.id) {
+    <li>
+        <a [routerLink]="['/transactions']" [queryParams]="{tag: tag.name}">{{ tag.name }}</a>
+        → {{ tag.transaction_count|number }}
+        <a class="rename" href="#" (click)="rename($event, tag)">Rename</a>
+    </li>
+    }
+</ul>
