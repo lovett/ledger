@@ -22,7 +22,8 @@ defmodule Ledger.Tags do
                  select: %{id: tg.id, name: tg.name, transaction_count: count(tg.id)},
                  left_join: "transactions_tags",
                  on: [tag_id: tg.id],
-                 group_by: tg.id
+                 group_by: tg.id,
+                 order_by: tg.name
     Repo.all(query)
   end
 

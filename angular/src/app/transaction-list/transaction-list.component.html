@@ -1,7 +1,6 @@
 <header>
-    <div></div>
-    <app-button label="Add transaction" icon="add" routerLink="/transactions/new"></app-button>
     <h1>Transactions</h1>
+    <app-button label="Add transaction" icon="add" routerLink="/transactions/new"></app-button>
 </header>
 
 <form (ngSubmit)="search()" [formGroup]="searchForm" autocomplete="off">
