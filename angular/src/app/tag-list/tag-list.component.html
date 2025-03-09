@@ -4,10 +4,30 @@
 
 <ul class="tags">
     @for (tag of (tags$ | async); track tag.id) {
-    <li>
-        <a [routerLink]="['/transactions']" [queryParams]="{tag: tag.name}">{{ tag.name }}</a>
-        → {{ tag.transaction_count|number }}
-        <a class="rename" href="#" (click)="rename($event, tag)">Rename</a>
+    <li class="tag">
+        <details>
+            <summary>{{ tag.name }}</summary>
+            <ul>
+                @if (tag.transaction_count === 0) {
+                <li>No transactions</li>
+                }
+
+                @if (tag.transaction_count === 1) {
+                <li><a [routerLink]="['/transactions']" [queryParams]="{tag: tag.name}">1 transaction</a></li>
+                }
+
+                @if (tag.transaction_count > 1) {
+                <li><a [routerLink]="['/transactions']" [queryParams]="{tag: tag.name}">{{ tag.transaction_count|number }} transaction</a></li>
+                }
+
+                <li>
+                    <app-button (click)="rename($event, tag)" label="Rename" icon="edit"></app-button>
+                </li>
+                <li>
+                    <app-button type="delete" (click)="delete($event, tag)" label="Delete" icon="bolt"></app-button>
+                </li>
+            </ul>
+        </details>
     </li>
     }
 </ul>

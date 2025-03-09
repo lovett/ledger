@@ -28,7 +28,6 @@ BUTTON[disabled], BUTTON[disabled]:hover, BUTTON[disabled]:active {
 
 
 .delete {
-    font-size: .9em;
     background-color: #B80300;
     color: #fff;
 }

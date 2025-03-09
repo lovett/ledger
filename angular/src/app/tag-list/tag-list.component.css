@@ -1,5 +1,7 @@
 .tags {
-    columns: 20em auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-auto-flow: column;
     list-style-type: none;
     margin: 0;
     padding: 0;
@@ -8,14 +10,17 @@
 .tags LI {
     margin: 0;
     padding: 0;
+    margin-bottom: 2em;
+    break-inside: avoid-column;
+}
+
+.tags summary {
+    cursor: pointer;
     margin-bottom: 1em;
 }
 
-.tags LI .rename {
-    margin-left: 3em;
-    display: none;
-}
-
-.tags LI:hover .rename {
-    display: inline;
+.tags LI UL {
+    list-style-type: none;
+    margin: 0.5em 0 0.75em;
+    padding: 0;
 }
