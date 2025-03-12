@@ -69,13 +69,16 @@ export class Transaction {
       cleared_on: this.ymd(this.cleared_on),
       note: this.note,
       receipt_url: this.receipt_mime ? this.receiptUrl : '',
+      tags: this.delimitedTags,
     }
+  }
 
-    // while (this.tags.controls.length < transaction.tags.length) {
-    //     this.tagFieldPush('', false);
-    // }
-
-    // this.tags.patchValue(transaction.tags.map((tag: Tag) => tag.name));
+  get delimitedTags(): string {
+    let result =  '';
+    for (const tag of this.tags) {
+      result += `${tag.name}, `;
+    }
+    return result.slice(0, -2);
   }
 
   get transactionType(): string {
@@ -128,6 +131,7 @@ export class Transaction {
     }
 
     formData.set('transaction[existing_receipt_action]', this.existing_receipt_action);
+    formData.set('transaction[tags]', this.delimitedTags);
     return formData;
   }
 }

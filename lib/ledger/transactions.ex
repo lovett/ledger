@@ -165,7 +165,8 @@ defmodule Ledger.Transactions do
                      :receipt_mime
                    ],
                    where: t.id == ^id,
-                   preload: [account: ^account_preload,
+                   preload: [:tags,
+                             account: ^account_preload,
                              destination: ^account_preload]
   end
 

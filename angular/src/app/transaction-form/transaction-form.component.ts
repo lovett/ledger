@@ -4,6 +4,7 @@ import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AsyncPipe, DecimalPipe, formatDate } from '@angular/common';
 import { Transaction } from '../transaction';
 import { Account } from '../account';
+import { Tag } from  '../tag';
 //import { Tag } from '../models/tag';
 import { TransactionService } from '../transaction.service';
 import { switchMap, debounceTime, filter } from 'rxjs';
@@ -241,9 +242,16 @@ export class TransactionFormComponent implements OnInit {
     if (this.transactionForm.value.note) {
       t.note = this.transactionForm.value.note;
     }
-        // t.tags = this.tags.value
-        //     .filter((tag: string) => tag && tag.length > 0)
-    //     .map((tag: string) => Tag.fromString(tag));
+
+    console.log('x', this.transactionForm.value);
+    if (this.transactionForm.value.tags) {
+      const tags = this.transactionForm.value.tags.split(',').map(value => value.toLowerCase().trim());
+      for (const tag of tags) {
+        const instance = new Tag();
+        instance.name = tag;
+        t.tags.push(instance);
+      }
+    }
 
     if (this.receipt_upload) t.receipt_upload = this.receipt_upload;
 

@@ -107,4 +107,20 @@ defmodule Ledger.Tags do
   def change_tag(%Tag{} = tag, attrs \\ %{}) do
     Tag.changeset(tag, attrs)
   end
+
+  @spec parse_delimited_names(String.t()) :: [String.t()]
+  def parse_delimited_names(value) do
+    value
+    |> String.split(",")
+    |> Enum.map(&String.trim/1)
+    |> Enum.reject(fn v -> v == "" end)
+  end
+
+  def get_or_insert_tag(name) do
+    Repo.insert!(
+      %Tag{name: name},
+      on_conflict: [set: [name: name]],
+      conflict_target: :name
+    )
+  end
 end
