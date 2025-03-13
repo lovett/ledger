@@ -24,7 +24,9 @@ defmodule LedgerWeb.AccountJSON do
       url: account.url,
       note: account.note,
       logo_mime: account.logo_mime,
-      balance: account.balance
+      balance: account.balance,
+      withdrawl_count: account.withdrawl_count,
+      deposit_count: account.deposit_count,
     }
   end
 end

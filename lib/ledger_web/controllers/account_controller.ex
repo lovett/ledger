@@ -9,8 +9,12 @@ defmodule LedgerWeb.AccountController do
 
   def index(conn, _params) do
     balances = Transactions.list_balances()
+    deposit_counts = Transactions.count_deposits()
+    withdrawl_counts = Transactions.count_withdrawls()
     accounts = Accounts.list_accounts()
     |> Enum.map(fn account -> %{account | balance: Map.get(balances, account.id, 0)} end)
+    |> Enum.map(fn account -> %{account | deposit_count: Map.get(deposit_counts, account.id, 0)} end)
+    |> Enum.map(fn account -> %{account | withdrawl_count: Map.get(withdrawl_counts, account.id, 0)} end)
     render(conn, :index, accounts: accounts)
   end
 
@@ -25,6 +29,8 @@ defmodule LedgerWeb.AccountController do
 
   def show(conn, %{"id" => id}) do
     account = Accounts.get_account!(id)
+    |> Map.put(:deposit_count, Transactions.count_deposits(id))
+    |> Map.put(:withdrawl_count, Transactions.count_withdrawls(id))
     render(conn, :show, account: account)
   end
 

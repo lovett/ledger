@@ -42,9 +42,22 @@
 
             <footer>
                 <p>
+                    @if (account.transactionCount > 0) {
                     <a [routerLink]="['/transactions']" [queryParams]="{account_id: account.id}">
-                        Transactions
+                        <span [ngPlural]="account.deposit_count">
+                            <ng-template ngPluralCase="=0">0 deposits</ng-template>
+                            <ng-template ngPluralCase="=1">1 deposit</ng-template>
+                            <ng-template ngPluralCase="few">{{ account.deposit_count | number }} deposits</ng-template>
+                        </span>,
+                        <span [ngPlural]="account.withdrawl_count">
+                            <ng-template ngPluralCase="=0">0 withdrawls</ng-template>
+                            <ng-template ngPluralCase="=1">1 withdrawl</ng-template>
+                            <ng-template ngPluralCase="few">{{ account.withdrawl_count | number }} withdrawls</ng-template>
+                        </span>
                     </a>
+                    } @else {
+                    No activity
+                    }
                 </p>
 
                 @if (account.closed_on) {

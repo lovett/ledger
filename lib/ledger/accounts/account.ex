@@ -13,6 +13,8 @@ defmodule Ledger.Accounts.Account do
     field :logo, :binary
     field :logo_mime, :string
     field :balance, :integer
+    field :deposit_count, :integer, virtual: true
+    field :withdrawl_count, :integer, virtual: true
     has_many :transactions, Transaction
     has_many :destination_transactions, Transaction, foreign_key: :destination_id
     timestamps(type: :utc_datetime)

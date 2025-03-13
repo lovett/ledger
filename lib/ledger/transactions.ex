@@ -121,6 +121,40 @@ defmodule Ledger.Transactions do
     end)
   end
 
+  def count_deposits() do
+    Repo.all(from t in Transaction,
+                  group_by: t.destination_id,
+                  select: %{account_id: t.destination_id, count: count()})
+    |> Enum.into(%{}, fn %{account_id: account_id, count: count} ->
+      { account_id, count }
+    end)
+  end
+
+  @spec count_deposits(account_id:: integer):: integer
+  def count_deposits(account_id) do
+    Repo.one from t in Transaction,
+                  select: count(),
+                  group_by: t.destination_id,
+                  where: t.destination_id == ^account_id
+  end
+
+  def count_withdrawls() do
+    Repo.all(from t in Transaction,
+                  group_by: t.account_id,
+                  select: %{account_id: t.account_id, count: count()})
+    |> Enum.into(%{}, fn %{account_id: account_id, count: count} ->
+      { account_id, count }
+    end)
+  end
+
+  @spec count_withdrawls(account_id:: integer):: integer
+  def count_withdrawls(account_id) do
+    Repo.one from t in Transaction,
+                  select: count(),
+                  group_by: t.account_id,
+                  where: t.account_id == ^account_id
+  end
+
   def tally_deposits do
     Repo.all from t in Transaction,
                   group_by: t.destination_id,

@@ -13,6 +13,8 @@ export class Account {
   logo_mime: string = '';
   logo_upload?: File;
   existing_logo_action: string = 'keep';
+  withdrawl_count = 0;
+  deposit_count = 0;
 
   constructor() {
   }
@@ -24,6 +26,14 @@ export class Account {
     a.balance = (record.balance ?? 0) / 100;
 
     a.total_pending = record.total_pending ?? 0;
+
+    if (record.deposit_count) {
+      a.deposit_count = record.deposit_count;
+    }
+
+    if (record.withdrawl_count) {
+      a.withdrawl_count = record.withdrawl_count;
+    }
 
     if (record.opened_on) {
       a.opened_on = new Date(`${record.opened_on}T00:00:00.0000`);
@@ -47,6 +57,10 @@ export class Account {
   ymd(d?: Date) {
     if (!d) return '';
     return d.toISOString().substring(0, 10);
+  }
+
+  get transactionCount() {
+    return this.deposit_count + this.withdrawl_count;
   }
 
   get formValues(): object {

@@ -40,6 +40,7 @@ import { Observable, map, of } from 'rxjs';
 export class AccountFormComponent implements OnInit {
   logo_upload?: File;
   account?: Account;
+  deletionConfirmationMessage?: string;
   errorMessage?: string;
   returnRoute = ['/accounts'];
 
@@ -155,6 +156,20 @@ export class AccountFormComponent implements OnInit {
   populate(account: Account) {
     this.accountForm.reset();
     this.accountForm.patchValue(account.formValues);
+
+    console.log('count', account.transactionCount);
+
+    if (account.transactionCount === 0) {
+      this.deletionConfirmationMessage = 'Delete this account? No transactions will be affected.';
+    }
+
+    if (account.transactionCount === 1) {
+      this.deletionConfirmationMessage = 'Delete this account and 1 transaction associated with it?';
+    }
+
+    if (account.transactionCount > 1) {
+      this.deletionConfirmationMessage = `Delete this account and ${account.transactionCount} transactions associated with it?`;
+    }
   }
 
   onFileChange(event: Event) {
