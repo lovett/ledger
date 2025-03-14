@@ -60,7 +60,12 @@
 
     <div>
         <app-label [control]="tags" text="Tags" />
-        <input id="tags" type="text" formControlName="tags"/>
+        <input #tagsRef id="tags" type="text" formControlName="tags"/>
+        <div class="shortcuts">
+            @for (tag of (tagCandidates$ | async); track tag.id) {
+            <a href="#" (click)="appendTag($event, tag.name)">{{ tag.name }}</a>
+            }
+        </div>
     </div>
 
     <div>

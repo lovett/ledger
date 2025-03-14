@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, viewChild } from '@angular/core';
 import { ReactiveFormsModule, FormArray, FormGroup, FormControl, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { AsyncPipe, DecimalPipe, formatDate } from '@angular/common';
 import { Transaction } from '../transaction';
 import { Account } from '../account';
 import { Tag } from  '../tag';
-//import { Tag } from '../models/tag';
 import { TransactionService } from '../transaction.service';
-import { switchMap, debounceTime, filter } from 'rxjs';
+import { TagService } from '../tag.service';
+//import { switchMap, debounceTime, filter } from 'rxjs';
+import { Observable, switchMap, debounceTime, of, catchError } from 'rxjs';
 import { ButtonComponent } from '../button/button.component';
 import { AccountMenuComponent } from '../account-menu/account-menu.component';
 import { LabelComponent } from '../label/label.component';
@@ -39,17 +40,20 @@ function dateRange(group: AbstractControl): ValidationErrors | null {
 
 @Component({
   selector: 'app-transaction-form',
-  imports: [ReactiveFormsModule, ButtonComponent, AccountMenuComponent, LabelComponent, RouterLink],
+  imports: [ReactiveFormsModule, ButtonComponent, AccountMenuComponent, LabelComponent, RouterLink, AsyncPipe],
   templateUrl: './transaction-form.component.html',
   styleUrl: './transaction-form.component.css'
 })
 export class TransactionFormComponent implements OnInit {
+  tagsRef = viewChild.required<ElementRef>('tagsRef');
   transaction?: Transaction;
   errorMessage?: string;
   datesExpanded = false;
   //autocompleteFrom: Transaction | null;
   receipt_upload?: File;
   returnRoute = ['/transactions'];
+  tagCandidates$: Observable<Tag[]> = of([]);
+
 
   transactionForm = new FormGroup({
     id: new FormControl(0),
@@ -71,33 +75,39 @@ export class TransactionFormComponent implements OnInit {
     //}, {validators: dateRange});
 
   constructor(
-        private router: Router,
-        private route: ActivatedRoute,
-        private formBuilder: FormBuilder,
-        private transactionService: TransactionService,
-
-    ) {
-        // this.singularResourceName = 'transaction';
-        // this.autocompleteFrom = null;
-        // this.receipt = null;
-        // this.transaction = null;
-    }
+    private router: Router,
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private transactionService: TransactionService,
+    private tagService: TagService,
+  ) {
+  }
 
     ngOnInit(): void {
+      this.occurredOn.setValue(this.today)
+
       const id = Number(this.route.snapshot.paramMap.get('id') || 0)
-      if (id === 0) {
-        this.occurredOn.setValue(this.today)
-        return;
+      if (id > 0) {
+        this.transactionService.getTransaction(id).subscribe({
+          next: (transaction: Transaction) => this.populate(transaction),
+          error: (error) => {
+            this.errorMessage = error.message;
+            console.error(error.message);
+          }
+        });
       }
 
-      this.transactionService.getTransaction(id).subscribe({
-        next: (transaction: Transaction) => this.populate(transaction),
-        error: (error) => {
-          this.errorMessage = error.message;
-          console.error(error.message);
-        }
-      });
-
+      this.tagCandidates$ = this.tags.valueChanges.pipe(
+        debounceTime(300),
+        switchMap((value) => {
+          const partial = value.split(',').pop()!.trim();
+          return this.tagService.autocomplete(partial).pipe(
+            catchError((error: Error) => {
+              return of([]);
+            })
+          )
+        })
+      );
         // this.amount.valueChanges.subscribe({
         //     next: (value) => {
         //         if (!value) return;
@@ -123,7 +133,7 @@ export class TransactionFormComponent implements OnInit {
   get occurredOn() { return this.transactionForm.get('occurred_on') as FormControl }
   get clearedOn() { return this.transactionForm.get('cleared_on') as FormControl }
   get note() { return this.transactionForm.get('note') as FormControl }
-  get tags() { return this.transactionForm.get('tags') as FormControl }
+  get tags() { return this.transactionForm.get('tags') as FormControl<string> }
   get receipt_url() { return this.transactionForm.get('receipt_url') as FormControl }
   get existing_receipt_action() { return this.transactionForm.get('existing_receipt_action') as FormControl}
   get today() { return formatDate(new Date(), 'yyyy-MM-dd', Intl.DateTimeFormat().resolvedOptions().locale); }
@@ -243,7 +253,6 @@ export class TransactionFormComponent implements OnInit {
       t.note = this.transactionForm.value.note;
     }
 
-    console.log('x', this.transactionForm.value);
     if (this.transactionForm.value.tags) {
       const tags = this.transactionForm.value.tags.split(',').map(value => value.toLowerCase().trim());
       for (const tag of tags) {
@@ -299,5 +308,15 @@ export class TransactionFormComponent implements OnInit {
     event.preventDefault();
     this.transactionForm.get('existing_receipt_action')?.setValue('discard');
     this.transactionForm.markAsDirty();
+  }
+
+  appendTag(event: Event, value: string) {
+    event.preventDefault();
+    const tags = this.tags.value.split(',');
+    tags.pop();
+    tags.push(value);
+    this.tags.setValue(tags.join(', '));
+    this.transactionForm.markAsDirty();
+    this.tagsRef().nativeElement.focus();
   }
 }

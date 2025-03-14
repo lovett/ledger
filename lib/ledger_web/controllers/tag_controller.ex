@@ -40,4 +40,9 @@ defmodule LedgerWeb.TagController do
       send_resp(conn, :no_content, "")
     end
   end
+
+  def autocomplete(conn, %{"name" => name}) do
+    tags = Tags.autocomplete_name(name)
+    render(conn, :index, tags: tags)
+  end
 end

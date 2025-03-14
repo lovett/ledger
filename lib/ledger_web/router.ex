@@ -33,6 +33,7 @@ defmodule LedgerWeb.Router do
       resources "/logo", LogoController, only: [:show], singleton: true
     end
     resources "/transactions", TransactionController, except: [:new, :edit]
+    get "/tags/autocomplete", TagController, :autocomplete
     resources "/tags", TagController, except: [:new, :edit]
   end
 

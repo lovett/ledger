@@ -27,6 +27,16 @@ defmodule Ledger.Tags do
     Repo.all(query)
   end
 
+  def autocomplete_name(name_fragment) do
+    search_term = "#{name_fragment}%"
+    query = from tg in Tag,
+                 where: like(tg.name, ^search_term),
+                 order_by: tg.name,
+                 limit: 10
+    Repo.all(query)
+  end
+
+
   @doc """
   Gets a single tag.
 

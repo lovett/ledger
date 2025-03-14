@@ -1,6 +1,6 @@
 import { Observable, map, throwError, catchError } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Tag } from './tag';
 import { TagRecord, ApiResponse } from './app.types';
 
@@ -13,6 +13,18 @@ type ListResponse = ApiResponse<TagRecord[]>;
 export class TagService {
 
   constructor(private http: HttpClient) {
+  }
+
+  autocomplete(name: string): Observable<TagList> {
+    let params = new HttpParams();
+    params = params.set("name", name);
+
+    return this.http.get<ListResponse>('/api/tags/autocomplete', {params, }).pipe(
+      map((response): TagList => {
+        return response.data.map(record => Tag.fromRecord(record));
+      }),
+      catchError(this.handleError)
+    );
   }
 
   getTags(): Observable<TagList> {
