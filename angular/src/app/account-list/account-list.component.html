@@ -59,7 +59,7 @@
                 </p>
 
                 @if (account.closed_on) {
-                <p>Closed on {{ account.opened_on|date: 'longDate' }}</p>
+                <p>Closed {{ account.closed_on|date: 'longDate' }}</p>
                 } @else {
                 <p>Since  {{ account.opened_on|date:'longDate' }}</p>
                 }
