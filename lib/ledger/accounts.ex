@@ -27,7 +27,8 @@ defmodule Ledger.Accounts do
                     :closed_on,
                     :note,
                     :logo_mime,
-                  ]
+                  ],
+                  order_by: [asc_nulls_first: a.closed_on, desc: a.opened_on]
   end
 
   @doc """
