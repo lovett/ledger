@@ -44,13 +44,12 @@
 }
 
 .card li.balance {
-    font-size: 2em;
+    font-size: var(--big);
     letter-spacing: .1em;
 }
 
 .card footer {
     margin: 1em;
-    font-size: .85em;
     border-top: 1px dashed #333;
 }
 

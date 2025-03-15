@@ -1,6 +1,16 @@
+:root {
+    --smaller: 0.85em;
+    --big: 2em;
+}
+
 body {
     font-family: system-ui, sans-serif;
-    margin: 0 5em 5em 5em;
+    font-size: 18px;
+    margin: 2em;
+}
+
+button {
+    font-size: inherit;
 }
 
 fieldset {
@@ -9,8 +19,12 @@ fieldset {
     margin: 0;
 }
 
+footer {
+    font-size: var(--smaller);
+}
+
 h1 {
-    font-size: 2em;
+    font-size: var(--big);
     line-height: 1;
     margin: 0;
 }
@@ -26,7 +40,7 @@ header {
 }
 
 input, select, textarea {
-    font-size: 1rem;
+    font-size: inherit;
     border: 1px solid currentColor;
     box-sizing: border-box;
     padding: 0.5em;
@@ -77,7 +91,7 @@ textarea {
 }
 
 .shortcuts a {
-    font-size: .85em;
+    font-size: var(--smaller);
 }
 
 .validation-message {
