@@ -63,7 +63,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.route.queryParamMap.subscribe((paramMap: ParamMap) => {
       this.offset = Number(paramMap.get("offset") ?? 0);
-      this.account_id = Number(paramMap.get("account") ?? 0);
+      this.account_id = Number(paramMap.get("account_id") ?? 0);
       this.searchForm.patchValue({query: paramMap.get("query") ?? '' });
       this.tag = paramMap.get("tag") || '';
 

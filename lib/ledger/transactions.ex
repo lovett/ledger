@@ -107,7 +107,16 @@ defmodule Ledger.Transactions do
   def list_balances do
     deposits = tally_deposits()
     withdrawls = tally_withdrawls()
+    balance_map(deposits, withdrawls)
+  end
 
+  def list_pending_balances do
+    deposits = tally_pending_deposits()
+    withdrawls = tally_pending_withdrawls()
+    balance_map(deposits, withdrawls)
+  end
+
+  def balance_map(deposits, withdrawls) do
     deposit_map = Enum.into(deposits, %{}, fn %{account_id: account_id, total_amount: total_amount} ->
       {account_id, total_amount}
     end)
@@ -116,8 +125,8 @@ defmodule Ledger.Transactions do
       {account_id, total_amount}
     end)
 
-    Map.merge(deposit_map, withdrawl_map, fn _k, total_deposit, total_withdrawl ->
-      total_deposit - total_withdrawl
+    Map.new(Map.keys(deposit_map) ++ Map.keys(withdrawl_map), fn key ->
+      {key, Map.get(deposit_map, key, 0) - Map.get(withdrawl_map, key, 0)}
     end)
   end
 
@@ -155,18 +164,41 @@ defmodule Ledger.Transactions do
                   where: t.account_id == ^account_id
   end
 
-  def tally_deposits do
+  def tally_pending_deposits do
+    filter = dynamic([t], is_nil(t.cleared_on))
+    tally_deposits(filter)
+  end
+
+  def tally_deposits() do
+    filter = dynamic([t], not is_nil(t.cleared_on))
+    tally_deposits(filter)
+  end
+
+  def tally_deposits(filter) do
     Repo.all from t in Transaction,
+                  where: ^filter,
                   group_by: t.destination_id,
+                  having: t.destination_id,
                   select: %{account_id: t.destination_id, total_amount: sum(t.amount)}
   end
 
-  def tally_withdrawls do
-    Repo.all from t in Transaction,
-                  group_by: t.account_id,
-                  select: %{account_id: t.account_id, total_amount: sum(t.amount)}
+  def tally_pending_withdrawls do
+    filter = dynamic([t], is_nil(t.cleared_on))
+    tally_withdrawls(filter)
   end
 
+  def tally_withdrawls do
+    filter = dynamic([t], not is_nil(t.cleared_on))
+    tally_withdrawls(filter)
+  end
+
+  def tally_withdrawls(filter) do
+    Repo.all from t in Transaction,
+                  where: ^filter,
+                  group_by: t.account_id,
+                  having: t.account_id,
+                  select: %{account_id: t.account_id, total_amount: sum(t.amount)}
+  end
 
   @doc """
   Gets a single transaction.

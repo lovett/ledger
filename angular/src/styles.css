@@ -84,6 +84,10 @@ textarea {
     font-weight: normal;
 }
 
+.negative {
+    color: firebrick;
+}
+
 .shortcuts {
     display: flex;
     gap: 1em;

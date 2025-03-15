@@ -23,15 +23,9 @@
             </div>
 
             <ul>
-                <li class="balance">{{ account.balance! | currency }}</li>
+                <li [ngClass]="{balance: true, negative: account.balance < 0}">{{ account.balance! | currency }}</li>
 
-                @if (account.total_pending! > 0) {
-                <li class="deposit">{{ account.total_pending! | currency }} pending</li>
-                }
-
-                @if (account.total_pending! < 0) {
-                <li class="withdrawl">{{ account.total_pending! | currency }} pending</li>
-                }
+                <li [ngClass]="{secondary: true, negative: account.balance_pending < 0}">{{ account.balance_pending! | currency }} pending</li>
 
                 @if (account.url) {
                 <li>

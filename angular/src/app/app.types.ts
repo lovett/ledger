@@ -18,6 +18,7 @@ export type AccountRecord = {
   url?: string,
   note?: string,
   balance: number,
+  balance_pending: number,
   total_pending: number,
   last_active?: string,
   logo_mime?: string,

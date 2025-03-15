@@ -8,6 +8,7 @@ export class Account {
   url: string = '';
   note: string = '';
   balance: number = 0;
+  balance_pending: number = 0;
   total_pending: number = 0;
   last_active?: Date;
   logo_mime: string = '';
@@ -24,7 +25,7 @@ export class Account {
     a.id = record.id ?? 0;
     a.name = record.name ?? '';
     a.balance = (record.balance ?? 0) / 100;
-
+    a.balance_pending = (record.balance_pending ?? 0) / 100;
     a.total_pending = record.total_pending ?? 0;
 
     if (record.deposit_count) {

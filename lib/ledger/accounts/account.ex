@@ -12,7 +12,8 @@ defmodule Ledger.Accounts.Account do
     field :note, :string
     field :logo, :binary
     field :logo_mime, :string
-    field :balance, :integer
+    field :balance, :integer, virtual: true
+    field :balance_pending, :integer, virtual: true
     field :deposit_count, :integer, virtual: true
     field :withdrawl_count, :integer, virtual: true
     has_many :transactions, Transaction
