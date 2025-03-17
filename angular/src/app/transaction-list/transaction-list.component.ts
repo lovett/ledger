@@ -30,6 +30,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   offset = 0;
   account_id = 0;
   paging: Paging;
+  searching: Boolean = false;
   // transactions: Transaction[] = [];
   // singularResourceName: string;
 
@@ -66,6 +67,8 @@ export class TransactionListComponent implements OnInit, OnDestroy {
       this.account_id = Number(paramMap.get("account_id") ?? 0);
       this.searchForm.patchValue({query: paramMap.get("query") ?? '' });
       this.tag = paramMap.get("tag") || '';
+
+      this.searching = (this.query.value !== '');
 
       this.transactions$ = this.transactionService.getTransactions(
         this.offset,
@@ -105,15 +108,22 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   //     });
   // }
 
-  clearSearch(event: Event) {
-      event.preventDefault();
-      // this.ledgerService.clearSelections();
-      this.searchForm.patchValue({query: ''});
-      this.router.navigate([], {
-        relativeTo: this.route,
-        queryParams: {query: null, tag: null, offset: null },
+  onSearchInput(event: Event) {
+    if (this.query.value === '') {
+      this.clearSearch();
+    }
+  }
+
+  clearSearch(event?: Event) {
+    if (event) event.preventDefault();
+
+    // this.ledgerService.clearSelections();
+    this.searchForm.patchValue({query: ''});
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {query: null, tag: null, offset: null },
         queryParamsHandling: 'merge',
-      });
+    });
   }
 
   clearAccount(event: Event) {
@@ -137,7 +147,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   search() {
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: { query: this.query.value, offset: 0 },
+      queryParams: { query: this.query.value || null, offset: 0 },
       queryParamsHandling: 'merge',
     });
   }
