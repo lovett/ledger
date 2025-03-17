@@ -2,32 +2,41 @@
     <h1>Tags</h1>
 </header>
 
-<ul class="tags">
-    @for (tag of (tags$ | async); track tag.id) {
-    <li class="tag">
-        <details>
-            <summary>{{ tag.name }}</summary>
-            <ul>
-                @if (tag.transaction_count === 0) {
-                <li>No transactions</li>
-                }
+<div id="panels">
+    <ul id="list-panel">
+        @for (tag of (tags$ | async); track tag.id) {
+        <li>
+            <svg class="icon"><use xlink:href="#tag"></use></svg>
+            <a href="#" (click)="selectTag($event, tag)">{{ tag.name }}</a>
+        </li>
+        }
+    </ul>
 
-                @if (tag.transaction_count === 1) {
-                <li><a [routerLink]="['/transactions']" [queryParams]="{tag: tag.name}">1 transaction</a></li>
-                }
+    <div id="tag-panel">
+        @if (selectedTag) {
+        <div id="tag-actions">
+        <h2><svg class="icon"><use xlink:href="#tag"></use></svg> {{ selectedTag.name }}</h2>
+        <ul>
+            <li [ngPlural]="selectedTag.transaction_count">
+                <ng-template ngPluralCase="=0">
+                    No transactions
+                </ng-template>
+                <ng-template ngPluralCase="=1">
+                    <a href="#" [routerLink]="['/transactions']" [queryParams]="{tag: selectedTag.name}">1 transaction</a>
+                </ng-template>
+                <ng-template ngPluralCase="other">
+                    <a href="#" [routerLink]="['/transactions']" [queryParams]="{tag: selectedTag.name}">{{ selectedTag.transaction_count|number }} transactions</a>
+                </ng-template>
+            </li>
+            <li>
+                <app-button (click)="rename($event, selectedTag)" label="Rename" icon="edit"></app-button>
+            </li>
+            <li>
+                <app-button type="delete" (click)="delete($event, selectedTag)" label="Delete" icon="bolt"></app-button>
+            </li>
+        </ul>
+        </div>
+        }
+    </div>
 
-                @if (tag.transaction_count > 1) {
-                <li><a [routerLink]="['/transactions']" [queryParams]="{tag: tag.name}">{{ tag.transaction_count|number }} transaction</a></li>
-                }
-
-                <li>
-                    <app-button (click)="rename($event, tag)" label="Rename" icon="edit"></app-button>
-                </li>
-                <li>
-                    <app-button type="delete" (click)="delete($event, tag)" label="Delete" icon="bolt"></app-button>
-                </li>
-            </ul>
-        </details>
-    </li>
-    }
-</ul>
+</div>

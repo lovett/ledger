@@ -1,26 +1,47 @@
-.tags {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-auto-flow: column;
+ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
 }
 
-.tags LI {
+li {
+    margin: 0;
+    padding: 0;
+}
+
+#panels {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+}
+
+#list-panel {
+    columns: 2;
+}
+
+#list-panel li {
     margin: 0;
     padding: 0;
     margin-bottom: 2em;
     break-inside: avoid-column;
 }
 
-.tags summary {
+#list-panel summary {
     cursor: pointer;
     margin-bottom: 1em;
 }
 
-.tags LI UL {
-    list-style-type: none;
-    margin: 0.5em 0 0.75em;
-    padding: 0;
+#list-panel .icon {
+    margin-right: 0.5em;
+}
+
+#tag-panel {
+    position: relative;
+}
+
+#tag-actions  {
+    position: fixed;
+}
+
+#tag-actions li {
+    margin-bottom: 2em;
 }

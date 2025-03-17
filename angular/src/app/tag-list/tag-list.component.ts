@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AsyncPipe, DecimalPipe } from '@angular/common';
+import { AsyncPipe, DecimalPipe, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { Tag } from '../tag';
@@ -8,12 +8,13 @@ import { ButtonComponent } from '../button/button.component';
 
 @Component({
   selector: 'app-tag-list',
-  imports: [RouterLink, AsyncPipe, DecimalPipe, ButtonComponent],
+  imports: [RouterLink, AsyncPipe, DecimalPipe, ButtonComponent, CommonModule],
   templateUrl: './tag-list.component.html',
   styleUrl: './tag-list.component.css'
 })
 export class TagListComponent {
   tags$: Observable<Tag[]> = of([]);
+  selectedTag?: Tag;
 
   constructor(
     private tagService: TagService,
@@ -63,5 +64,10 @@ export class TagListComponent {
         console.log(err);
       }
     });
+  }
+
+  selectTag(event: Event, tag: Tag) {
+    event.preventDefault();
+    this.selectedTag = tag;
   }
 }

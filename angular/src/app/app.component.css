@@ -6,6 +6,10 @@
     margin: auto;
 }
 
+#shell nav {
+    position: fixed;
+}
+
 #shell nav a {
     text-decoration: none;
 }
