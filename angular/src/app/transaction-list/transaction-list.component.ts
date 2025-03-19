@@ -2,7 +2,7 @@ import { Component, output, OnDestroy, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
 import { CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe } from '@angular/common';
-import { RouterLink, Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { RouterLink, Router, ActivatedRoute, Params, ParamMap } from '@angular/router';
 import { TransactionService } from '../transaction.service';
 import { Observable, of, map, tap } from 'rxjs';
 import { Transaction } from '../transaction';
@@ -31,17 +31,17 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   account_id = 0;
   paging: Paging;
   searching: Boolean = false;
+  filterSessionKey = 'transaction-list:filters';
   // transactions: Transaction[] = [];
   // singularResourceName: string;
 
   constructor(
     private transactionService: TransactionService,
-    private route: ActivatedRoute,
+    public route: ActivatedRoute,
     //     private formBuilder: FormBuilder,
     private router: Router,
   ) {
     this.paging = Paging.blank();
-
     //     this.searchForm = this.formBuilder.group({
     //         query: [
     //             '',
@@ -62,13 +62,21 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    const filters = window.sessionStorage.getItem(this.filterSessionKey) || '';
+    if (window.location.search === '' && filters !== '') {
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams: this.querystringToParams(filters),
+      });
+    }
+
     this.route.queryParamMap.subscribe((paramMap: ParamMap) => {
-      this.offset = Number(paramMap.get("offset") ?? 0);
       this.account_id = Number(paramMap.get("account_id") ?? 0);
       this.searchForm.patchValue({query: paramMap.get("query") ?? '' });
       this.tag = paramMap.get("tag") || '';
-
       this.searching = (this.query.value !== '');
+
+      window.sessionStorage.setItem(this.filterSessionKey, window.location.search);
 
       this.transactions$ = this.transactionService.getTransactions(
         this.offset,
@@ -80,10 +88,18 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         map(data => data[0])
       )
     });
+
   }
 
   ngOnDestroy() {
     // this.ledgerService.transactionSelection(null);
+  }
+
+  querystringToParams(querystring: string): Params {
+    const searchParams = new URLSearchParams(querystring)
+    const params: Params = {};
+    searchParams.forEach((v, k) => params[k] = v);
+    return params;
   }
 
   get query() { return this.searchForm.get("query") as FormControl }
