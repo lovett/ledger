@@ -12,7 +12,21 @@
 
 
 <div class="paging">
-    <div class="resets">
+    <div class="filters">
+        @if (selections.length === 0) {
+        <a href="#" (click)="select('all', $event)">Select all</a>
+        } @else {
+        <a href="#" (click)="select('none', $event)">Unselect all</a>
+        }
+
+        @if (hasPending && selections.length === 0) {
+        <a href="#" (click)="select('pending', $event)">Select pending</a>
+        }
+
+        @if (hasPending && selections.length > 0) {
+        <a href="#" (click)="select('not-pending', $event)">Unselect pending</a>
+        }
+
         @if (searching) {
         <a href="#" (click)="clearSearch($event)">Clear search</a>
         }
@@ -36,12 +50,13 @@
     </div>
 </div>
 
-<table>
+<table #tableRef>
     @for (transaction of (transactions$ | async); track transaction.id) {
 
     @if ($first) {
     <thead>
         <tr>
+            <th></th>
             <th>ID</th>
             <th>Date</th>
             <th>Account</th>
@@ -51,9 +66,10 @@
         </tr>
     </thead>
     }
-    <tr [class]="transaction.rowClasses" (click)="toggleSelection($event, transaction)">
+    <tr [class]="transaction.rowClasses">
+        <td><input type="checkbox" (click)="toggleSelection(transaction)" [checked]="transaction.selected" /></td>
         <td>
-            <a class="nowrap" [routerLink]="['/transactions', transaction.id, 'edit']">{{ transaction.id }}</a>
+            <a [routerLink]="['/transactions', transaction.id, 'edit']">{{ transaction.id }}</a>
         </td>
         <td class="nowrap">
             {{ transaction.occurred_on|date:'longDate' }}

@@ -7,7 +7,8 @@
 }
 
 #shell nav {
-    position: fixed;
+    position: sticky;
+    top: 0;
 }
 
 #shell nav a {
@@ -21,8 +22,6 @@
 }
 
 #shell nav ul {
-    position: sticky;
-    top: 1em;
     list-style-type: none;
     margin-left: 0;
     padding-left: 0;

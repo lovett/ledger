@@ -6,7 +6,7 @@
 body {
     font-family: system-ui, sans-serif;
     font-size: 18px;
-    margin: 2em;
+    margin: 0 2em 2em 2em;
 }
 
 button {
@@ -47,9 +47,10 @@ input, select, textarea {
     width: 100%;
 }
 
-input[type="file"] {
+input[type="checkbox"], input[type="file"] {
     border: 0;
     padding-left: 0;
+    width: initial;
 }
 
 input.ng-invalid:not(.ng-pristine) {

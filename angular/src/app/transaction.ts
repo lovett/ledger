@@ -94,6 +94,7 @@ export class Transaction {
   get rowClasses(): Record<string, any> {
     return {
       cleared: this.cleared_on,
+      pending: !this.cleared_on,
       selected: this.selected
     }
   }

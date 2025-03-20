@@ -1,4 +1,4 @@
-import { Component, output, OnDestroy, OnInit } from '@angular/core';
+import { Component, output, OnDestroy, OnInit, ElementRef, viewChild } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
 import { CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe } from '@angular/common';
@@ -7,10 +7,6 @@ import { TransactionService } from '../transaction.service';
 import { Observable, of, map, tap } from 'rxjs';
 import { Transaction } from '../transaction';
 import { Paging } from '../paging';
-// import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-// import { Transaction } from '../models/transaction';
-// import { TransactionList } from '../types/TransactionList';
-// import { Router, ActivatedRoute}  from '@angular/router';
 
 @Component({
   selector: 'app-transaction-list',
@@ -19,8 +15,8 @@ import { Paging } from '../paging';
   styleUrl: './transaction-list.component.css'
 })
 export class TransactionListComponent implements OnInit, OnDestroy {
+  tableRef = viewChild.required<ElementRef>('tableRef');
   transactions$: Observable<Transaction[]> = of([]);
-  readonly selection = output<Transaction>();
 
   searchForm = new FormGroup({
     query: new FormControl('')
@@ -30,18 +26,20 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   offset = 0;
   account_id = 0;
   paging: Paging;
-  searching: Boolean = false;
+  searching = false;
+  hasPending = false;
   filterSessionKey = 'transaction-list:filters';
-  // transactions: Transaction[] = [];
-  // singularResourceName: string;
+  selections: Transaction[] = [];
 
   constructor(
     private transactionService: TransactionService,
     public route: ActivatedRoute,
-    //     private formBuilder: FormBuilder,
     private router: Router,
   ) {
     this.paging = Paging.blank();
+
+    this.transactionService.selection$.subscribe(selections => this.onSelectionChange(selections));
+
     //     this.searchForm = this.formBuilder.group({
     //         query: [
     //             '',
@@ -71,6 +69,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     }
 
     this.route.queryParamMap.subscribe((paramMap: ParamMap) => {
+      this.clearSelection();
       this.account_id = Number(paramMap.get("account_id") ?? 0);
       this.searchForm.patchValue({query: paramMap.get("query") ?? '' });
       this.tag = paramMap.get("tag") || '';
@@ -84,6 +83,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         this.tag,
         this.query.value
       ).pipe(
+        tap(data => this.hasPending = data[0].filter(t => !t.cleared_on).length > 0),
         tap(data => this.paging = new Paging(data[0].length, data[1], this.offset)),
         map(data => data[0])
       )
@@ -110,7 +110,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   //             this.count = transactionList.count;
   //             this.transactions = transactionList.transactions.map((jsonTransaction) => {
   //                 const t = Transaction.fromJson(jsonTransaction);
-  //                 const index = this.ledgerService.selectedTransactions.findIndex(
+  //                 const index = this.ledgerService.selections.findIndex(
   //                     selectedTransaction => selectedTransaction.uid === t.uid
   //                 );
 
@@ -133,7 +133,6 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   clearSearch(event?: Event) {
     if (event) event.preventDefault();
 
-    // this.ledgerService.clearSelections();
     this.searchForm.patchValue({query: ''});
     this.router.navigate([], {
       relativeTo: this.route,
@@ -179,12 +178,57 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     });
   }
 
-  toggleSelection(event: MouseEvent, transaction: Transaction) {
-    // const target = event.target as HTMLElement;
-    // if (target.tagName === 'A') {
-    //     return;
-    // }
-    // transaction.selected = !transaction.selected;
-    // this.ledgerService.transactionSelection(transaction);
+  /**
+   * Augment the selection and broadcast the result.
+   */
+  toggleSelection(transaction: Transaction) {
+    transaction.selected = !transaction.selected;
+    this.selections.push(transaction);
+    this.selections = this.selections.filter(t => t.selected);
+    this.transactionService.selectionSubject.next(this.selections);
+  }
+
+  select(criteria: string, event?: MouseEvent) {
+    if (event) event.preventDefault();
+
+    let selector = '';
+    if (criteria === 'all') {
+      selector = 'input[type="checkbox"]';
+    }
+
+    if (criteria === 'none') {
+      selector = 'input[type="checkbox"]:checked';
+    }
+
+    if (criteria === 'pending') {
+      selector = 'tr.pending input[type="checkbox"]:not(:checked)';
+    }
+
+    if (criteria === 'not-pending') {
+      selector = 'tr.pending input[type="checkbox"]:checked';
+    }
+
+    const checkboxes = this.tableRef().nativeElement.querySelectorAll(selector);
+    checkboxes.forEach((checkbox: HTMLInputElement) => checkbox.click());
+  }
+
+  /**
+   * Broadcast a selection reset that originated internally.
+   */
+  clearSelection(event?: MouseEvent) {
+    if (event) event.preventDefault();
+    this.transactionService.selectionSubject.next([]);
+  }
+
+  /**
+   * React to a selection reset that originated elsewhere.
+   */
+  onSelectionChange(selection: Transaction[]) {
+    if (selection.length === 0) {
+      for (const t of this.selections) {
+        t.selected = false;
+      }
+      this.selections = [];
+    }
   }
 }

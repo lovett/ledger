@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Transaction } from './transaction';
 import { TransactionRecord, ApiResponse } from './app.types';
+import { ReplaySubject } from 'rxjs';
 
 type TransactionList = [Transaction[], number];
 type ListResponse = ApiResponse<TransactionRecord[]>;
@@ -11,9 +12,24 @@ type ListResponse = ApiResponse<TransactionRecord[]>;
   providedIn: 'root'
 })
 export class TransactionService {
+  selectionSubject = new ReplaySubject<Transaction[]>();
+  selection$ = this.selectionSubject.asObservable();
+  selections: Transaction[] = [];
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(
+    private http: HttpClient
+  ) {}
+
+  //clearSelection() {
+    // this.selectedTransactions.forEach(t => t.selected = false);
+    // this.selectedTransactions = [];
+    // this.selectionSubject.next(0);
+  //}
+
+  // transactionSelection(t: Transaction) {
+  //   const amount = t.selected ? t.amount : t.amount * -1;
+  //   this.selectionSubject.next(amount);
+  // }
 
   getTransactions(offset = 0, account_id = 0, tag = '', query = ''): Observable<TransactionList> {
     let params = new HttpParams();

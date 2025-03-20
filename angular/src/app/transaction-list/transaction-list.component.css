@@ -59,7 +59,7 @@ td p {
     white-space: nowrap;
 }
 
-.resets {
+.filters {
     display: flex;
     gap: 2em;
 }
