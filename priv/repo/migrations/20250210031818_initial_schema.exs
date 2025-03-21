@@ -11,7 +11,7 @@ defmodule Ledger.Repo.Migrations.InitialSchema do
       note,
       content='transactions',
       content_rowid='id',
-      tokenize='porter'
+      tokenize='trigram'
     );
     """
   end
