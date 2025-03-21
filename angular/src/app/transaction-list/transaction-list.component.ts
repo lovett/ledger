@@ -1,7 +1,7 @@
 import { Component, output, OnDestroy, OnInit, ElementRef, viewChild } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
-import { CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, NgTemplateOutlet, CommonModule } from '@angular/common';
 import { RouterLink, Router, ActivatedRoute, Params, ParamMap } from '@angular/router';
 import { TransactionService } from '../transaction.service';
 import { Observable, of, map, tap } from 'rxjs';
@@ -10,7 +10,7 @@ import { Paging } from '../paging';
 
 @Component({
   selector: 'app-transaction-list',
-  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, ButtonComponent],
+  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, ButtonComponent, CommonModule],
   templateUrl: './transaction-list.component.html',
   styleUrl: './transaction-list.component.css'
 })
@@ -30,6 +30,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   hasPending = false;
   filterSessionKey = 'transaction-list:filters';
   selections: Transaction[] = [];
+  loading = false;
 
   constructor(
     private transactionService: TransactionService,
@@ -77,12 +78,14 @@ export class TransactionListComponent implements OnInit, OnDestroy {
 
       window.sessionStorage.setItem(this.filterSessionKey, window.location.search);
 
+      this.loading = true;
       this.transactions$ = this.transactionService.getTransactions(
         this.offset,
         this.account_id,
         this.tag,
         this.query.value
       ).pipe(
+        tap(() => this.loading = false),
         tap(data => this.hasPending = data[0].filter(t => !t.cleared_on).length > 0),
         tap(data => this.paging = new Paging(data[0].length, data[1], this.offset)),
         map(data => data[0])

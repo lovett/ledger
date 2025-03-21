@@ -5,13 +5,13 @@ fieldset {
     flex-flow: row nowrap;
     align-items: center;
     gap: 1em;
-    margin-bottom: 1em;
+    margin-bottom: 2em;
 }
 
 input[type="search"] ~ button {
     border-radius: 0;
     border: 1px solid #333;
-    padding: 0.5em 2em;
+    padding: 0.25em 1em;
 }
 
 input[type="search"] ~ button svg {
@@ -25,7 +25,17 @@ table {
     overflow: hidden;
 }
 
-th {
+table thead:first-of-type th {
+    font-weight: normal;
+    padding-bottom: 0.5em;
+}
+
+table thead:first-of-type th > div {
+    display: flex;
+    justify-content: space-between;
+}
+
+table thead:last-of-type th {
     background-color: #333;
     font-weight: bold;
     padding: .75em;
@@ -59,11 +69,10 @@ td p {
     white-space: nowrap;
 }
 
-.filters {
+.selectors {
     display: flex;
-    gap: 2em;
+    gap: 1em;
 }
-
 
 .tag-list {
     margin: 1em 0 0 0;
@@ -107,11 +116,17 @@ td p {
     text-align: center;
 }
 
+.scopes {
+    display: flex;
+    gap: 1em;
+}
+
 .transaction-type {
     font-size: var(--smaller);
     padding-top: .5em;
     text-transform: uppercase;
 }
+
 
 /* .pager > div:not(:nth-child(2)) { */
 /*     display: flex; */

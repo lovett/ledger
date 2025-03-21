@@ -7,12 +7,24 @@
     <fieldset>
         <input (input)="onSearchInput($event)" type="search" formControlName="query"/>
         <button [disabled]="searchForm.invalid" type="submit"><svg><use xlink:href="#search" /></svg></button>
+        <div class="scopes">
+            @if (searching) {
+            <a href="#" (click)="clearSearch($event)">Clear search</a>
+            }
+
+            @if (account_id > 0) {
+            <a href="#" (click)="clearAccount($event)">All accounts</a>
+            }
+
+            @if (tag != "") {
+            <a href="#" (click)="clearTag($event)">All tags</a>
+            }
+        </div>
     </fieldset>
 </form>
 
-
-<div class="paging">
-    <div class="filters">
+<ng-template #selectorsFragment>
+    <div class="selectors">
         @if (selections.length === 0) {
         <a href="#" (click)="select('all', $event)">Select all</a>
         } @else {
@@ -26,34 +38,33 @@
         @if (hasPending && selections.length > 0) {
         <a href="#" (click)="select('not-pending', $event)">Unselect pending</a>
         }
-
-        @if (searching) {
-        <a href="#" (click)="clearSearch($event)">Clear search</a>
-        }
-
-        @if (account_id > 0) {
-        <a href="#" (click)="clearAccount($event)">All accounts</a>
-        }
-
-        @if (tag != "") {
-        <a href="#" (click)="clearTag($event)">All tags</a>
-        }
-
     </div>
+</ng-template>
 
-    <div>
+<ng-template #countsFragment>
+    <div class="counts">
         @if (paging.isVisible) {
         {{ paging.displayStart | number }} to {{ paging.displayEnd | number }} of {{ paging.total | number }}, newest first
         } @else {
         0 of {{ paging.total | number }}
         }
     </div>
-</div>
+</ng-template>
 
 <table #tableRef>
     @for (transaction of (transactions$ | async); track transaction.id) {
 
     @if ($first) {
+    <thead>
+        <tr>
+            <th colspan="7">
+                <div>
+                    <ng-container [ngTemplateOutlet]="selectorsFragment"></ng-container>
+                    <ng-container [ngTemplateOutlet]="countsFragment"></ng-container>
+                </div>
+            </th>
+        </tr>
+    </thead>
     <thead>
         <tr>
             <th></th>
@@ -137,8 +148,13 @@
         </td>
     </tr>
     } @empty {
+
     <tr class="empty">
+        @if (loading) {
+        <td><p>Loading…</p></td>
+        } @else {
         <td><p>Nothing found.</p></td>
+        }
     </tr>
     }
 </table>
