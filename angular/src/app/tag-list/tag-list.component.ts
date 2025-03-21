@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AsyncPipe, DecimalPipe, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Observable, of } from 'rxjs';
+import { Observable, of, tap } from 'rxjs';
 import { Tag } from '../tag';
 import { TagService } from '../tag.service';
 import { ButtonComponent } from '../button/button.component';
@@ -15,6 +15,7 @@ import { ButtonComponent } from '../button/button.component';
 export class TagListComponent {
   tags$: Observable<Tag[]> = of([]);
   selectedTag?: Tag;
+  loading = false;
 
   constructor(
     private tagService: TagService,
@@ -22,7 +23,10 @@ export class TagListComponent {
   }
 
   ngOnInit() {
-    this.tags$ = this.tagService.getTags();
+    this.loading = true;
+    this.tags$ = this.tagService.getTags().pipe(
+      tap(() => this.loading = false)
+    );
   }
 
   delete(event: Event, tag: Tag) {

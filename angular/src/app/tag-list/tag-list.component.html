@@ -9,6 +9,12 @@
             <svg class="icon"><use xlink:href="#tag"></use></svg>
             <a href="#" (click)="selectTag($event, tag)">{{ tag.name }}</a>
         </li>
+        } @empty {
+        <li>
+            @if (!loading) {
+            Nothing found.
+            }
+        </li>
         }
     </ul>
 

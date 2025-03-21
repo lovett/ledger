@@ -150,9 +150,7 @@
     } @empty {
 
     <tr class="empty">
-        @if (loading) {
-        <td><p>Loading…</p></td>
-        } @else {
+        @if (!loading) {
         <td><p>Nothing found.</p></td>
         }
     </tr>

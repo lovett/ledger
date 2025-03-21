@@ -64,6 +64,10 @@
             </footer>
         </div>
         } @empty {
-        <p>There are no accounts.</p>
+        <p>
+            @if (!loading) {
+            Nothing found.
+            }
+        </p>
         }
     </div>

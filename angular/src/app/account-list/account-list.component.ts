@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { CurrencyPipe, DatePipe, AsyncPipe, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Observable } from 'rxjs';
 import { Account } from '../account';
 import { AccountService } from '../account.service';
 import { ButtonComponent } from '../button/button.component';
+import { Observable, of, tap } from 'rxjs';
 
 @Component({
   selector: 'app-account-list',
@@ -13,12 +13,17 @@ import { ButtonComponent } from '../button/button.component';
   styleUrl: './account-list.component.css'
 })
 export class AccountListComponent {
-  accounts$: Observable<Account[]>;
+  accounts$: Observable<Account[]> = of([]);
+  loading = false;
 
   constructor(
     private accountService: AccountService
+  ) {}
 
-  ) {
-    this.accounts$ = this.accountService.getAccounts();
+  ngOnInit() {
+    this.loading = true;
+    this.accounts$ = this.accountService.getAccounts().pipe(
+        tap(() => this.loading = false)
+    );
   }
 }
