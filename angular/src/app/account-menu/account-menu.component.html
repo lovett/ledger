@@ -2,8 +2,6 @@
 <app-label [text]="label()" [control]="control()!" [customMessage]="error()" />
 }
 
-
-
 <select id="{{ fieldName }}" [formControl]="control()!">
     <option value=""></option>
     @for (account of (accounts$ | async); track account.id) {

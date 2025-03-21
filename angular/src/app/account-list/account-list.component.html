@@ -3,71 +3,71 @@
     <app-button [routerLink]="'/accounts/new'" label="Add account" [icon]="'add'"></app-button>
 </header>
 
-    <div class="cards">
-        @for (account of (accounts$ | async); track account.id) {
-        <div class="card" [class.inactive]="account.closed_on">
-            <div class="title">
-                {{account.name}}
+<div class="cards">
+    @for (account of (accounts$ | async); track account.id) {
+    <div class="card" [class.inactive]="account.closed_on">
+        <div class="title">
+            {{account.name}}
 
-                <a [routerLink]="['/accounts', account.id, 'edit']">
-                    <svg class="icon"><use xlink:href="#edit"></use></svg>
-                </a>
-            </div>
-
-            <div class="logo">
-                @if (account.logoUrl) {
-                <img src="{{ account.logoUrl }}" alt="{{ account.name }} Logo" title="" />
-                } @else {
-                <svg><use xlink:href="#bank"></use></svg>
-                }
-            </div>
-
-            <ul>
-                <li [ngClass]="{balance: true, negative: account.balance < 0}">{{ account.balance! | currency }}</li>
-
-                <li [ngClass]="{secondary: true, negative: account.balance_pending < 0}">{{ account.balance_pending! | currency }} pending</li>
-
-                @if (account.url) {
-                <li>
-                    <a href="{{ account.url }}" target="_blank" rel="noopener noreferer">Log In</a>
-                </li>
-                }
-            </ul>
-
-            <footer>
-                <p>
-                    @if (account.transactionCount > 0) {
-                    <a [routerLink]="['/transactions']" [queryParams]="{account_id: account.id}">
-                        <span [ngPlural]="account.deposit_count">
-                            <ng-template ngPluralCase="=1">1 deposit</ng-template>
-                            <ng-template ngPluralCase="other">{{ account.deposit_count | number }} deposits</ng-template>
-                        </span>,
-                        <span [ngPlural]="account.withdrawl_count">
-                            <ng-template ngPluralCase="=1">1 withdrawl</ng-template>
-                            <ng-template ngPluralCase="other">{{ account.withdrawl_count | number }} withdrawls</ng-template>
-                        </span>
-                    </a>
-                    } @else {
-                    No activity
-                    }
-                </p>
-
-                @if (account.closed_on) {
-                <p>Closed {{ account.closed_on|date: 'longDate' }}</p>
-                } @else {
-                <p>Since  {{ account.opened_on|date:'longDate' }}</p>
-                }
-
-                @if (account.note) {
-                <p><em>{{ account.note }}</em></p>
-                }
-            </footer>
+            <a [routerLink]="['/accounts', account.id, 'edit']">
+                <svg class="icon"><use xlink:href="#edit"></use></svg>
+            </a>
         </div>
-        } @empty {
-        <p>
-            @if (!loading) {
-            Nothing found.
+
+        <div class="logo">
+            @if (account.logoUrl) {
+            <img src="{{ account.logoUrl }}" alt="{{ account.name }} Logo" title="" />
+            } @else {
+            <svg><use xlink:href="#bank"></use></svg>
             }
-        </p>
-        }
+        </div>
+
+        <ul>
+            <li [ngClass]="{balance: true, negative: account.balance < 0}">{{ account.balance! | currency }}</li>
+
+            <li [ngClass]="{secondary: true, negative: account.balance_pending < 0}">{{ account.balance_pending! | currency }} pending</li>
+
+            @if (account.url) {
+            <li>
+                <a href="{{ account.url }}" target="_blank" rel="noopener noreferer">Log In</a>
+            </li>
+            }
+        </ul>
+
+        <footer>
+            <p>
+                @if (account.transactionCount > 0) {
+                <a [routerLink]="['/transactions']" [queryParams]="{account_id: account.id}">
+                    <span [ngPlural]="account.deposit_count">
+                        <ng-template ngPluralCase="=1">1 deposit</ng-template>
+                        <ng-template ngPluralCase="other">{{ account.deposit_count | number }} deposits</ng-template>
+                    </span>,
+                    <span [ngPlural]="account.withdrawl_count">
+                        <ng-template ngPluralCase="=1">1 withdrawl</ng-template>
+                        <ng-template ngPluralCase="other">{{ account.withdrawl_count | number }} withdrawls</ng-template>
+                    </span>
+                </a>
+                } @else {
+                No activity
+                }
+            </p>
+
+            @if (account.closed_on) {
+            <p>Closed {{ account.closed_on|date: 'longDate' }}</p>
+            } @else {
+            <p>Since  {{ account.opened_on|date:'longDate' }}</p>
+            }
+
+            @if (account.note) {
+            <p><em>{{ account.note }}</em></p>
+            }
+        </footer>
     </div>
+    } @empty {
+    <p>
+        @if (!loading) {
+        Nothing found.
+        }
+    </p>
+    }
+</div>
