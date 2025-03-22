@@ -27,7 +27,7 @@ defmodule Ledger.Transactions do
 
     query = from base_query(filter.tag),
                  select: [:id, :occurred_on, :cleared_on, :amount, :payee, :note, :account_id, :destination_id],
-                 where: ^filter_account(filter.account_id),
+                 where: ^filter_account(filter),
                  where: ^filter_search(filter.search),
                  order_by: [desc: :occurred_on],
                  order_by: [desc: :inserted_at],
@@ -62,17 +62,17 @@ defmodule Ledger.Transactions do
   def count_transactions(filter) do
     query = from t in base_query(filter.tag),
                  select: count(),
-                 where: ^filter_account(filter.account_id),
+                 where: ^filter_account(filter),
                  where: ^filter_search(filter.search)
     Repo.one query
   end
 
-  @spec filter_account(id:: integer) :: Ecto.Query.t()
-  def filter_account(id \\ 0) do
-    if id == 0 do
+  @spec filter_account(%TransactionFilter{}) :: Ecto.Query.t()
+  def filter_account(filter) do
+    if is_nil(filter.account) do
       dynamic(true)
     else
-      dynamic([t], t.account_id == ^id or t.destination_id == ^id)
+      dynamic([t], t.account_id == ^filter.account.id or t.destination_id == ^filter.account.id)
     end
   end
 

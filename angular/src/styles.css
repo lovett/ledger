@@ -31,12 +31,18 @@ h1 {
 
 header {
     display: grid;
-    grid-template-columns: auto auto;
+    grid-template-columns: 1fr auto;
     justify-content: space-between;
     margin-bottom: 3em;
-    align-items: end;
+    align-items: start;
     margin-top: 2em;
     min-height: 3em;
+}
+
+header > *:last-child:not(:first-child) {
+    display: grid;
+    justify-items: end;
+    gap: 1em;
 }
 
 input, select, textarea {

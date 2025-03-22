@@ -9,8 +9,11 @@ defmodule LedgerWeb.TransactionController do
   action_fallback LedgerWeb.FallbackController
 
   def index(conn, params) do
+    account_id = String.to_integer(Map.get(params, "account_id", "0"))
+    account = if account_id > 0, do: Accounts.get_account!(account_id), else: nil
+
     filter = %TransactionFilter{
-      account_id: String.to_integer(Map.get(params, "account_id", "0")),
+      account: account,
       tag: Map.get(params, "tag", ""),
       search: Map.get(params, "query", "") |> String.trim,
       offset: String.to_integer(Map.get(params, "offset", "0")),
@@ -19,7 +22,7 @@ defmodule LedgerWeb.TransactionController do
 
     transactions = Transactions.list_transactions(filter)
     count = Transactions.count_transactions(filter)
-    render(conn, :index, transactions: transactions, count: count, offset: filter.offset)
+    render(conn, :index, transactions: transactions, count: count, filter: filter)
   end
 
   def create(conn, %{"transaction" => transaction_params}) do

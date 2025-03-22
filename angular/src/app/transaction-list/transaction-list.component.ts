@@ -7,6 +7,9 @@ import { TransactionService } from '../transaction.service';
 import { Observable, of, map, tap } from 'rxjs';
 import { Transaction } from '../transaction';
 import { Paging } from '../paging';
+import { TransactionFilter, TransactionQueryParams } from '../app.types';
+
+type FilterTuple = [string, string];
 
 @Component({
   selector: 'app-transaction-list',
@@ -22,15 +25,12 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     query: new FormControl('')
   });
 
-  tag = '';
-  offset = 0;
-  account_id = 0;
   paging: Paging;
-  searching = false;
   hasPending = false;
   filterSessionKey = 'transaction-list:filters';
   selections: Transaction[] = [];
   loading = false;
+  filters: FilterTuple[] = [];
 
   constructor(
     private transactionService: TransactionService,
@@ -71,28 +71,24 @@ export class TransactionListComponent implements OnInit, OnDestroy {
 
     this.route.queryParamMap.subscribe((paramMap: ParamMap) => {
       this.clearSelection();
-      this.account_id = Number(paramMap.get("account_id") ?? 0);
       this.searchForm.patchValue({query: paramMap.get("query") ?? '' });
-      this.tag = paramMap.get("tag") || '';
-      this.searching = (this.query.value !== '');
-      this.offset = Number(paramMap.get("offset") ?? 0);
 
       window.sessionStorage.setItem(this.filterSessionKey, window.location.search);
 
       this.loading = true;
       this.transactions$ = this.transactionService.getTransactions(
-        this.offset,
-        this.account_id,
-        this.tag,
+        Number(paramMap.get("offset") ?? 0),
+        Number(paramMap.get("account_id") ?? 0),
+        paramMap.get("tag") || '',
         this.query.value
       ).pipe(
         tap(() => this.loading = false),
         tap(data => this.hasPending = data[0].filter(t => !t.cleared_on).length > 0),
-        tap(data => this.paging = new Paging(data[0].length, data[1], this.offset)),
+        tap(data => this.paging = new Paging(data[0].length, data[1], data[2]!.offset)),
+        tap(data => this.setFilters(data[2])),
         map(data => data[0])
       )
     });
-
   }
 
   ngOnDestroy() {
@@ -130,36 +126,30 @@ export class TransactionListComponent implements OnInit, OnDestroy {
 
   onSearchInput(event: Event) {
     if (this.query.value === '') {
-      this.clearSearch();
+      this.clearFilter('search');
     }
   }
 
-  clearSearch(event?: Event) {
+  clearFilter(name: string, event?: Event) {
     if (event) event.preventDefault();
 
-    this.searchForm.patchValue({query: ''});
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {query: null, tag: null, offset: null },
-        queryParamsHandling: 'merge',
-    });
-  }
+    const queryParams: TransactionQueryParams = {offset: null};
+    if (name === 'search' || name === 'all') {
+      queryParams.query = null;
+    }
 
-  clearAccount(event: Event) {
-    event.preventDefault();
-    this.router.navigate([], {
-      relativeTo: this.route,
-      queryParams: {account_id: null, offset: null},
-      queryParamsHandling: 'merge'
-    });
-  }
+    if (name === 'account' || name === 'all') {
+      queryParams.account_id = null;
+    }
 
-  clearTag(event: Event) {
-    event.preventDefault();
+    if (name === 'tag' || name === 'all') {
+      queryParams.tag = null;
+    }
+
     this.router.navigate([], {
       relativeTo: this.route,
-      queryParams: {tag: null},
-      queryParamsHandling: 'merge'
+      queryParams,
+      queryParamsHandling: 'merge',
     });
   }
 
@@ -233,6 +223,23 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         t.selected = false;
       }
       this.selections = [];
+    }
+  }
+
+  setFilters(filter?: TransactionFilter) {
+    this.filters = [];
+    if (!filter) return;
+
+    if (filter.search) {
+      this.filters.push(["search", filter.search]);
+    }
+
+    if (filter.tag) {
+      this.filters.push(["tag", filter.tag]);
+    }
+
+    if (filter.account) {
+      this.filters.push(["account", filter.account.name]);
     }
   }
 }

@@ -1,11 +1,9 @@
 fieldset {
     border: 0;
     display: grid;
-    grid-template-columns: auto auto 1fr;
-    flex-flow: row nowrap;
+    grid-template-columns: auto 1fr;
     align-items: center;
     gap: 1em;
-    margin-bottom: 2em;
 }
 
 input[type="search"] ~ button {
@@ -110,9 +108,26 @@ td p {
     gap: 1em;
 }
 
-.scopes {
-    display: flex;
-    gap: 1em;
+.filters {
+    list-style-type: none;
+    margin-left: 0;
+    padding: 0;
+}
+
+.filters li {
+    padding-bottom: .5em;
+}
+
+.filters li a:last-child:not(:first-child) {
+    margin-left: 1em;
+}
+
+.filters .name {
+    font-weight: bold;
+}
+
+.filters .value {
+    font-style: italic;
 }
 
 .transaction-type {

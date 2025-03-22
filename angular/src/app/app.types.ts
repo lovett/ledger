@@ -3,6 +3,21 @@ export type ApiResponse<T> = {
   count: number
 }
 
+export type TransactionQueryParams = {
+  account_id?: number | null,
+  tag?: string | null,
+  query?: string | null,
+  offset?: number | null,
+}
+
+export type TransactionFilter = {
+  offset: number,
+  tag: string,
+  search: string,
+  limit: number,
+  account: AccountRecord
+}
+
 export type TagRecord = {
   id: number,
   name: string,

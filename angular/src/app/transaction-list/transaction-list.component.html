@@ -1,27 +1,49 @@
+<ng-template #filtersFragment>
+    @if (filters.length > 0) {
+    <ul class="filters">
+        @for (scope of filters; track scope[0]) {
+        <li>
+            @if ($first) {
+            Where
+            } @else {
+            …and
+            }
+            <span class="name">{{ scope[0] }}</span> matches <span class="value">{{ scope[1] }}</span>
+            @if (scope[0] == "account") {
+            <a class="remove" href="#" (click)="clearFilter('account', $event)">Remove</a>
+            }
+
+            @if (scope[0] == "tag") {
+            <a href="#" (click)="clearFilter('tag', $event)">Remove</a>
+            }
+
+            @if (scope[0] == "search") {
+            <a href="#" (click)="clearFilter('search', $event)">Remove</a>
+            }
+        </li>
+        }
+
+        <li><a href="#" (click)="clearFilter('all', $event)">Remove all</a></li>
+    </ul>
+    }
+</ng-template>
+
 <header>
-    <h1>Transactions</h1>
-    <app-button label="Add transaction" icon="add" routerLink="/transactions/new"></app-button>
+    <div>
+        <h1>Transactions</h1>
+        <ng-container [ngTemplateOutlet]="filtersFragment"></ng-container>
+    </div>
+
+    <div>
+        <app-button label="Add transaction" icon="add" routerLink="/transactions/new"></app-button>
+        <form (ngSubmit)="search()" [formGroup]="searchForm" autocomplete="off">
+            <fieldset>
+                <input (input)="onSearchInput($event)" type="search" formControlName="query"/>
+                <button [disabled]="searchForm.invalid" type="submit"><svg><use xlink:href="#search" /></svg></button>
+            </fieldset>
+        </form>
+    </div>
 </header>
-
-<form (ngSubmit)="search()" [formGroup]="searchForm" autocomplete="off">
-    <fieldset>
-        <input (input)="onSearchInput($event)" type="search" formControlName="query"/>
-        <button [disabled]="searchForm.invalid" type="submit"><svg><use xlink:href="#search" /></svg></button>
-        <div class="scopes">
-            @if (searching) {
-            <a href="#" (click)="clearSearch($event)">Clear search</a>
-            }
-
-            @if (account_id > 0) {
-            <a href="#" (click)="clearAccount($event)">All accounts</a>
-            }
-
-            @if (tag != "") {
-            <a href="#" (click)="clearTag($event)">All tags</a>
-            }
-        </div>
-    </fieldset>
-</form>
 
 <ng-template #selectorsFragment>
     <div class="selectors">

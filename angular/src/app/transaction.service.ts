@@ -2,11 +2,11 @@ import { Observable, map, throwError, catchError } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Transaction } from './transaction';
-import { TransactionRecord, ApiResponse } from './app.types';
+import { TransactionRecord, ApiResponse, TransactionFilter } from './app.types';
 import { ReplaySubject } from 'rxjs';
 
-type TransactionList = [Transaction[], number];
-type ListResponse = ApiResponse<TransactionRecord[]>;
+type TransactionList = [Transaction[], number, TransactionFilter?];
+type ListResponse = ApiResponse<TransactionRecord[]> & {filter?: TransactionFilter}
 
 @Injectable({
   providedIn: 'root'
@@ -54,7 +54,7 @@ export class TransactionService {
       map((response): TransactionList => {
         const transactions = response.data.map(record => Transaction.fromRecord(record));
         const count = response.count;
-        return [transactions, count]
+        return [transactions, count, response.filter]
       }),
       catchError(this.handleError)
     );
