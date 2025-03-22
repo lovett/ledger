@@ -75,6 +75,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
       this.searchForm.patchValue({query: paramMap.get("query") ?? '' });
       this.tag = paramMap.get("tag") || '';
       this.searching = (this.query.value !== '');
+      this.offset = Number(paramMap.get("offset") ?? 0);
 
       window.sessionStorage.setItem(this.filterSessionKey, window.location.search);
 

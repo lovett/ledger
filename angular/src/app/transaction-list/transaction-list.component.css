@@ -103,17 +103,11 @@ td p {
     white-space: nowrap;
 }
 
-.paging {
-    padding-bottom: 0.5em;
-    display: flex;
-    justify-content: space-between;
-}
-
 .pager {
+    padding: 1em 0;
     display: flex;
-    justify-content: space-around;
-    padding: .5em 0;
-    text-align: center;
+    justify-content: center;
+    gap: 1em;
 }
 
 .scopes {

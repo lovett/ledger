@@ -49,6 +49,7 @@ export class TransactionService {
     if (query) {
       params = params.set("query", query);
     }
+
     return this.http.get<ListResponse>('/api/transactions', {params, }).pipe(
       map((response): TransactionList => {
         const transactions = response.data.map(record => Transaction.fromRecord(record));

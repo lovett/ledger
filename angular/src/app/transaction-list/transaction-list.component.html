@@ -97,7 +97,7 @@
             }
 
             @if (transaction.destination) {
-            <a [routerLink]="[]" [queryParams]="{account: transaction.destination.id}" queryParamsHandling="merge">
+            <a [routerLink]="[]" [queryParams]="{account_id: transaction.destination.id}" queryParamsHandling="merge">
                 {{ transaction.destination.name }}
             </a>
             }
@@ -161,25 +161,25 @@
 <div class="pager">
     @if (paging.canNavigateToFirstPage) {
     <a [routerLink]="[]" [queryParams]="{offset: paging.firstOffset}" queryParamsHandling="merge">
-        <span>Newest</span>
+        <span>First</span>
     </a>
     }
 
     @if (paging.canNavigateToPreviousPage) {
     <a [routerLink]="[]" [queryParams]="{offset: paging.previousOffset}" queryParamsHandling="merge">
-        <span>Newer</span>
+        <span>Previous</span>
     </a>
     }
 
     @if (paging.canNavigateToNextPage) {
     <a [routerLink]="[]" [queryParams]="{offset: paging.nextOffset}" queryParamsHandling="merge">
-        <span>Older</span>
+        <span>Next</span>
     </a>
     }
 
     @if (paging.canNavigateToLastPage) {
     <a [routerLink]="[]" [queryParams]="{offset: paging.lastOffset}" queryParamsHandling="merge">
-        <span>Oldest</span>
+        <span>Last</span>
     </a>
     }
 </div>
