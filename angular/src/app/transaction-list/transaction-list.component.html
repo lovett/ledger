@@ -39,10 +39,7 @@
     <div>
         <app-button label="Add transaction" icon="add" routerLink="/transactions/new"></app-button>
         <form (ngSubmit)="search()" [formGroup]="searchForm" autocomplete="off">
-            <fieldset>
-                <input (input)="onSearchInput($event)" type="search" formControlName="query"/>
-                <button [disabled]="searchForm.invalid" type="submit"><svg><use xlink:href="#search" /></svg></button>
-            </fieldset>
+            <input (input)="onSearchInput($event)" type="search" formControlName="query" placeholder="Search transactions" />
         </form>
     </div>
 </header>
