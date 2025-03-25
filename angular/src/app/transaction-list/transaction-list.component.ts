@@ -86,7 +86,8 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         catchError((error) => {
           this.loading = false;
           window.sessionStorage.removeItem(this.filterSessionKey);
-          this.setError(error.message, error.status);
+
+          this.setError(error.status, error.message);
           return of([]);
         }),
         tap(data => {
@@ -179,7 +180,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         transaction.cleared_on = new Date();
       },
       error: (error) => {
-        this.setError('The transaction was not cleared', error.status);
+        this.setError(error.status, 'The transaction was not cleared');
       }
     });
   }
@@ -255,8 +256,13 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     }
   }
 
-  setError(message: string, httpCode?: number) {
+  setError(httpCode: number, message: string) {
+    if (httpCode === 404) {
+      this.errorHttpCode = 0;
+      this.errorMessage = '';
+      return;
+    }
+    this.errorHttpCode = httpCode;
     this.errorMessage = message;
-    this.errorHttpCode = httpCode ? httpCode : 0;
   }
 }
