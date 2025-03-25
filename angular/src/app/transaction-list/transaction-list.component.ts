@@ -86,18 +86,19 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         catchError((error) => {
           this.loading = false;
           window.sessionStorage.removeItem(this.filterSessionKey);
-
           this.setError(error.status, error.message);
           return of([]);
         }),
         tap(data => {
           this.loading = false;
           window.sessionStorage.setItem(this.filterSessionKey, window.location.search);
-          this.hasPending = data[0].filter(t => !t.cleared_on).length > 0;
-          this.paging = new Paging(data[0].length, data[1], data[2]!.offset);
-          this.setFilters(data[2]);
+          if (data.length > 0) {
+            this.hasPending = data[0].filter(t => !t.cleared_on).length > 0;
+            this.paging = new Paging(data[0].length, data[1], data[2]!.offset);
+            this.setFilters(data[2]);
+          }
         }),
-        map(data => data[0]),
+        map(data => (data.length > 0) ? data[0] : []),
       )
     });
 

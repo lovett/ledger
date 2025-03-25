@@ -174,7 +174,13 @@
     } @empty {
     <tr class="empty">
         @if (!loading) {
-        <td><p>Nothing found.</p></td>
+        <td>
+            <p>Nothing found.</p>
+
+            @if (route.snapshot.queryParamMap.keys.length > 0) {
+            <p><a [routerLink]="[]" [queryParams]="{}">View all transactions</a></p>
+            }
+        </td>
         }
     </tr>
     }
