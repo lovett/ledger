@@ -178,7 +178,7 @@
             <p>Nothing found.</p>
 
             @if (route.snapshot.queryParamMap.keys.length > 0) {
-            <p><a [routerLink]="[]" [queryParams]="{}">View all transactions</a></p>
+            <p><a href="#" (click)="clearFilter('all', $event)">View all transactions</a></p>
             }
         </td>
         }
