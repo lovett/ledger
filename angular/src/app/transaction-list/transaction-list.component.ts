@@ -1,10 +1,11 @@
 import { Component, output, OnDestroy, OnInit, ElementRef, viewChild } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
+import { ErrorMessageComponent } from '../error-message/error-message.component';
 import { CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, NgTemplateOutlet, CommonModule } from '@angular/common';
 import { RouterLink, Router, ActivatedRoute, Params, ParamMap } from '@angular/router';
 import { TransactionService } from '../transaction.service';
-import { Observable, of, map, tap } from 'rxjs';
+import { Observable, of, map, tap, catchError } from 'rxjs';
 import { Transaction } from '../transaction';
 import { Paging } from '../paging';
 import { TransactionFilter, TransactionQueryParams } from '../app.types';
@@ -13,7 +14,7 @@ type FilterTuple = [string, string];
 
 @Component({
   selector: 'app-transaction-list',
-  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, ButtonComponent, CommonModule],
+  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, ButtonComponent, ErrorMessageComponent, CommonModule],
   templateUrl: './transaction-list.component.html',
   styleUrl: './transaction-list.component.css'
 })
@@ -31,6 +32,8 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   selections: Transaction[] = [];
   loading = false;
   filters: FilterTuple[] = [];
+  errorMessage: string = '';
+  errorHttpCode: number = 0;
 
   constructor(
     private transactionService: TransactionService,
@@ -73,8 +76,6 @@ export class TransactionListComponent implements OnInit, OnDestroy {
       this.clearSelection();
       this.searchForm.patchValue({query: paramMap.get("query") ?? '' });
 
-      window.sessionStorage.setItem(this.filterSessionKey, window.location.search);
-
       this.loading = true;
       this.transactions$ = this.transactionService.getTransactions(
         Number(paramMap.get("offset") ?? 0),
@@ -82,13 +83,23 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         paramMap.get("tag") || '',
         this.query.value
       ).pipe(
-        tap(() => this.loading = false),
-        tap(data => this.hasPending = data[0].filter(t => !t.cleared_on).length > 0),
-        tap(data => this.paging = new Paging(data[0].length, data[1], data[2]!.offset)),
-        tap(data => this.setFilters(data[2])),
-        map(data => data[0])
+        catchError((error) => {
+          this.loading = false;
+          window.sessionStorage.removeItem(this.filterSessionKey);
+          this.setError(error.message, error.status);
+          return of([]);
+        }),
+        tap(data => {
+          this.loading = false;
+          window.sessionStorage.setItem(this.filterSessionKey, window.location.search);
+          this.hasPending = data[0].filter(t => !t.cleared_on).length > 0;
+          this.paging = new Paging(data[0].length, data[1], data[2]!.offset);
+          this.setFilters(data[2]);
+        }),
+        map(data => data[0]),
       )
     });
+
   }
 
   ngOnDestroy() {
@@ -163,11 +174,12 @@ export class TransactionListComponent implements OnInit, OnDestroy {
 
   clearTransaction(event: MouseEvent, transaction: Transaction){
     event.preventDefault();
-    transaction.cleared_on = new Date();
     this.transactionService.saveTransaction(transaction).subscribe({
+      next: () => {
+        transaction.cleared_on = new Date();
+      },
       error: (error) => {
-        //this.errorMessage = error.message;
-        console.error(error.message);
+        this.setError('The transaction was not cleared', error.status);
       }
     });
   }
@@ -241,5 +253,10 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     if (filter.account) {
       this.filters.push(["account", filter.account.name]);
     }
+  }
+
+  setError(message: string, httpCode?: number) {
+    this.errorMessage = message;
+    this.errorHttpCode = httpCode ? httpCode : 0;
   }
 }

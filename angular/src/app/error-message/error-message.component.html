@@ -1,1 +1,11 @@
-<p>error-message works!</p>
+@if (message() && !hidden) {
+<div id="error-message">
+    <p>{{ message() }}</p>
+
+    @if (httpCode()) {
+    <p>HTTP Code: {{ httpCode() }}</p>
+    }
+
+    <a href="#" class="close" (click)="clear($event)">×</a>
+</div>
+}

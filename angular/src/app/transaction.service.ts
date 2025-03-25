@@ -56,7 +56,7 @@ export class TransactionService {
         const count = response.count;
         return [transactions, count, response.filter]
       }),
-      catchError(this.handleError)
+      //catchError(this.handleError)
     );
   }
 
@@ -76,7 +76,7 @@ export class TransactionService {
     }
 
     return request.pipe(
-      catchError(this.handleError)
+      //catchError(this.handleError)
     );
   }
 
@@ -101,14 +101,12 @@ export class TransactionService {
 
 
   handleError(error: HttpErrorResponse) {
-    console.error('handleError', error);
     let message = '';
     if (error.error instanceof ErrorEvent) {
       message = error.error.message;
     } else {
       message = error.message;
     }
-    console.error(message);
-    return throwError(() => new Error('Something went wrong.'));
+    return throwError(() => new Error(message));
   }
 }

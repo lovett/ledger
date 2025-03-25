@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   selector: 'app-error-message',
@@ -7,5 +7,13 @@ import { Component } from '@angular/core';
   styleUrl: './error-message.component.css'
 })
 export class ErrorMessageComponent {
+  message = input<string>('');
+  httpCode = input<number>(0);
+  hidden = false;
+
+  clear(e: MouseEvent) {
+    e.preventDefault();
+    this.hidden = true;
+  }
 
 }
