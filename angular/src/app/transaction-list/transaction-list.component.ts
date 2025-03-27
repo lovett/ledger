@@ -1,20 +1,21 @@
 import { Component, output, OnDestroy, OnInit, ElementRef, viewChild } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
-import { ErrorMessageComponent } from '../error-message/error-message.component';
 import { CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, NgTemplateOutlet, CommonModule } from '@angular/common';
 import { RouterLink, Router, ActivatedRoute, Params, ParamMap } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { TransactionService } from '../transaction.service';
 import { Observable, of, map, tap, catchError } from 'rxjs';
 import { Transaction } from '../transaction';
 import { Paging } from '../paging';
 import { TransactionFilter, TransactionQueryParams } from '../app.types';
+import { ErrorService } from '../error.service';
 
 type FilterTuple = [string, string];
 
 @Component({
   selector: 'app-transaction-list',
-  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, ButtonComponent, ErrorMessageComponent, CommonModule],
+  imports: [ReactiveFormsModule, RouterLink, CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, ButtonComponent, CommonModule],
   templateUrl: './transaction-list.component.html',
   styleUrl: './transaction-list.component.css'
 })
@@ -32,11 +33,12 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   selections: Transaction[] = [];
   loading = false;
   filters: FilterTuple[] = [];
-  errorMessage: string = '';
-  errorHttpCode: number = 0;
+  // errorMessage: string = '';
+  // errorHttpCode: number = 0;
 
   constructor(
     private transactionService: TransactionService,
+    private errorService: ErrorService,
     public route: ActivatedRoute,
     private router: Router,
   ) {
@@ -83,10 +85,10 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         paramMap.get("tag") || '',
         this.query.value
       ).pipe(
-        catchError((error) => {
+        catchError((error: HttpErrorResponse) => {
           this.loading = false;
           window.sessionStorage.removeItem(this.filterSessionKey);
-          this.setError(error.status, error.message);
+          this.errorService.reportError(error);
           return of([]);
         }),
         tap(data => {
@@ -101,7 +103,6 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         map(data => (data.length > 0) ? data[0] : []),
       )
     });
-
   }
 
   ngOnDestroy() {
@@ -181,7 +182,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         transaction.cleared_on = new Date();
       },
       error: (error) => {
-        this.setError(error.status, 'The transaction was not cleared');
+        this.errorService.reportError(error, 'The transaction was not cleared.');
       }
     });
   }
@@ -255,15 +256,5 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     if (filter.account) {
       this.filters.push(["account", filter.account.name]);
     }
-  }
-
-  setError(httpCode: number, message: string) {
-    if (httpCode === 404) {
-      this.errorHttpCode = 0;
-      this.errorMessage = '';
-      return;
-    }
-    this.errorHttpCode = httpCode;
-    this.errorMessage = message;
   }
 }

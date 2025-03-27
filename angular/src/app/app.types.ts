@@ -1,3 +1,7 @@
+import { HttpErrorResponse } from '@angular/common/http';
+
+export type ErrorTuple = [HttpErrorResponse, string?];
+
 export type ApiResponse<T> = {
   data: T;
   count: number

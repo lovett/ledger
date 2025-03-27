@@ -1,4 +1,4 @@
-import { Observable, map, throwError, catchError } from 'rxjs';
+import { Observable, map, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Transaction } from './transaction';
@@ -55,8 +55,7 @@ export class TransactionService {
         const transactions = response.data.map(record => Transaction.fromRecord(record));
         const count = response.count;
         return [transactions, count, response.filter]
-      }),
-      //catchError(this.handleError)
+      })
     );
   }
 
@@ -64,8 +63,7 @@ export class TransactionService {
     return this.http.get<ApiResponse<TransactionRecord>>(`/api/transactions/${id}`).pipe(
       map((response) => {
         return Transaction.fromRecord(response.data);
-      }),
-      catchError(this.handleError)
+      })
     );
   }
 
@@ -75,38 +73,18 @@ export class TransactionService {
       request = this.http.post<void>('/api/transactions', transaction.formData);
     }
 
-    return request.pipe(
-      //catchError(this.handleError)
-    );
+    return request;
   }
 
-  // clearTransaction(id: number): Observable<void> {
-  //   return this.http.patch<void>(`/api/transactions/${id}`, transaction
-  // }
-
   deleteTransaction(id: number): Observable<void> {
-    return this.http.delete<void>(`/api/transactions/${id}`).pipe(
-      catchError(this.handleError)
-    );
+    return this.http.delete<void>(`/api/transactions/${id}`);
   }
 
   autocompletePayee(payee: string): Observable<String[]> {
     return this.http.get<String[]>('/ledger/autocomplete/payee', {params: {query: payee}}).pipe(
       map((response): String[] => {
         return response;
-      }),
-      catchError(this.handleError)
+      })
     );
-  }
-
-
-  handleError(error: HttpErrorResponse) {
-    let message = '';
-    if (error.error instanceof ErrorEvent) {
-      message = error.error.message;
-    } else {
-      message = error.message;
-    }
-    return throwError(() => new Error(message));
   }
 }
