@@ -1,11 +1,11 @@
 import { Component, output, OnDestroy, OnInit, ElementRef, viewChild } from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
 import { CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, NgTemplateOutlet, CommonModule } from '@angular/common';
 import { RouterLink, Router, ActivatedRoute, Params, ParamMap } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TransactionService } from '../transaction.service';
-import { Observable, of, map, tap, catchError } from 'rxjs';
+import { Observable, Subscription, of, map, tap, catchError } from 'rxjs';
 import { Transaction } from '../transaction';
 import { Paging } from '../paging';
 import { TransactionFilter, TransactionQueryParams } from '../app.types';
@@ -24,48 +24,27 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   transactions$: Observable<Transaction[]> = of([]);
 
   searchForm = new FormGroup({
-    query: new FormControl('')
+    query: new FormControl('', {validators: Validators.required} )
   });
 
-  paging: Paging;
+  paging: Paging = Paging.blank();
   hasPending = false;
   filterSessionKey = 'transaction-list:filters';
   selections: Transaction[] = [];
   loading = false;
   filters: FilterTuple[] = [];
-  // errorMessage: string = '';
-  // errorHttpCode: number = 0;
+  selectionSubscription?: Subscription;
 
   constructor(
     private transactionService: TransactionService,
     private errorService: ErrorService,
     public route: ActivatedRoute,
     private router: Router,
-  ) {
-    this.paging = Paging.blank();
-
-    this.transactionService.selection$.subscribe(selections => this.onSelectionChange(selections));
-
-    //     this.searchForm = this.formBuilder.group({
-    //         query: [
-    //             '',
-    //             {validators: Validators.required}
-    //         ],
-    //     });
-
-    //     this.route.queryParams.subscribe((queryParams) => {
-    //         this.account = Number(queryParams['account'] || 0);
-    //         this.offset = Number(queryParams['offset'] || 0);
-    //         this.tag = queryParams['tag'];
-    //         this.query.setValue(queryParams['q']);
-    //         this.activeQuery = queryParams['q'];
-    //         this.getTransactions();
-    //         window.scrollTo(0, 0);
-    //     });
-
-  }
+  ) {}
 
   ngOnInit() {
+    this.selectionSubscription = this.transactionService.selection$.subscribe(selections => this.onSelectionChange(selections));
+
     const filters = window.sessionStorage.getItem(this.filterSessionKey) || '';
     if (window.location.search === '' && filters !== '') {
       this.router.navigate([], {
@@ -106,7 +85,9 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.ledgerService.transactionSelection(null);
+    if (this.selectionSubscription) {
+      this.selectionSubscription.unsubscribe();
+    }
   }
 
   querystringToParams(querystring: string): Params {
@@ -117,26 +98,6 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   }
 
   get query() { return this.searchForm.get("query") as FormControl }
-
-  // getTransactions() {
-  //     this.ledgerService.getTransactions(this.query.value, this.limit, this.offset, this.account, this.tag).subscribe({
-  //         next: (transactionList: TransactionList) => {
-  //             this.count = transactionList.count;
-  //             this.transactions = transactionList.transactions.map((jsonTransaction) => {
-  //                 const t = Transaction.fromJson(jsonTransaction);
-  //                 const index = this.ledgerService.selections.findIndex(
-  //                     selectedTransaction => selectedTransaction.uid === t.uid
-  //                 );
-
-  //                 t.selected = index > -1;
-  //                 return t;
-  //             });
-  //             this.nextOffset = Math.min(this.offset + this.transactions.length, this.count);
-  //             this.previousOffset = Math.max(0, this.offset - this.transactions.length);
-  //         },
-  //         error: (err: Error) => console.log(err),
-  //     });
-  // }
 
   onSearchInput(event: Event) {
     if (this.query.value === '') {
