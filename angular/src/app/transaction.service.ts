@@ -1,12 +1,8 @@
-import { Observable, map, throwError } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { Observable, Subject, map, throwError } from 'rxjs';
 import { Transaction } from './transaction';
-import { TransactionRecord, ApiResponse, TransactionFilter } from './app.types';
-import { Subject } from 'rxjs';
-
-type TransactionList = [Transaction[], number, TransactionFilter?];
-type ListResponse = ApiResponse<TransactionRecord[]> & {filter?: TransactionFilter}
+import { TransactionListResponse, TransactionList, TransactionRecord, ApiResponse, TransactionFilter } from './app.types';
 
 @Injectable({
   providedIn: 'root'
@@ -19,17 +15,6 @@ export class TransactionService {
   constructor(
     private http: HttpClient
   ) {}
-
-  //clearSelection() {
-    // this.selectedTransactions.forEach(t => t.selected = false);
-    // this.selectedTransactions = [];
-    // this.selectionSubject.next(0);
-  //}
-
-  // transactionSelection(t: Transaction) {
-  //   const amount = t.selected ? t.amount : t.amount * -1;
-  //   this.selectionSubject.next(amount);
-  // }
 
   getTransactions(offset = 0, account_id = 0, tag = '', query = ''): Observable<TransactionList> {
     let params = new HttpParams();
@@ -50,7 +35,7 @@ export class TransactionService {
       params = params.set("query", query);
     }
 
-    return this.http.get<ListResponse>('/api/transactions', {params, }).pipe(
+    return this.http.get<TransactionListResponse>('/api/transactions', {params, }).pipe(
       map((response): TransactionList => {
         const transactions = response.data.map(record => Transaction.fromRecord(record));
         const count = response.count;

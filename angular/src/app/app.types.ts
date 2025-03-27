@@ -1,4 +1,5 @@
 import { HttpErrorResponse } from '@angular/common/http';
+import { Transaction } from './transaction';
 
 export type ErrorTuple = [HttpErrorResponse, string?];
 
@@ -57,3 +58,7 @@ export type TransactionRecord = {
   destination: Partial<AccountRecord>,
   tags: TagRecord[],
 }
+
+export type TransactionList = [Transaction[], number, TransactionFilter?];
+
+export type TransactionListResponse = ApiResponse<TransactionRecord[]> & {filter?: TransactionFilter }
