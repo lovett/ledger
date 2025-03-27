@@ -85,6 +85,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.clearSelection();
     if (this.selectionSubscription) {
       this.selectionSubscription.unsubscribe();
     }
