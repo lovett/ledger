@@ -28,20 +28,6 @@
     }
 </ng-template>
 
-<header>
-    <div>
-        <h1>Transactions</h1>
-        <ng-container [ngTemplateOutlet]="filtersFragment"></ng-container>
-    </div>
-
-    <div>
-        <app-button label="Add transaction" icon="add" routerLink="/transactions/new"></app-button>
-        <form (ngSubmit)="search()" [formGroup]="searchForm" autocomplete="off">
-            <input (input)="onSearchInput($event)" type="search" formControlName="query" placeholder="Search transactions" />
-        </form>
-    </div>
-</header>
-
 <ng-template #selectorsFragment>
     <div class="selectors">
         @if (selections.length === 0) {
@@ -69,6 +55,20 @@
         }
     </div>
 </ng-template>
+
+<header>
+    <div>
+        <h1>Transactions</h1>
+        <ng-container [ngTemplateOutlet]="filtersFragment"></ng-container>
+    </div>
+
+    <div>
+        <app-button label="Add transaction" icon="add" routerLink="/transactions/new"></app-button>
+        <form (ngSubmit)="search()" [formGroup]="searchForm" autocomplete="off">
+            <input (input)="onSearchInput($event)" type="search" formControlName="query" placeholder="Search transactions" />
+        </form>
+    </div>
+</header>
 
 <table #tableRef>
     @for (transaction of (transactions$ | async); track transaction.id) {
