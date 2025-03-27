@@ -15,7 +15,7 @@ defmodule LedgerWeb.TransactionController do
     filter = %TransactionFilter{
       account: account,
       tag: Map.get(params, "tag", ""),
-      search: Map.get(params, "query", "") |> String.trim,
+      search: Map.get(params, "query", ""),
       offset: String.to_integer(Map.get(params, "offset", "0")),
       limit: 100
     }

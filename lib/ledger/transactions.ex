@@ -98,10 +98,13 @@ defmodule Ledger.Transactions do
       end
 
     (value <> suffix)
+    |> String.replace(~r/[^\w :^*"]/, "")
+    |> String.replace(~r"date:([\d*]+)", "occurred_on:^\\1*")
     |> String.replace(~r/(?<!\boccurred_on|\bamount|\bpayee|\bnote)\s*:\s*/, " ")
-    |> String.replace(~r/[^\w :"]/, "")
+    |> String.replace(~r"^$", "amount:")
     |> String.replace("\"\"", "")
     |> String.trim()
+    |> IO.inspect(label: "fts escaped")
   end
 
   def list_balances do
