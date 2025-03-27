@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Transaction } from './transaction';
 import { TransactionRecord, ApiResponse, TransactionFilter } from './app.types';
-import { ReplaySubject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 type TransactionList = [Transaction[], number, TransactionFilter?];
 type ListResponse = ApiResponse<TransactionRecord[]> & {filter?: TransactionFilter}
@@ -12,7 +12,7 @@ type ListResponse = ApiResponse<TransactionRecord[]> & {filter?: TransactionFilt
   providedIn: 'root'
 })
 export class TransactionService {
-  selectionSubject = new ReplaySubject<Transaction[]>();
+  selectionSubject = new Subject<Transaction[]>();
   selection$ = this.selectionSubject.asObservable();
   selections: Transaction[] = [];
 
