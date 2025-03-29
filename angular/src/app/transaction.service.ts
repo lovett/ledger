@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Params } from '@angular/router';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, Subject, map, throwError } from 'rxjs';
 import { Transaction } from './transaction';
@@ -11,10 +12,28 @@ export class TransactionService {
   selectionSubject = new Subject<Transaction[]>();
   selection$ = this.selectionSubject.asObservable();
   selections: Transaction[] = [];
+  filterSessionKey = 'transaction:filters';
 
   constructor(
     private http: HttpClient
   ) {}
+
+  storeFilters(filters: string) {
+    window.sessionStorage.setItem(this.filterSessionKey, filters);
+  }
+
+  recallStoredFilters(): Params {
+    const storedValue = window.sessionStorage.getItem(this.filterSessionKey) || '';
+
+    const searchParams = new URLSearchParams(storedValue)
+    const params: Params = {};
+    searchParams.forEach((v, k) => params[k] = v);
+    return params;
+  }
+
+  clearStoredFilters() {
+    window.sessionStorage.removeItem(this.filterSessionKey);
+  }
 
   getTransactions(offset = 0, account_id = 0, tag = '', query = ''): Observable<TransactionList> {
     let params = new HttpParams();

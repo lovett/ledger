@@ -29,7 +29,6 @@ export class TransactionListComponent implements OnInit, OnDestroy {
 
   paging: Paging = Paging.blank();
   hasPending = false;
-  filterSessionKey = 'transaction-list:filters';
   selections: Transaction[] = [];
   loading = false;
   filters: FilterTuple[] = [];
@@ -45,11 +44,11 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.selectionSubscription = this.transactionService.selection$.subscribe(selections => this.onSelectionChange(selections));
 
-    const filters = window.sessionStorage.getItem(this.filterSessionKey) || '';
-    if (window.location.search === '' && filters !== '') {
+    const filters = this.transactionService.recallStoredFilters();
+    if (window.location.search === '' && Object.keys(filters).length > 0) {
       this.router.navigate([], {
         relativeTo: this.route,
-        queryParams: this.querystringToParams(filters),
+        queryParams: filters,
       });
     }
 
@@ -66,13 +65,13 @@ export class TransactionListComponent implements OnInit, OnDestroy {
       ).pipe(
         catchError((error: HttpErrorResponse) => {
           this.loading = false;
-          window.sessionStorage.removeItem(this.filterSessionKey);
+          this.transactionService.clearStoredFilters();
           this.errorService.reportError(error);
           return of([]);
         }),
         tap(data => {
           this.loading = false;
-          window.sessionStorage.setItem(this.filterSessionKey, window.location.search);
+          this.transactionService.storeFilters(window.location.search);
           if (data.length > 0) {
             this.hasPending = data[0].filter(t => !t.cleared_on).length > 0;
             this.paging = new Paging(data[0].length, data[1], data[2]!.offset);
@@ -89,13 +88,6 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     if (this.selectionSubscription) {
       this.selectionSubscription.unsubscribe();
     }
-  }
-
-  querystringToParams(querystring: string): Params {
-    const searchParams = new URLSearchParams(querystring)
-    const params: Params = {};
-    searchParams.forEach((v, k) => params[k] = v);
-    return params;
   }
 
   get query() { return this.searchForm.get("query") as FormControl }
