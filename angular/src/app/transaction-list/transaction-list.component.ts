@@ -24,7 +24,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
   transactions$: Observable<Transaction[]> = of([]);
 
   searchForm = new FormGroup({
-    query: new FormControl('', {validators: Validators.required} )
+    query: new FormControl('')
   });
 
   paging: Paging = Paging.blank();
