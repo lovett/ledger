@@ -265,7 +265,10 @@ export class TransactionFormComponent implements OnInit {
     if (this.receipt_upload) t.receipt_upload = this.receipt_upload;
 
     this.transactionService.saveTransaction(t).subscribe({
-      next: () => this.router.navigate(this.returnRoute),
+      next: () => {
+        this.transactionService.clearStoredFilters();
+        this.router.navigate(this.returnRoute);
+      },
       error: (error) => {
         this.errorMessage = error.message;
         console.error(error.message);
