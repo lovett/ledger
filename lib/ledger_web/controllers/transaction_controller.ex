@@ -70,22 +70,6 @@ defmodule LedgerWeb.TransactionController do
     end
   end
 
-  @spec page_title(filter:: %TransactionFilter{}):: String.t()
-  def page_title(filter) do
-    account = if filter.account_id > 0, do: Accounts.get_account!(filter.account_id)
-    search = if filter.search != "", do: filter.search
-    tag = if filter.tag != "", do: filter.tag
-
-    cond do
-      account && search && tag -> "Transactions in #{account.name} tagged #{tag}"
-      account && search -> "Search results in #{account.name}"
-      account -> "Transactions in #{account.name}"
-      search  -> "Transaction Search Results"
-      tag -> "Transactions tagged #{tag}"
-      true -> "Transactions"
-    end
-  end
-
   def merge_receipt_fields(%{"receipt_upload" => %Plug.Upload{} = receipt_upload} = transaction_params) do
     case File.read(receipt_upload.path) do
       {:ok, contents} ->
