@@ -13,6 +13,7 @@ export class ErrorService {
   constructor() { }
 
   reportError(error: HttpErrorResponse, message?: string) {
+    console.log(error);
     this.errorSubject.next([error, message]);
   }
 }

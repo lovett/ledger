@@ -17,9 +17,9 @@ export class LabelComponent {
     if (this.customMessage()) return this.customMessage();
     if (control.valid || control.untouched) return null;
     if (control.hasError('required')) return 'This field is required';
-    if (control.hasError('pattern')) return 'The amount should be numeric';
-    if (control.hasError('min')) return 'Value is too small';
-    if (control.hasError('unique')) return 'This value is already used';
+    if (control.hasError('pattern')) return 'The amount should be a number';
+    if (control.hasError('min')) return 'This value is too small';
+    if (control.hasError('unique')) return 'This value is already being used';
     return 'Error';
   }
 

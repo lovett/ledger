@@ -36,9 +36,7 @@ export class AccountService {
       request = this.http.post<void>('/api/accounts', account.formData);
     }
 
-    return request.pipe(
-      catchError(this.handleError)
-    );
+    return request;
   }
 
   deleteAccount(id: number): Observable<void> {

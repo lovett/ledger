@@ -3,7 +3,7 @@
     <p>{{ message() }}</p>
 
     @if (httpCode()) {
-    <p>HTTP Code: {{ httpCode() }}</p>
+    <p>HTTP Error {{ httpCode() }}</p>
     }
 
     <a href="#" class="close" (click)="clear($event)">×</a>

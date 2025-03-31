@@ -2,34 +2,14 @@ import { Component, inject, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, FormBuilder, Validators, AsyncValidatorFn } from '@angular/forms';
 import { accountDatesValidator } from './account-dates.directive';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { Account } from '../account';
 import { AccountService } from '../account.service';
 import { ButtonComponent } from '../button/button.component';
 import { LabelComponent } from '../label/label.component';
 import { Observable, map, of } from 'rxjs';
+import { ErrorService } from '../error.service';
 
-
-// MIGRATION_PENDING
-// function uniqueName(id: number, accountService: AccountService): AsyncValidatorFn {
-//   const sanitizer = (value: string) => value.toLowerCase().replace(/\s+/g, '');
-//   return (control: AbstractControl): Observable<ValidationErrors | null> => {
-//     if (id !== 0) {
-//       return of(null);
-//     }
-
-//     const needle = sanitizer(control.value);
-//     return accountService.getAccounts().pipe(
-//       map(accounts => {
-//         for (const account of accounts) {
-//           if (sanitizer(account.name) === needle) {
-//             return {'unique': true}
-//           }
-//         }
-//         return null;
-//       })
-//     );
-//   }
-// }
 
 @Component({
   selector: 'app-account-form',
@@ -48,7 +28,6 @@ export class AccountFormComponent implements OnInit {
     id: new FormControl(0),
     name: new FormControl('', {
       validators: Validators.required,
-      // MIGRATION_PENDING asyncValidators: uniqueName(id, this.accountService),
     }),
     url: new FormControl(''),
     opened_on: new FormControl(''),
@@ -63,8 +42,8 @@ export class AccountFormComponent implements OnInit {
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private accountService: AccountService,
-  ) {
-  }
+    private errorService: ErrorService,
+  ) {}
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id') || 0)
@@ -124,9 +103,11 @@ export class AccountFormComponent implements OnInit {
 
     this.accountService.saveAccount(a).subscribe({
       next: () => this.router.navigate(this.returnRoute),
-      error: (error) => {
-        this.errorMessage = error.message;
-        console.error(error.message);
+      error: (error: HttpErrorResponse) => {
+        if (error.error.errors.name) {
+          this.name.setErrors({unique: true});
+        }
+        this.errorService.reportError(error, 'The account was not saved.');
       }
     });
   }
