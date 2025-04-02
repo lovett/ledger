@@ -35,11 +35,15 @@ export class TransactionService {
     window.sessionStorage.removeItem(this.filterSessionKey);
   }
 
-  getTransactions(offset = 0, account_id = 0, tag = '', query = ''): Observable<TransactionList> {
+  getTransactions(offset = 0, account_id = 0, tag = '', query = '', limit = 0): Observable<TransactionList> {
     let params = new HttpParams();
 
     if (offset > 0) {
       params = params.set("offset", offset);
+    }
+
+    if (limit > 0) {
+      params = params.set("limit", limit);
     }
 
     if (account_id > 0) {

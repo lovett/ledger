@@ -73,6 +73,19 @@ export class Transaction {
     }
   }
 
+  get formValuesForAutocomplete(): object {
+    return {
+      payee: this.payee,
+      amount: this.amount,
+      accounts: {
+        account_id: this.account?.id,
+        destination_id: this.destination?.id,
+      },
+      note: this.note,
+      tags: this.delimitedTags,
+    }
+  }
+
   get delimitedTags(): string {
     let result =  '';
     for (const tag of this.tags) {

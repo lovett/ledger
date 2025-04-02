@@ -17,7 +17,13 @@
     <div>
         <app-label [control]="payee" text="Payee" />
         <input id="payee" type="text" formControlName="payee" />
-        <!-- MIGRATION_PENDING <p *ngIf="autocompleteFrom"><a href="#" (click)="applyAutocompletedTransaction($event)">Autocomplete</a> from transaction #{{ autocompleteFrom.uid }} of {{ autocompleteFrom.occurred_on |date:'longDate' }}</p> -->
+        <div class="shortcuts">
+            @for (transaction of (autocompleteCandidates$ | async); track transaction.id) {
+            <a href="#" (click)="autocomplete($event, transaction)">
+                 {{ transaction.payee }}: {{ transaction.delimitedTags }}
+            </a>
+            }
+        </div>
     </div>
 
     <div>

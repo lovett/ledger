@@ -1,14 +1,13 @@
 import { Component, OnInit, ElementRef, viewChild } from '@angular/core';
 import { ReactiveFormsModule, FormArray, FormGroup, FormControl, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { AsyncPipe, DecimalPipe, formatDate } from '@angular/common';
+import { AsyncPipe, formatDate } from '@angular/common';
 import { Transaction } from '../transaction';
 import { Account } from '../account';
 import { Tag } from  '../tag';
 import { TransactionService } from '../transaction.service';
 import { TagService } from '../tag.service';
-//import { switchMap, debounceTime, filter } from 'rxjs';
-import { Observable, switchMap, debounceTime, of, catchError } from 'rxjs';
+import { Observable, switchMap, debounceTime, of, catchError, map } from 'rxjs';
 import { ButtonComponent } from '../button/button.component';
 import { AccountMenuComponent } from '../account-menu/account-menu.component';
 import { LabelComponent } from '../label/label.component';
@@ -49,11 +48,10 @@ export class TransactionFormComponent implements OnInit {
   transaction?: Transaction;
   errorMessage?: string;
   datesExpanded = false;
-  //autocompleteFrom: Transaction | null;
   receipt_upload?: File;
   returnRoute = ['/transactions'];
   tagCandidates$: Observable<Tag[]> = of([]);
-
+  autocompleteCandidates$: Observable<Transaction[]> = of([]);
 
   transactionForm = new FormGroup({
     id: new FormControl(0),
@@ -80,49 +78,48 @@ export class TransactionFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private transactionService: TransactionService,
     private tagService: TagService,
-  ) {
-  }
+  ) {}
 
-    ngOnInit(): void {
-      this.occurredOn.setValue(this.today)
+  ngOnInit(): void {
+    this.occurredOn.setValue(this.today)
 
-      const id = Number(this.route.snapshot.paramMap.get('id') || 0)
-      if (id > 0) {
-        this.transactionService.getTransaction(id).subscribe({
-          next: (transaction: Transaction) => this.populate(transaction),
-          error: (error) => {
-            this.errorMessage = error.message;
-            console.error(error.message);
-          }
-        });
-      }
+    const id = Number(this.route.snapshot.paramMap.get('id') || 0)
+    if (id > 0) {
+      this.transactionService.getTransaction(id).subscribe({
+        next: (transaction: Transaction) => this.populate(transaction),
+        error: (error) => {
+          this.errorMessage = error.message;
+          console.error(error.message);
+        }
+      });
+    }
 
-      this.tagCandidates$ = this.tags.valueChanges.pipe(
+    if (id == 0) {
+      this.autocompleteCandidates$ = this.payee.valueChanges.pipe(
         debounceTime(300),
         switchMap((value) => {
-          const partial = value.split(',').pop()!.trim();
-          return this.tagService.autocomplete(partial).pipe(
+          return this.transactionService.getTransactions(0, 0, '', `payee:${value}`, 3).pipe(
             catchError((error: Error) => {
               return of([]);
-            })
+            }),
+            map(data => (data.length > 0) ? data[0] : []),
           )
         })
       );
-        // this.amount.valueChanges.subscribe({
-        //     next: (value) => {
-        //         if (!value) return;
-        //         this.amount.setValue(value.replace(/[^0-9.]/, ''), {emitEvent: false});
-        //     },
-        // });
-
-        // if (id === 0) {
-        //     this.payee.valueChanges.pipe(
-        //         filter(value => value && value.length > 2),
-        //         debounceTime(500),
-        //         switchMap(payee => this.transactionService.autocompletePayee(payee)),
-        //     ).subscribe((result => this.autocomplete(result)));
-        // }
     }
+
+    this.tagCandidates$ = this.tags.valueChanges.pipe(
+      debounceTime(300),
+      switchMap((value) => {
+        const partial = value.split(',').pop()!.trim();
+        return this.tagService.autocomplete(partial).pipe(
+          catchError((error: Error) => {
+            return of([]);
+          })
+        )
+      })
+    );
+  }
 
   get id() { return this.transactionForm.get('id') as FormControl }
   get accounts() { return this.transactionForm.get('accounts') as FormGroup }
@@ -151,79 +148,16 @@ export class TransactionFormComponent implements OnInit {
     this.transactionForm.get(field)?.setValue(this.today);
   }
 
-  //autocomplete(searchResult: TransactionList) {
-        // if (searchResult.count === 0) {
-        //     this.autocompleteFrom = null;
-        //     return;
-        // }
-
-        // this.autocompleteFrom = Transaction.fromJson(searchResult.transactions[0]);
-  //}
-
-    applyAutocompletedTransaction(e: MouseEvent) {
-        // e.preventDefault();
-        // if (!this.autocompleteFrom) {
-        //     return;
-        // }
-
-        // while (this.tags.controls.length < this.autocompleteFrom.tags.length) {
-        //     this.tagFieldPush('', false);
-        // }
-
-        // this.transactionForm.patchValue({
-        //     account: this.autocompleteFrom.account || null,
-        //     payee: this.autocompleteFrom.payee,
-        //     amount: this.moneyPipe.transform(this.autocompleteFrom.amount, 'plain'),
-        //     note: this.autocompleteFrom.note,
-        //     tags: this.autocompleteFrom.tags,
-        // }, { emitEvent: false});
-
-        // this.autocompleteFrom = null;
-    }
-
-    tagFieldPush(value = '', markDirty = true) {
-        // this.tags.push(this.formBuilder.control(value));
-        // if (markDirty) {
-        //     this.transactionForm.markAsDirty();
-        // }
-    }
-
-    tagFieldPop() {
-        // this.tags.removeAt(-1);
-        // this.transactionForm.markAsDirty();
-    }
-
-    populate(transaction: Transaction) {
-      this.transactionForm.reset();
-      this.transactionForm.patchValue(transaction.formValues);
-    }
-
-    changeAccount(account: Account) {
-        // this.transactionForm.patchValue({
-        //     account: account,
-        // });
-    }
+  populate(transaction: Transaction) {
+    this.transactionForm.reset();
+    this.transactionForm.patchValue(transaction.formValues);
+  }
 
   save(): void {
     if (this.transactionForm.invalid) {
       console.log('invalid');
       return;
     }
-
-        // if (!this.transactionForm.valid) {
-        //     this.errorMessage = 'Cannot save because the form is incomplete.';
-        //     return;
-        // }
-
-        // if (!this.transactionForm.dirty) {
-        //     this.errorMessage = 'Cannot save because nothing has changed.';
-        //     return;
-        // }
-
-        // if (!this.account.value && !this.destination.value) {
-        //     this.errorMessage = 'Cannot save because an account has not been specified.';
-        //     return;
-        // }
 
     const t = new Transaction();
     t.id = Number(this.transactionForm.value.id);
@@ -276,11 +210,6 @@ export class TransactionFormComponent implements OnInit {
     });
   }
 
-    deleted() {
-        // this.transactionForm.reset();
-        // this.router.navigate(['/transactions']);
-    }
-
   canShowReceipt(): boolean {
     if (!this.receipt_url?.value) return false;
     if (this.existing_receipt_action?.value === 'discard') return false;
@@ -321,5 +250,10 @@ export class TransactionFormComponent implements OnInit {
     this.tags.setValue(tags.join(', '));
     this.transactionForm.markAsDirty();
     this.tagsRef().nativeElement.focus();
+  }
+
+  autocomplete(event: Event, transaction: Transaction) {
+    event.preventDefault();
+    this.transactionForm.patchValue(transaction.formValuesForAutocomplete);
   }
 }
