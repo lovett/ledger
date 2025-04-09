@@ -1,8 +1,9 @@
 import { Observable, map, throwError, catchError } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Tag } from './tag';
 import { TagRecord, ApiResponse } from './app.types';
+import { CACHEABLE, CLEARABLES } from './caching.interceptor';
 
 type TagList = Tag[];
 type ListResponse = ApiResponse<TagRecord[]>;
@@ -13,6 +14,14 @@ type ListResponse = ApiResponse<TagRecord[]>;
 export class TagService {
 
   constructor(private http: HttpClient) {
+  }
+
+  cacheableContext(): HttpContext {
+    return new HttpContext().set(CACHEABLE, true);
+  }
+
+  clearableContext(): HttpContext {
+    return new HttpContext().set(CLEARABLES, ['/api/tags']);
   }
 
   autocomplete(name: string): Observable<TagList> {
@@ -28,7 +37,8 @@ export class TagService {
   }
 
   getTags(): Observable<TagList> {
-    return this.http.get<ListResponse>('/api/tags').pipe(
+    const context = this.cacheableContext();
+    return this.http.get<ListResponse>('/api/tags', {context,}).pipe(
       map((response): TagList => {
         return response.data.map(record => Tag.fromRecord(record));
       }),
@@ -37,7 +47,8 @@ export class TagService {
   }
 
   saveTag(tag: Tag): Observable<void> {
-    let request = this.http.put<void>(`/api/tags/${tag.id}`, tag.formData);
+    const context = this.clearableContext();
+    let request = this.http.put<void>(`/api/tags/${tag.id}`, tag.formData, {context,});
     return request.pipe(
       catchError(this.handleError)
     );

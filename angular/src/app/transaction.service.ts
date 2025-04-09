@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Params } from '@angular/router';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { Observable, Subject, map, throwError } from 'rxjs';
 import { Transaction } from './transaction';
 import { TransactionListResponse, TransactionList, TransactionRecord, ApiResponse, TransactionFilter } from './app.types';
+import { CACHEABLE, CLEARABLES } from './caching.interceptor';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,10 @@ export class TransactionService {
   constructor(
     private http: HttpClient
   ) {}
+
+  clearableContext(): HttpContext {
+    return new HttpContext().set(CLEARABLES, ['/api/accounts', '/api/tags']);
+  }
 
   storeFilters(filters: string) {
     window.sessionStorage.setItem(this.filterSessionKey, filters);
@@ -76,9 +81,11 @@ export class TransactionService {
   }
 
   saveTransaction(transaction: Transaction): Observable<void> {
-    let request = this.http.put<void>(`/api/transactions/${transaction.id}`, transaction.formData);
+    const context = this.clearableContext();
+
+    let request = this.http.put<void>(`/api/transactions/${transaction.id}`, transaction.formData, {context,});
     if (transaction.id === 0) {
-      request = this.http.post<void>('/api/transactions', transaction.formData);
+      request = this.http.post<void>('/api/transactions', transaction.formData, {context,});
     }
 
     return request;

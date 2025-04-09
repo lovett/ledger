@@ -1,8 +1,9 @@
 import { Observable, map, throwError, catchError } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { Account } from './account';
 import { AccountRecord, ApiResponse } from './app.types';
+import { CACHEABLE, CLEARABLES } from './caching.interceptor';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,17 @@ export class AccountService {
   constructor(private http: HttpClient) {
   }
 
+  cacheableContext(): HttpContext {
+    return new HttpContext().set(CACHEABLE, true);
+  }
+
+  clearableContext(): HttpContext {
+    return new HttpContext().set(CLEARABLES, ['/api/accounts']);
+  }
+
   getAccounts(): Observable<Account[]> {
-    return this.http.get<ApiResponse<AccountRecord[]>>('/api/accounts').pipe(
+    const context = this.cacheableContext();
+    return this.http.get<ApiResponse<AccountRecord[]>>('/api/accounts', {context,}).pipe(
       map((response) => {
         return response.data.map(record => Account.fromRecord(record));
       }),
@@ -31,7 +41,8 @@ export class AccountService {
   }
 
   saveAccount(account: Account): Observable<void> {
-    let request = this.http.put<void>(`/api/accounts/${account.id}`, account.formData);
+    const context = this.clearableContext();
+    let request = this.http.put<void>(`/api/accounts/${account.id}`, account.formData, {context,});
     if (account.id === 0) {
       request = this.http.post<void>('/api/accounts', account.formData);
     }
