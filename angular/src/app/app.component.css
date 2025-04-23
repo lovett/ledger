@@ -1,9 +1,16 @@
 #shell {
-    display: grid;
-    grid-template-columns: 10em 1fr;
-    grid-column-gap: 1em;
-    max-width: 75em;
     margin: auto;
+    text-align: center;
+}
+
+@media (min-width: 850px) {
+    #shell {
+        text-align: left;
+        display: grid;
+        grid-column-gap: 1em;
+        grid-template-columns: 10em 1fr;
+        max-width: 75em;
+    }
 }
 
 #shell nav {
@@ -23,8 +30,27 @@
 
 #shell nav ul {
     list-style-type: none;
-    margin-left: 0;
+    margin-left: auto;
+    margin-right: auto;
     padding-left: 0;
+}
+
+@media (min-width: 850px) {
+    #shell nav ul {
+        display: block;
+    }
+}
+
+#shell nav ul li {
+    display: inline-block;
+    padding: 0.5em;
+}
+
+@media (min-width: 850px) {
+    #shell nav ul li {
+        display: block;
+        padding: 0;
+    }
 }
 
 #shell nav li {

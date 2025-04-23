@@ -1,8 +1,15 @@
 .cards {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2em;
 }
+
+@media (min-width: 850px) {
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2em;
+    }
+}
+
+
 
 .card {
     background-color: #fff;
@@ -10,6 +17,13 @@
     border-radius: 10px 10px 0 0;
     display: grid;
     grid-template-rows: 3em 5em auto;
+    margin-bottom: 1em;
+}
+
+@media (min-width: 850px) {
+    .card {
+        margin-bottom: 0;
+    }
 }
 
 .card.inactive {

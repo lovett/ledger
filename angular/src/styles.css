@@ -5,8 +5,14 @@
 
 body {
     font-family: system-ui, sans-serif;
-    font-size: 18px;
-    margin: 0 2em 2em 2em;
+    margin: 0 1em 1em 1em;
+}
+
+@media (min-width: 850px) {
+    body {
+        font-size: 18px;
+        margin: 0 2em 2em 2em;
+    }
 }
 
 button {
@@ -27,22 +33,51 @@ h1 {
     font-size: var(--big);
     line-height: 1;
     margin: 0;
+    margin-bottom: 1em;
+}
+
+@media (min-width: 850px) {
+    h1 {
+        margin-bottom: 0;
+    }
 }
 
 header {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    justify-content: space-between;
     margin-bottom: 3em;
-    align-items: start;
-    margin-top: 2em;
-    min-height: 3em;
+    display: grid;
+    justify-content: center;
+}
+
+@media (min-width: 850px) {
+    header {
+        align-items: start;
+        margin-top: 2em;
+        grid-template-columns: 1fr auto;
+        justify-content: space-between;
+        min-height: 3em;
+    }
+
+}
+
+header h1 {
+    display: none;
+}
+
+@media (min-width: 850px) {
+    header h1 {
+        display: block;
+    }
 }
 
 header > *:last-child:not(:first-child) {
-    display: grid;
-    justify-items: end;
-    gap: 1em;
+}
+
+@media (min-width: 850px) {
+    header > *:last-child:not(:first-child) {
+        display: grid;
+        justify-items: end;
+        gap: 1em;
+    }
 }
 
 input, select, textarea {
@@ -79,8 +114,16 @@ textarea {
 }
 
 #app-logo {
-    margin-top: 4em;
+    margin-top: 1em;
     width: 5em;
+}
+
+
+@media (min-width: 850px) {
+    #app-logo {
+        margin-top: 4em;
+        width: 5em;
+    }
 }
 
 .icon {
