@@ -1,15 +1,21 @@
 #shell {
     margin: auto;
+}
+
+#shell > div:first-child {
     text-align: center;
 }
 
 @media (min-width: 850px) {
     #shell {
-        text-align: left;
         display: grid;
         grid-column-gap: 1em;
         grid-template-columns: 10em 1fr;
         max-width: 75em;
+    }
+
+    #shell > div:first-child {
+        text-align: left;
     }
 }
 
