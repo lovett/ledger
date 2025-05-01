@@ -1,48 +1,43 @@
-<header>
+<header class="snug">
     <h1>Tags</h1>
 </header>
 
-<div id="panels">
-    <ul id="list-panel">
-        @for (tag of (tags$ | async); track tag.id) {
-        <li>
-            <svg class="icon"><use xlink:href="#tag"></use></svg>
-            <a href="#" (click)="selectTag($event, tag)">{{ tag.name }}</a>
-        </li>
-        } @empty {
-        <li>
-            @if (!loading) {
-            Nothing found.
-            }
-        </li>
+<ul id="tag-list">
+    @for (tag of (tags$ | async); track tag.id) {
+    <li>
+        <svg class="icon"><use xlink:href="#tag"></use></svg>
+        <a href="#" (click)="selectTag($event, tag)">{{ tag.name }}</a>
+    </li>
+    } @empty {
+    <li>
+        @if (!loading) {
+        Nothing found.
         }
-    </ul>
+    </li>
+    }
+</ul>
 
-    <div id="tag-panel">
+<dialog #dialogRef>
+    <form method="dialog">
         @if (selectedTag) {
-        <div id="tag-actions">
-            <h2><svg class="icon"><use xlink:href="#tag"></use></svg> {{ selectedTag.name }}</h2>
-            <ul>
-                <li [ngPlural]="selectedTag.transaction_count">
-                    <ng-template ngPluralCase="=0">
-                        No transactions
-                    </ng-template>
-                    <ng-template ngPluralCase="=1">
-                        <a href="#" [routerLink]="['/transactions']" [queryParams]="{tag: selectedTag.name}">1 transaction</a>
-                    </ng-template>
-                    <ng-template ngPluralCase="other">
-                        <a href="#" [routerLink]="['/transactions']" [queryParams]="{tag: selectedTag.name}">{{ selectedTag.transaction_count|number }} transactions</a>
-                    </ng-template>
-                </li>
-                <li>
-                    <app-button (click)="rename($event, selectedTag)" label="Rename" icon="edit"></app-button>
-                </li>
-                <li>
-                    <app-button type="delete" (click)="delete($event, selectedTag)" label="Delete" icon="bolt"></app-button>
-                </li>
-            </ul>
-        </div>
-        }
-    </div>
+        <button class="close"><svg class="icon"><use xlink:href="#close"></use></svg></button>
 
-</div>
+        <h2><svg class="icon"><use xlink:href="#tag"></use></svg> {{ selectedTag.name }}</h2>
+
+        <div [ngPlural]="selectedTag.transaction_count">
+                <ng-template ngPluralCase="=0">
+                    No transactions
+                </ng-template>
+                <ng-template ngPluralCase="=1">
+                    <a href="#" [routerLink]="['/transactions']" [queryParams]="{tag: selectedTag.name}">1 transaction</a>
+                </ng-template>
+                <ng-template ngPluralCase="other">
+                    <a href="#" [routerLink]="['/transactions']" [queryParams]="{tag: selectedTag.name}">{{ selectedTag.transaction_count|number }} transactions</a>
+                </ng-template>
+        </div>
+
+        <app-button (click)="rename($event, selectedTag)" label="Rename" icon="edit"></app-button>
+        <app-button type="delete" (click)="delete($event, selectedTag)" label="Delete" icon="bolt"></app-button>
+        }
+    </form>
+</dialog>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, viewChild } from '@angular/core';
 import { AsyncPipe, DecimalPipe, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Observable, of, tap } from 'rxjs';
@@ -13,6 +13,8 @@ import { ButtonComponent } from '../button/button.component';
   styleUrl: './tag-list.component.css'
 })
 export class TagListComponent {
+  dialogRef = viewChild.required<ElementRef>('dialogRef');
+
   tags$: Observable<Tag[]> = of([]);
   selectedTag?: Tag;
   loading = false;
@@ -33,7 +35,7 @@ export class TagListComponent {
     event.preventDefault();
     const target = event.target as HTMLElement;
     if (tag.transaction_count > 0) {
-      const confirmation = confirm(`Remove ${tag.name} from all transactions?`);
+      const confirmation = confirm(`Remove the tag "${tag.name}" from all transactions?`);
       if (!confirmation) return;
     }
 
@@ -73,5 +75,6 @@ export class TagListComponent {
   selectTag(event: Event, tag: Tag) {
     event.preventDefault();
     this.selectedTag = tag;
+    this.dialogRef().nativeElement.showModal();
   }
 }

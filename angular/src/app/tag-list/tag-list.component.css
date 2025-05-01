@@ -10,27 +10,27 @@ li {
 }
 
 #panels {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
 }
 
-#list-panel {
-    columns: 2;
+@media (min-width: 850px) {
+    #tag-list {
+        columns: 3;
+    }
 }
 
-#list-panel li {
+#tag-list li {
     margin: 0;
     padding: 0;
     margin-bottom: 2em;
     break-inside: avoid-column;
 }
 
-#list-panel summary {
+#tag-list summary {
     cursor: pointer;
     margin-bottom: 1em;
 }
 
-#list-panel .icon {
+#tag-list .icon {
     margin-right: 0.5em;
 }
 
@@ -38,10 +38,28 @@ li {
     position: relative;
 }
 
-#tag-actions  {
-    position: fixed;
+dialog {
+    min-width: 15em;
+    border: 0;
+    border-radius: .5em;
+    padding: 1em;
 }
 
-#tag-actions li {
-    margin-bottom: 2em;
+dialog form {
+    display: flex;
+    align-items: center;
+    flex-flow: column;
+    gap: 1em;
+}
+
+dialog h2 {
+    margin: 0;
+}
+
+dialog .close {
+    align-self: end;
+}
+
+dialog .close .icon {
+    width: 1em;
 }
