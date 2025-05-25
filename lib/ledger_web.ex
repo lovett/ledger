@@ -24,10 +24,10 @@ defmodule LedgerWeb do
   """
   def static_paths, do: ~w(
     account
-    ledger.svg
-    main.js
-    polyfills.js
-    styles.css
+    ledger
+    main
+    polyfills
+    styles
   )
 
   def router do
