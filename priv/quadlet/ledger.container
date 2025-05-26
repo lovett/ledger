@@ -1,0 +1,21 @@
+# See `mix help build` for details on the ledger.image and /etc/ledger.vars files.
+
+[Unit]
+Description=Ledger
+
+[Container]
+ContainerName=ledger
+EnvironmentFile=/etc/ledger.vars
+Image=ledger.image
+PublishPort=4011:4011
+Volume=ledger-data:/data
+
+[Service]
+Restart=always
+
+[Install]
+WantedBy=multi-user.target default.target
+
+# Local Variables:
+# mode: systemd
+# End:

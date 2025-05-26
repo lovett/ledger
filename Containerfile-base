@@ -1,0 +1,7 @@
+FROM registry.fedoraproject.org/fedora-minimal:41
+
+RUN microdnf -y install glibc-langpack-en --nodocs --setopt install_weak_deps=False && \
+    microdnf -y clean all && \
+    echo "LANG=\"en_US.UTF-8\"" > /etc/locale.conf
+
+ENV LANG en_US.UTF-8

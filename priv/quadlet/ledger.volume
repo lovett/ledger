@@ -1,0 +1,6 @@
+[Volume]
+VolumeName=ledger-data
+
+# Local Variables:
+# mode: systemd
+# End:

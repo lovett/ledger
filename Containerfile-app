@@ -1,0 +1,12 @@
+FROM localhost/ledger-base
+
+ENV MIX_ENV="prod"
+
+WORKDIR "/app"
+RUN chown nobody /app
+
+COPY --chown=nobody:root  _build/${MIX_ENV}/rel/ledger ./
+
+USER nobody
+
+CMD ["/app/bin/server"]
