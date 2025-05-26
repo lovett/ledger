@@ -2,4 +2,5 @@
 set -eu
 
 cd -P -- "$(dirname -- "$0")"
+./ledger eval Ledger.Release.migrate
 PHX_SERVER=true exec ./ledger start
