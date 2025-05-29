@@ -146,6 +146,7 @@ export class TransactionFormComponent implements OnInit {
   todayShortcut(event: Event, field: string) {
     event.preventDefault();
     this.transactionForm.get(field)?.setValue(this.today);
+    this.transactionForm.markAsDirty();
   }
 
   populate(transaction: Transaction) {
