@@ -46,7 +46,6 @@ table thead:last-of-type th {
 tr:not(.empty) td {
     background-color: #fff;
     padding: .75em;
-    word-break: break-word;
     vertical-align: top;
     border-bottom: 1px solid #333;
 }
