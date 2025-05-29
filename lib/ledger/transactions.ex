@@ -26,7 +26,7 @@ defmodule Ledger.Transactions do
     account = from a in Account, select: [:id, :name, :logo_mime]
 
     query = from base_query(filter.tag),
-                 select: [:id, :occurred_on, :cleared_on, :amount, :payee, :note, :account_id, :destination_id],
+                 select: [:id, :occurred_on, :cleared_on, :amount, :payee, :note, :account_id, :destination_id, :receipt_mime],
                  where: ^filter_account(filter),
                  where: ^filter_search(filter.search),
                  order_by: [desc: :occurred_on],
@@ -237,6 +237,12 @@ defmodule Ledger.Transactions do
                    preload: [:tags,
                              account: ^account_preload,
                              destination: ^account_preload]
+  end
+
+  def get_transaction_receipt!(id) do
+    Repo.one! from t in Transaction,
+                   select: [:receipt, :receipt_mime],
+                   where: t.id == ^id
   end
 
   @doc """

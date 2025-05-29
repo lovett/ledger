@@ -132,14 +132,6 @@
             <p><em>{{ transaction.note }}</em></p>
             }
 
-            @if (transaction.receipt_mime) {
-            <p>
-                <a target="_blank" href="/ledger/receipts/{{ transaction.id }}">
-                    <svg class="icon"><use xlink:href="#icon-file"></use></svg> receipt
-                </a>
-            </p>
-            }
-
             <ul class="tag-list">
                 @for (tag of transaction.tags; track tag.id) {
                 <li>
@@ -156,6 +148,12 @@
         <td class="align-right nowrap">
             {{ transaction.amount | currency }}
             <div class="transaction-type">{{ transaction.transactionType }}</div>
+            @if (transaction.receipt_mime) {
+            <div class="receipt">
+                <svg class="icon"><use xlink:href="#scroll"></use></svg>
+                <a target="_blank" href="{{ transaction.receiptUrl }}">Receipt</a>
+            </div>
+            }
         </td>
         <td class="align-center">
             @if (transaction.cleared_on) {

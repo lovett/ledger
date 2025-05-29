@@ -38,7 +38,6 @@ table thead:last-of-type th {
     font-weight: bold;
     padding: .75em;
     white-space: nowrap;
-    text-align: left;
     color: #fff;
     vertical-align: top;
 }
@@ -87,7 +86,7 @@ td p {
     white-space: nowrap;
 }
 
-.tag-list LI .icon {
+td .tag-list LI .icon {
     margin-right: .5em;
 }
 
@@ -129,11 +128,21 @@ td p {
     font-style: italic;
 }
 
+.receipt {
+    margin-top: 1em;
+    font-size: var(--smaller);
+    text-transform: uppercase;
+}
+.receipt .icon {
+    margin-right: 0.25em;
+}
+
 .transaction-type {
     font-size: var(--smaller);
     padding-top: .5em;
     text-transform: uppercase;
 }
+
 
 
 /* .pager > div:not(:nth-child(2)) { */

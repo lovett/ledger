@@ -29,7 +29,8 @@ defmodule LedgerWeb.TransactionJSON do
       note: transaction.note,
       account: transaction.account,
       destination: transaction.destination,
-      tags: transaction.tags
+      tags: transaction.tags,
+      receipt_mime: transaction.receipt_mime,
     }
   end
 end
