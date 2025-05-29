@@ -149,7 +149,8 @@ textarea {
 
 .shortcuts {
     display: flex;
-    gap: 1em;
+    flex-flow: row wrap;
+    gap: 0.5em 1em;
     padding-top: .5em;
 }
 
