@@ -148,26 +148,6 @@ td .tag-list LI .icon {
     text-transform: uppercase;
 }
 
-
-
-/* .pager > div:not(:nth-child(2)) { */
-/*     display: flex; */
-/*     flex-flow: row nowrap; */
-/*     justify-content: space-between; */
-/* } */
-
-/* .pager A:hover { */
-/*     text-decoration: none; */
-/* } */
-
-/* .pager A:hover SPAN { */
-/*     text-decoration: underline; */
-/* } */
-
-/* .pager SPAN { */
-/*     padding: 0 0.25em; */
-/* } */
-
 TR.cleared .minibanner {
     background-color: lightgreen;
 }
