@@ -9,6 +9,7 @@ BUTTON {
     background-color: #5F816A;
     color: #fff;
     cursor: pointer;
+    height: 2.5em;
 }
 
 BUTTON:hover {
