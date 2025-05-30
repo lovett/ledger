@@ -121,7 +121,7 @@ export class Transaction {
     const formData = new FormData();
     formData.set('id', this.id.toString());
     formData.set('transaction[payee]', this.payee);
-    formData.set('transaction[amount]', (this.amount * 100).toString());
+    formData.set('transaction[amount]', (Math.ceil(this.amount * 100)).toString());
     formData.set('transaction[occurred_on]', this.ymd(this.occurred_on));
 
     if (this.cleared_on) {
