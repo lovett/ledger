@@ -146,6 +146,7 @@ export class Transaction {
 
     formData.set('transaction[existing_receipt_action]', this.existing_receipt_action);
     formData.set('transaction[tags]', this.delimitedTags);
+    console.log(formData);
     return formData;
   }
 }

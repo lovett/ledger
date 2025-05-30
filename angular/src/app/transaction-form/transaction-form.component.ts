@@ -197,6 +197,8 @@ export class TransactionFormComponent implements OnInit {
       }
     }
 
+    t.existing_receipt_action = this.transactionForm.value.existing_receipt_action!;
+
     if (this.receipt_upload) t.receipt_upload = this.receipt_upload;
 
     this.transactionService.saveTransaction(t).subscribe({

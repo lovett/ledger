@@ -86,8 +86,8 @@ defmodule LedgerWeb.TransactionController do
 
   def discard_existing_receipt(%{"existing_receipt_action" => "discard"} = transaction_params) do
     transaction_params
-    |> Map.put("logo_mime", nil)
-    |> Map.put("logo", nil)
+    |> Map.put("receipt_mime", nil)
+    |> Map.put("receipt", nil)
   end
 
   def discard_existing_receipt(transaction_params), do: transaction_params
