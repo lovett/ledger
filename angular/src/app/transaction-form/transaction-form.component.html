@@ -49,7 +49,7 @@
 
     <div>
         <app-label [control]="occurredOn" text="Date"/>
-        <input id="occurredOn" type="date" formControlName="occurred_on" [max]="today" />
+        <input id="occurredOn" type="date" formControlName="occurred_on" />
         <div class="shortcuts">
             <a href="#" (click)="todayShortcut($event, 'occurred_on')">Today</a>
         </div>
@@ -57,7 +57,7 @@
 
     <div>
         <app-label [control]="clearedOn" text="Cleared" />
-        <input id="clearedOn" type="date" formControlName="cleared_on" [max]="today" />
+        <input id="clearedOn" type="date" formControlName="cleared_on" />
         <div class="shortcuts">
             <a href="#" (click)="todayShortcut($event, 'cleared_on')">Today</a>
             <a href="#" (click)="clearShortcut($event, 'cleared_on')">Clear</a>
