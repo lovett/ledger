@@ -2,7 +2,7 @@
     <a [routerLink]="returnRoute">Cancel</a>
 
     @if (canDelete()) {
-    <app-button type="delete" label="Delete account" icon="bolt" [confirmationMessage]="deletionConfirmationMessage" (confirmed)="delete($event)"></app-button>
+    <app-button type="delete" label="Delete account" icon="trash" [confirmationMessage]="deletionConfirmationMessage" (confirmed)="delete($event)"></app-button>
     }
 </header>
 
