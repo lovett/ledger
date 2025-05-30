@@ -221,7 +221,8 @@ export class TransactionFormComponent implements OnInit {
     return this.id.value > 0;
   }
 
-  delete() {
+  delete(confirmed: boolean) {
+    if (!confirmed) return;
     this.transactionService.deleteTransaction(this.id.value).subscribe({
       next: () => this.router.navigate(this.returnRoute),
       error: (error) => {

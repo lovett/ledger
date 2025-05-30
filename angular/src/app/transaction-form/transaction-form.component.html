@@ -3,7 +3,7 @@
 
     @if (canDelete()) {
     <app-button
-        (confirmed)="delete()"
+        (confirmed)="delete($event)"
         type="delete"
         label="Delete transaction"
         icon="bolt"
