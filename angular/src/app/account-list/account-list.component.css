@@ -60,6 +60,15 @@
     letter-spacing: .1em;
 }
 
+.card li.transaction {
+    display: flex;
+    flex-flow: row wrap;
+    gap: 1em;
+    justify-content: center;
+    margin-top: 1em;
+    font-size: .75em;
+}
+
 .card footer {
     margin: 1em;
     border-top: 1px dashed #333;

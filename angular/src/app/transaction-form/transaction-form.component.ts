@@ -84,6 +84,9 @@ export class TransactionFormComponent implements OnInit {
     this.occurredOn.setValue(this.today)
 
     const id = Number(this.route.snapshot.paramMap.get('id') || 0)
+    const account_id = Number(this.route.snapshot.queryParamMap.get('account_id') || 0)
+    const transaction_type = this.route.snapshot.queryParamMap.get('type');
+
     if (id > 0) {
       this.transactionService.getTransaction(id).subscribe({
         next: (transaction: Transaction) => this.populate(transaction),
@@ -106,7 +109,17 @@ export class TransactionFormComponent implements OnInit {
           )
         })
       );
+
+      if (account_id > 0 && transaction_type == 'deposit') {
+        this.destinationId.setValue(account_id);
+      }
+
+      if (account_id > 0 && transaction_type == 'withdrawl') {
+        this.accountId.setValue(account_id);
+      }
     }
+
+
 
     this.tagCandidates$ = this.tags.valueChanges.pipe(
       debounceTime(300),
