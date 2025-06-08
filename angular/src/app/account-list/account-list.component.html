@@ -25,13 +25,14 @@
         <ul>
             <li [ngClass]="{balance: true, negative: account.balance < 0}">{{ account.balance! | currency }}</li>
 
-            <li [ngClass]="{secondary: true, negative: account.balance_pending < 0}">{{ account.balance_pending! | currency }} pending</li>
+            <li [ngClass]="{secondary: true, pending: true, negative: account.balance_pending < 0}">{{ account.balance_pending! | currency }} pending</li>
 
-            @if (account.url) {
-            <li>
-                <a href="{{ account.url }}" target="_blank" rel="noopener noreferer">Log In</a>
-            </li>
+            @if (account.transactionCount > 0) {
+            <li><a [routerLink]="['/transactions']" [queryParams]="{account_id: account.id}">Transactions</a></li>
+            } @else {
+            No activity
             }
+
 
             @if (!account.closed_on) {
             <li class="transaction">
@@ -42,22 +43,11 @@
         </ul>
 
         <footer>
+            @if (account.url) {
             <p>
-                @if (account.transactionCount > 0) {
-                <a [routerLink]="['/transactions']" [queryParams]="{account_id: account.id}">
-                    <span [ngPlural]="account.deposit_count">
-                        <ng-template ngPluralCase="=1">1 deposit</ng-template>
-                        <ng-template ngPluralCase="other">{{ account.deposit_count | number }} deposits</ng-template>
-                    </span>,
-                    <span [ngPlural]="account.withdrawl_count">
-                        <ng-template ngPluralCase="=1">1 withdrawl</ng-template>
-                        <ng-template ngPluralCase="other">{{ account.withdrawl_count | number }} withdrawls</ng-template>
-                    </span>
-                </a>
-                } @else {
-                No activity
-                }
+                <a href="{{ account.url }}" target="_blank" rel="noopener noreferer">Log In</a>
             </p>
+            }
 
             @if (account.closed_on) {
             <p>Closed {{ account.closed_on|date: 'longDate' }}</p>
