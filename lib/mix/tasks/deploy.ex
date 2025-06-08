@@ -36,6 +36,14 @@ defmodule Mix.Tasks.Deploy do
   Image=my-container-registry.example.com/myusername/ledger:latest
   ```
 
+  If the registry runs on the same host and is itself a container, add:
+
+  ```
+  [Unit]
+  After=my-container-registry.container
+  Requires=my-container-registry.container
+  ```
+
   """
 
   use Mix.Task
@@ -55,8 +63,8 @@ defmodule Mix.Tasks.Deploy do
       "ledger:#{mix_env}-#{version}",
       "#{container_registry}/ledger:#{mix_env}-#{version}",
     ],
-      into: IO.stream(),
-      stderr_to_stdout: true
+               into: IO.stream(),
+               stderr_to_stdout: true
     )
 
     # The latest tag is what is referenced by the Quadlet file.
@@ -65,8 +73,8 @@ defmodule Mix.Tasks.Deploy do
       "ledger:#{mix_env}-#{version}",
       "#{container_registry}/ledger:latest",
     ],
-      into: IO.stream(),
-      stderr_to_stdout: true
+               into: IO.stream(),
+               stderr_to_stdout: true
     )
 
     System.cmd(
