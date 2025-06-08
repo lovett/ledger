@@ -131,11 +131,10 @@ export class TransactionListComponent implements OnInit, OnDestroy {
 
   clearTransaction(event: MouseEvent, transaction: Transaction){
     event.preventDefault();
+    transaction.cleared_on = new Date();
     this.transactionService.saveTransaction(transaction).subscribe({
-      next: () => {
-        transaction.cleared_on = new Date();
-      },
       error: (error) => {
+        transaction.cleared_on = undefined;
         this.errorService.reportError(error, 'The transaction was not cleared.');
       }
     });
