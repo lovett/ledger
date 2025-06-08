@@ -23,7 +23,9 @@
         </li>
         }
 
+        @if (filters.length > 1) {
         <li><a href="#" (click)="clearFilter('all', $event)">Remove all</a></li>
+        }
     </ul>
     }
 </ng-template>
@@ -49,7 +51,7 @@
 <ng-template #countsFragment>
     <div class="counts">
         @if (paging.isVisible) {
-        {{ paging.displayStart | number }} to {{ paging.displayEnd | number }} of {{ paging.total | number }}, newest first
+        {{ paging.displayStart | number }} to {{ paging.displayEnd | number }} of {{ paging.total | number }}
         } @else {
         0 of {{ paging.total | number }}
         }
