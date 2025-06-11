@@ -104,7 +104,6 @@ defmodule Ledger.Transactions do
     |> String.replace(~r"^$", "amount:")
     |> String.replace("\"\"", "")
     |> String.trim()
-    |> IO.inspect(label: "fts escaped")
   end
 
   def list_balances do
