@@ -8,28 +8,42 @@ form {
     grid-column: span 2;
 }
 
-#autocomplete {
-    grid-column: span 2;
-    margin-top: 1em;
-    background-color: lemonchiffon;
-    border: 1px solid #E6C700;
+.autocomplete {
+    display: flex;
+    align-items: center;
+}
+
+.autocomplete .candidates {
+    position: relative;
+    display: inline-block;
+    margin: -1em auto;
     padding: 1em;
     border-radius: .5em;
-    justify-items: start;
+    font-size: .85em;
+    background-color: #F9EAE1;
+    border: 1px solid #333;
 }
 
-#autocomplete h2 {
-    margin: 0;
-    padding: 0;
-    font-size: 1.25em;
+.autocomplete .candidates .candidate {
+    display: grid;
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+    gap: 1em;
+    padding: 0.25em 0;
 }
 
-#autocomplete ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+.autocomplete .candidates .candidate .icon {
+    width: 15px;
+    height: 15px;
 }
 
-#autocomplete li:not(:last-of-type) {
-    margin-bottom: .5em;
+.autocomplete .candidates .close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.autocomplete .candidates .close .icon {
+    width: 20px;
+    height: 20px;
 }

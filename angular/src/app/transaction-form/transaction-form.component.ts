@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, viewChild } from '@angular/core';
 import { ReactiveFormsModule, FormArray, FormGroup, FormControl, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { AsyncPipe, formatDate } from '@angular/common';
+import { CurrencyPipe, DatePipe, AsyncPipe, formatDate } from '@angular/common';
 import { Transaction } from '../transaction';
 import { Account } from '../account';
 import { Tag } from  '../tag';
@@ -39,7 +39,7 @@ function dateRange(group: AbstractControl): ValidationErrors | null {
 
 @Component({
   selector: 'app-transaction-form',
-  imports: [ReactiveFormsModule, ButtonComponent, AccountMenuComponent, LabelComponent, RouterLink, AsyncPipe],
+  imports: [ReactiveFormsModule, ButtonComponent, AccountMenuComponent, LabelComponent, RouterLink, CurrencyPipe, DatePipe, AsyncPipe],
   templateUrl: './transaction-form.component.html',
   styleUrl: './transaction-form.component.css'
 })
@@ -98,17 +98,7 @@ export class TransactionFormComponent implements OnInit {
     }
 
     if (id == 0) {
-      this.autocompleteCandidates$ = this.payee.valueChanges.pipe(
-        debounceTime(300),
-        switchMap((value) => {
-          return this.transactionService.getTransactions(0, 0, '', `payee:${value}`, 3).pipe(
-            catchError((error: Error) => {
-              return of([]);
-            }),
-            map(data => (data.length > 0) ? data[0] : []),
-          )
-        })
-      );
+      this.autocompletePayee();
 
       if (account_id > 0 && transaction_type == 'deposit') {
         this.destinationId.setValue(account_id);
@@ -272,5 +262,25 @@ export class TransactionFormComponent implements OnInit {
   autocomplete(event: Event, transaction: Transaction) {
     event.preventDefault();
     this.transactionForm.patchValue(transaction.formValuesForAutocomplete);
+    this.autocompletePayee()
+  }
+
+  autocompletePayee() {
+      this.autocompleteCandidates$ = this.payee.valueChanges.pipe(
+        debounceTime(300),
+        switchMap((value) => {
+          return this.transactionService.getTransactions(0, 0, '', `payee:${value}`, 3).pipe(
+            catchError((error: Error) => {
+              return of([]);
+            }),
+            map(data => (data.length > 0) ? data[0] : []),
+          )
+        })
+      );
+  }
+
+  hideAutocompleteCandidates(event: Event) {
+    event.preventDefault();
+    this.autocompletePayee();
   }
 }
