@@ -30,7 +30,7 @@
             @if (account.transactionCount > 0) {
             <li><a [routerLink]="['/transactions']" [queryParams]="{account_id: account.id}">Transactions</a></li>
             } @else {
-            No activity
+            <li>No activity</li>
             }
 
 
