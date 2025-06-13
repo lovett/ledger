@@ -9,9 +9,6 @@ li {
     padding: 0;
 }
 
-#panels {
-}
-
 @media (min-width: 850px) {
     #tag-list {
         columns: 3;

@@ -74,7 +74,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
           this.transactionService.storeFilters(window.location.search);
           if (data.length > 0) {
             this.hasPending = data[0].filter(t => !t.cleared_on).length > 0;
-            this.paging = new Paging(data[0].length, data[1], data[2]!.offset);
+            this.paging = new Paging(data[0].length, data[1], data[2]?.offset || 0);
             this.setFilters(data[2]);
           }
         }),
@@ -171,7 +171,9 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     }
 
     const checkboxes = this.tableRef().nativeElement.querySelectorAll(selector);
-    checkboxes.forEach((checkbox: HTMLInputElement) => checkbox.click());
+    for (const checkbox of checkboxes) {
+      checkbox.click()
+    }
   }
 
   /**

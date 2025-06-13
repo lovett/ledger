@@ -1,0 +1,29 @@
+{
+  "files": {
+    "ignore": [".angular"]
+  },
+  "formatter": {
+    "indentStyle": "space",
+    "indentWidth": 4
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
+  "json": {
+    "formatter": {
+      "trailingCommas": "none"
+    }
+  },
+  "linter": {
+    "rules": {
+      "style": {
+        "useImportType": "off"
+      },
+      "suspicious": {
+        "noAssignInExpressions": "off"
+      }
+    }
+  }
+}

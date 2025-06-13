@@ -74,9 +74,6 @@ header h1 {
     }
 }
 
-header > *:last-child:not(:first-child) {
-}
-
 @media (min-width: 850px) {
     header > *:last-child:not(:first-child) {
         display: grid;

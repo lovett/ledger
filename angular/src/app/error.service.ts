@@ -10,8 +10,6 @@ export class ErrorService {
   private errorSubject = new Subject<ErrorTuple>();
   error$ = this.errorSubject.asObservable();
 
-  constructor() { }
-
   reportError(error: HttpErrorResponse, message?: string) {
     console.log(error);
     this.errorSubject.next([error, message]);

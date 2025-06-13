@@ -1,7 +1,7 @@
 export class Paging {
-  currentlyShowing: number = 0;
-  total: number = 0;
-  offset: number = 0;
+  currentlyShowing = 0;
+  total = 0;
+  offset = 0;
 
   constructor(currentlyShowing: number, total: number, offset: number) {
     this.currentlyShowing = currentlyShowing;

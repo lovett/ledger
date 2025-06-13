@@ -86,7 +86,7 @@ export class AccountFormComponent implements OnInit {
 
     const a = new Account();
     a.id = Number(this.accountForm.value.id);
-    a.name = this.accountForm.value.name!;
+    a.name = this.accountForm.value.name || '';
     if (this.accountForm.value.opened_on) {
       a.opened_on = new Date(this.accountForm.value.opened_on);
     }
@@ -95,9 +95,9 @@ export class AccountFormComponent implements OnInit {
       a.closed_on = new Date(this.accountForm.value.closed_on);
     }
 
-    a.url = this.accountForm.value.url!;
-    a.note = this.accountForm.value.note!;
-    a.existing_logo_action = this.accountForm.value.existing_logo_action!;
+    a.url = this.accountForm.value.url || '';
+    a.note = this.accountForm.value.note || '';
+    a.existing_logo_action = this.accountForm.value.existing_logo_action || '';
 
     if (this.logo_upload) a.logo_upload = this.logo_upload;
 

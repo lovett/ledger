@@ -3,22 +3,19 @@ import { Tag } from './tag';
 import {TransactionRecord} from './app.types';
 
 export class Transaction {
-  id: number = 0;
+  id = 0;
   occurred_on?: Date = new Date();
   cleared_on?: Date;
-  amount: number = 0;
-  payee: string = '';
+  amount = 0;
+  payee = '';
   note?: string;
   account?: Partial<Account>;
   destination?: Partial<Account>;
-  receipt_mime: string = '';
+  receipt_mime = '';
   receipt_upload?: File;
-  existing_receipt_action: string = 'keep';
+  existing_receipt_action = 'keep';
   tags: Tag[] = [];
   selected = false;
-
-  constructor() {
-  }
 
   ymd(d?: Date) {
     if (!d) return '';
@@ -104,9 +101,9 @@ export class Transaction {
     return Boolean(this.account) && Boolean(this.destination);
   }
 
-  get rowClasses(): Record<string, any> {
+  get rowClasses(): Record<string, boolean> {
     return {
-      cleared: this.cleared_on,
+      cleared: !!this.cleared_on,
       pending: !this.cleared_on,
       selected: this.selected
     }

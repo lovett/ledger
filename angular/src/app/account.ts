@@ -1,24 +1,21 @@
 import {AccountRecord} from './app.types';
 
 export class Account {
-  id: number = 0;
-  name: string = '';
+  id = 0;
+  name = '';
   opened_on?: Date;
   closed_on?: Date;
-  url: string = '';
-  note: string = '';
-  balance: number = 0;
-  balance_pending: number = 0;
-  total_pending: number = 0;
+  url = '';
+  note = '';
+  balance = 0;
+  balance_pending = 0;
+  total_pending = 0;
   last_active?: Date;
-  logo_mime: string = '';
+  logo_mime = '';
   logo_upload?: File;
-  existing_logo_action: string = 'keep';
+  existing_logo_action = 'keep';
   withdrawl_count = 0;
   deposit_count = 0;
-
-  constructor() {
-  }
 
   static fromRecord(record: AccountRecord | Partial<AccountRecord>): Account {
     const a = new Account();

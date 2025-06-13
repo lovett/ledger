@@ -42,7 +42,7 @@ export class TagListComponent {
     this.tagService.deleteTag(tag.id).subscribe({
       next: () => {
         const node = target.closest('.tag') as HTMLElement;
-        node.parentNode!.removeChild(node);
+        node.parentNode?.removeChild(node);
       },
       error: (err: Error) => {
         console.log(err);

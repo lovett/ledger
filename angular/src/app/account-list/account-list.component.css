@@ -1,6 +1,3 @@
-.cards {
-}
-
 @media (min-width: 850px) {
     .cards {
         display: grid;

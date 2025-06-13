@@ -10,8 +10,8 @@ import { Transaction } from '../transaction';
   styleUrl: './selection-summary.component.css'
 })
 export class SelectionSummaryComponent implements OnInit {
-  amount: number = 0;
-  count: number = 0;
+  amount = 0;
+  count = 0;
 
   constructor(
     private transactionService: TransactionService,

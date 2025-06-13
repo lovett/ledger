@@ -58,10 +58,10 @@ export class AccountMenuComponent implements OnInit, OnChanges {
   }
 
   get fieldName(): string {
-    const control = this.control()!;
-    const parent = control.parent!;
+    const control = this.control() || null;
+    const parent = control?.parent;
 
-    for (const [k, v] of Object.entries(parent.controls)) {
+    for (const [k, v] of Object.entries(parent?.controls || [])) {
       if (v === control) {
         return k;
       }

@@ -95,9 +95,9 @@ export class TransactionService {
     return this.http.delete<void>(`/api/transactions/${id}`);
   }
 
-  autocompletePayee(payee: string): Observable<String[]> {
-    return this.http.get<String[]>('/ledger/autocomplete/payee', {params: {query: payee}}).pipe(
-      map((response): String[] => {
+  autocompletePayee(payee: string): Observable<string[]> {
+    return this.http.get<string[]>('/ledger/autocomplete/payee', {params: {query: payee}}).pipe(
+      map((response): string[] => {
         return response;
       })
     );

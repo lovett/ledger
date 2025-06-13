@@ -1,8 +1,8 @@
 import {TagRecord} from './app.types';
 
 export class Tag {
-  id: number = 0;
-  name: string = '';
+  id = 0;
+  name = '';
   transaction_count = 0;
   last_used?: Date;
 

@@ -97,14 +97,14 @@ export class TransactionFormComponent implements OnInit {
       });
     }
 
-    if (id == 0) {
+    if (id === 0) {
       this.autocompletePayee();
 
-      if (account_id > 0 && transaction_type == 'deposit') {
+      if (account_id > 0 && transaction_type === 'deposit') {
         this.destinationId.setValue(account_id);
       }
 
-      if (account_id > 0 && transaction_type == 'withdrawl') {
+      if (account_id > 0 && transaction_type === 'withdrawl') {
         this.accountId.setValue(account_id);
       }
     }
@@ -113,9 +113,9 @@ export class TransactionFormComponent implements OnInit {
 
     this.tagCandidates$ = this.tags.valueChanges.pipe(
       debounceTime(300),
-      switchMap((value) => {
-        const partial = value.split(',').pop()!.trim();
-        return this.tagService.autocomplete(partial).pipe(
+      switchMap((value: string) => {
+        const lastTag = value.split(',').pop()?.trim() || '';
+        return this.tagService.autocomplete(lastTag).pipe(
           catchError((error: Error) => {
             return of([]);
           })
@@ -165,19 +165,19 @@ export class TransactionFormComponent implements OnInit {
 
     const t = new Transaction();
     t.id = Number(this.transactionForm.value.id);
-    if (this.transactionForm.value.accounts!.account_id) {
+    if (this.transactionForm.value.accounts?.account_id) {
       t.account = new Account();
-      t.account.id = Number(this.transactionForm.value.accounts!.account_id);
+      t.account.id = Number(this.transactionForm.value.accounts.account_id);
     }
 
-    if (this.transactionForm.value.accounts!.destination_id) {
+    if (this.transactionForm.value.accounts?.destination_id) {
       t.destination = new Account();
-      t.destination.id = Number(this.transactionForm.value.accounts!.destination_id);
+      t.destination.id = Number(this.transactionForm.value.accounts.destination_id);
     }
 
-    t.payee = this.transactionForm.value.payee!;
+    t.payee = this.transactionForm.value.payee || '';
 
-    t.amount = parseFloat(this.transactionForm.value.amount || "0");
+    t.amount = Number.parseFloat(this.transactionForm.value.amount || "0");
 
     if (this.transactionForm.value.occurred_on) {
       t.occurred_on = new Date(this.transactionForm.value.occurred_on);
@@ -200,7 +200,7 @@ export class TransactionFormComponent implements OnInit {
       }
     }
 
-    t.existing_receipt_action = this.transactionForm.value.existing_receipt_action!;
+    t.existing_receipt_action = this.transactionForm.value.existing_receipt_action || '';
 
     if (this.receipt_upload) t.receipt_upload = this.receipt_upload;
 

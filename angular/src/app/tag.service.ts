@@ -48,7 +48,7 @@ export class TagService {
 
   saveTag(tag: Tag): Observable<void> {
     const context = this.clearableContext();
-    let request = this.http.put<void>(`/api/tags/${tag.id}`, tag.formData, {context,});
+    const request = this.http.put<void>(`/api/tags/${tag.id}`, tag.formData, {context,});
     return request.pipe(
       catchError(this.handleError)
     );
