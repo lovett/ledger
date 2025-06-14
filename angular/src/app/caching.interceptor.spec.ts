@@ -4,14 +4,14 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { cachingInterceptor } from './caching.interceptor';
 
 describe('cachingInterceptor', () => {
-  const interceptor: HttpInterceptorFn = (req, next) =>
-    TestBed.runInInjectionContext(() => cachingInterceptor(req, next));
+    const interceptor: HttpInterceptorFn = (req, next) =>
+        TestBed.runInInjectionContext(() => cachingInterceptor(req, next));
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-  });
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+    });
 
-  it('should be created', () => {
-    expect(interceptor).toBeTruthy();
-  });
+    it('should be created', () => {
+        expect(interceptor).toBeTruthy();
+    });
 });

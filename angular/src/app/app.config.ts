@@ -7,11 +7,9 @@ import { cachingInterceptor } from './caching.interceptor';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
-  providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes),
-    provideHttpClient(
-      withInterceptors([cachingInterceptor]),
-    )
-  ]
+    providers: [
+        provideZoneChangeDetection({ eventCoalescing: true }),
+        provideRouter(routes),
+        provideHttpClient(withInterceptors([cachingInterceptor])),
+    ],
 };

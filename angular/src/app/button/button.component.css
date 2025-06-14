@@ -6,55 +6,56 @@ BUTTON {
     gap: 0.5em;
     align-items: center;
     border-radius: .75em;
-    background-color: #5F816A;
+    background-color: #5f816a;
     color: #fff;
     cursor: pointer;
     height: 2.5em;
 }
 
 BUTTON:hover {
-    background-color: #72977E;
+    background-color: #72977e;
 }
 
 BUTTON:active {
-    background-color: #95B19E;
+    background-color: #95b19e;
 }
 
-BUTTON[disabled], BUTTON[disabled]:hover, BUTTON[disabled]:active {
+BUTTON[disabled],
+BUTTON[disabled]:hover,
+BUTTON[disabled]:active {
     background-color: #666;
     color: currentColor;
-    opacity: .5;
+    opacity: 0.5;
 }
 
-
 .delete {
-    background-color: #B80300;
+    background-color: #b80300;
     color: #fff;
 }
 
 .delete:hover {
-    background-color: #FF221F;
+    background-color: #ff221f;
 }
 
 .delete:active {
-    background-color: #FF4747;
+    background-color: #ff4747;
 }
 
 .save {
-    background-color: #2A68A2;
+    background-color: #2a68a2;
     color: #fff;
 }
 
 .save:hover {
-    background-color: #327DC3;
+    background-color: #327dc3;
 }
 
 .save:active {
-    background-color: #5D9BD5;
+    background-color: #5d9bd5;
 }
 
 .trash {
-    background-color: #2D0320;
+    background-color: #2d0320;
     color: #fff;
 }
 

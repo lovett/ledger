@@ -6,24 +6,28 @@ import { ErrorService } from './error.service';
 import { ErrorTuple } from './app.types';
 
 @Component({
-  selector: 'app-root',
-  imports: [RouterLink, RouterLinkActive, RouterOutlet, ErrorMessageComponent, SelectionSummaryComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+    selector: 'app-root',
+    imports: [
+        RouterLink,
+        RouterLinkActive,
+        RouterOutlet,
+        ErrorMessageComponent,
+        SelectionSummaryComponent,
+    ],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'Ledger';
-  errorMessage = '';
-  errorHttpCode = 0;
+    title = 'Ledger';
+    errorMessage = '';
+    errorHttpCode = 0;
 
-  constructor(
-    private errorService: ErrorService
-  ) {}
+    constructor(private errorService: ErrorService) {}
 
-  ngOnInit() {
-    this.errorService.error$.subscribe((errorTuple: ErrorTuple) => {
-      this.errorHttpCode = errorTuple[0].status;
-      this.errorMessage = errorTuple[1] || '';
-    });
-  }
+    ngOnInit() {
+        this.errorService.error$.subscribe((errorTuple: ErrorTuple) => {
+            this.errorHttpCode = errorTuple[0].status;
+            this.errorMessage = errorTuple[1] || '';
+        });
+    }
 }

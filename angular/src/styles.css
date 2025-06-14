@@ -82,7 +82,9 @@ header h1 {
     }
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
     font-size: inherit;
     border: 1px solid currentColor;
     box-sizing: border-box;
@@ -90,15 +92,16 @@ input, select, textarea {
     width: 100%;
 }
 
-input[type="checkbox"], input[type="file"] {
+input[type="checkbox"],
+input[type="file"] {
     border: 0;
     padding-left: 0;
     width: initial;
 }
 
 input.ng-invalid:not(.ng-pristine) {
-    border: 1px solid #B80300;
-    outline-color: #B80300;
+    border: 1px solid #b80300;
+    outline-color: #b80300;
 }
 
 label {
@@ -119,7 +122,6 @@ textarea {
     margin-top: 1em;
     width: 5em;
 }
-
 
 @media (min-width: 850px) {
     #app-logo {
@@ -154,7 +156,7 @@ textarea {
 .validation-message {
     font-style: italic;
     padding-left: 1em;
-    color: #B80300;
+    color: #b80300;
     font-weight: normal;
     display: inline;
 }

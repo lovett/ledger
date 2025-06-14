@@ -1,19 +1,32 @@
 {
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+    "defaultBranch": "master"
+  },
   "files": {
     "ignore": [".angular"]
   },
   "formatter": {
-    "indentStyle": "space",
-    "indentWidth": 4
+    "indentStyle": "space"
+  },
+  "css": {
+    "formatter": {
+      "indentWidth": 4
+    }
   },
   "javascript": {
     "formatter": {
-      "quoteStyle": "single"
+      "quoteStyle": "single",
+      "quoteProperties": "preserve",
+      "indentWidth": 4
     }
   },
   "json": {
     "formatter": {
-      "trailingCommas": "none"
+      "trailingCommas": "none",
+      "indentWidth": 2
     }
   },
   "linter": {

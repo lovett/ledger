@@ -7,13 +7,13 @@ import { TagListComponent } from './tag-list/tag-list.component';
 import { Routes } from '@angular/router';
 
 export const routes: Routes = [
-  { path: 'accounts', component: AccountListComponent },
-  { path: 'accounts/:id/edit', component: AccountFormComponent },
-  { path: 'accounts/new', component: AccountFormComponent },
-  { path: 'transactions', component: TransactionListComponent },
-  { path: 'transactions/:id/edit', component: TransactionFormComponent },
-  { path: 'transactions/new', component: TransactionFormComponent },
-  { path: 'tags', component: TagListComponent },
+    { path: 'accounts', component: AccountListComponent },
+    { path: 'accounts/:id/edit', component: AccountFormComponent },
+    { path: 'accounts/new', component: AccountFormComponent },
+    { path: 'transactions', component: TransactionListComponent },
+    { path: 'transactions/:id/edit', component: TransactionFormComponent },
+    { path: 'transactions/new', component: TransactionFormComponent },
+    { path: 'tags', component: TagListComponent },
 
-  { path: '', redirectTo: 'accounts', pathMatch: 'full' },
+    { path: '', redirectTo: 'accounts', pathMatch: 'full' },
 ];

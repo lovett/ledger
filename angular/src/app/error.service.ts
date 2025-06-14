@@ -4,14 +4,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ErrorTuple } from './app.types';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class ErrorService {
-  private errorSubject = new Subject<ErrorTuple>();
-  error$ = this.errorSubject.asObservable();
+    private errorSubject = new Subject<ErrorTuple>();
+    error$ = this.errorSubject.asObservable();
 
-  reportError(error: HttpErrorResponse, message?: string) {
-    console.log(error);
-    this.errorSubject.next([error, message]);
-  }
+    reportError(error: HttpErrorResponse, message?: string) {
+        console.log(error);
+        this.errorSubject.next([error, message]);
+    }
 }

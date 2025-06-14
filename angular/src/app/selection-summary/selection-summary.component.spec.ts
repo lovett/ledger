@@ -3,21 +3,20 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SelectionSummaryComponent } from './selection-summary.component';
 
 describe('SelectionSummaryComponent', () => {
-  let component: SelectionSummaryComponent;
-  let fixture: ComponentFixture<SelectionSummaryComponent>;
+    let component: SelectionSummaryComponent;
+    let fixture: ComponentFixture<SelectionSummaryComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [SelectionSummaryComponent]
-    })
-    .compileComponents();
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [SelectionSummaryComponent],
+        }).compileComponents();
 
-    fixture = TestBed.createComponent(SelectionSummaryComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        fixture = TestBed.createComponent(SelectionSummaryComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });
