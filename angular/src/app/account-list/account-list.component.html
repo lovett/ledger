@@ -7,32 +7,25 @@
     @for (account of (accounts$ | async); track account.id) {
     <div class="card" [class.inactive]="account.closed_on">
         <div class="title">
-            {{account.name}}
+            <a class="logo" [routerLink]="['/transactions']" [queryParams]="{account_id: account.id}">{{account.name}}</a>
 
             <a [routerLink]="['/accounts', account.id, 'edit']">
                 <svg class="icon"><use xlink:href="#edit"></use></svg>
             </a>
         </div>
 
-        <div class="logo">
+        <a class="logo" [routerLink]="['/transactions']" [queryParams]="{account_id: account.id}">
             @if (account.logoUrl) {
             <img src="{{ account.logoUrl }}" alt="{{ account.name }} Logo" title="" />
             } @else {
             <svg><use xlink:href="#bank"></use></svg>
             }
-        </div>
+        </a>
 
         <ul>
             <li [ngClass]="{balance: true, negative: account.balance < 0}">{{ account.balance! | currency }}</li>
 
             <li [ngClass]="{secondary: true, pending: true, negative: account.balance_pending < 0}">{{ account.balance_pending! | currency }} pending</li>
-
-            @if (account.transactionCount > 0) {
-            <li><a [routerLink]="['/transactions']" [queryParams]="{account_id: account.id}">Transactions</a></li>
-            } @else {
-            <li>No activity</li>
-            }
-
 
             @if (!account.closed_on) {
             <li class="transaction">
@@ -51,7 +44,9 @@
 
             @if (account.closed_on) {
             <p>Closed {{ account.closed_on|date: 'longDate' }}</p>
-            } @else {
+            }
+
+            @if (account.opened_on && !account.closed_on) {
             <p>Since  {{ account.opened_on|date:'longDate' }}</p>
             }
 

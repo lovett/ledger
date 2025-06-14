@@ -36,7 +36,15 @@
     font-weight: bold;
 }
 
+.card .title .icon {
+    width: 1.25em;
+    height: 1.25em;
+    margin-top: -.25em;
+}
+
 .card .title a {
+    margin-top: 0;
+    text-decoration: none;
     color: inherit;
 }
 
@@ -83,6 +91,8 @@
 }
 
 .logo {
+    display: block;
+    color: inherit;
     margin-top: 1em;
 }
 
