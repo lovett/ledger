@@ -8,6 +8,16 @@
     opacity: 0.75;
 }
 
+a {
+    color: currentColor;
+    text-decoration: none;
+}
+
+a:hover {
+    color: dodgerblue;
+    text-decoration: underline;
+}
+
 body {
     font-family: system-ui, sans-serif;
     margin: 0 1em 1em 1em;

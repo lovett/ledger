@@ -125,7 +125,7 @@
         </td>
         <td>
             @if (transaction.payee) {
-            <p>{{ transaction.payee }}</p>
+            <p><a [routerLink]="[]" [queryParams]="{query: 'payee:' + transaction.payee}" queryParamsHandling="merge">{{ transaction.payee }}</a></p>
             } @else {
             <p>No payee</p>
             }
