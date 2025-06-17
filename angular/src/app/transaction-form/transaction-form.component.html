@@ -86,6 +86,7 @@
         <input id="occurredOn" type="date" formControlName="occurred_on" />
         <div class="shortcuts">
             <a href="#" (click)="todayShortcut($event, 'occurred_on')">Today</a>
+            <a href="#" (click)="yesterdayShortcut($event, 'occurred_on')">Yesterday</a>
         </div>
     </div>
 
@@ -94,6 +95,7 @@
         <input id="clearedOn" type="date" formControlName="cleared_on" />
         <div class="shortcuts">
             <a href="#" (click)="todayShortcut($event, 'cleared_on')">Today</a>
+            <a href="#" (click)="yesterdayShortcut($event, 'cleared_on')">Yesterday</a>
             <a href="#" (click)="clearShortcut($event, 'cleared_on')">Clear</a>
         </div>
     </div>
