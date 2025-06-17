@@ -181,6 +181,9 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         event.preventDefault();
         transaction.cleared_on = new Date();
         this.transactionService.saveTransaction(transaction).subscribe({
+            next: () => {
+                if (transaction.selected) this.deselect(transaction);
+            },
             error: (error) => {
                 transaction.cleared_on = undefined;
                 this.errorService.reportError(
@@ -197,6 +200,12 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     toggleSelection(transaction: Transaction) {
         transaction.selected = !transaction.selected;
         this.selections.push(transaction);
+        this.selections = this.selections.filter((t) => t.selected);
+        this.transactionService.selectionSubject.next(this.selections);
+    }
+
+    deselect(transaction: Transaction) {
+        transaction.selected = false;
         this.selections = this.selections.filter((t) => t.selected);
         this.transactionService.selectionSubject.next(this.selections);
     }
