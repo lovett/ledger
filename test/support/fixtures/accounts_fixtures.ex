@@ -19,6 +19,7 @@ defmodule Ledger.AccountsFixtures do
         closed_on: nil,
         logo: nil,
         logo_mime: nil,
+        logo_hash: nil,
         name: unique_account_name(),
         note: nil,
         opened_on: ~D[2025-01-01],

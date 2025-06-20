@@ -3,7 +3,7 @@ defmodule Ledger.Accounts.Account do
   alias Ledger.Transactions.Transaction
   import Ecto.Changeset
 
-  @derive {Jason.Encoder, only: [:id, :name, :logo_mime]}
+  @derive {Jason.Encoder, only: [:id, :name, :logo_mime, :logo_hash]}
   schema "accounts" do
     field :name, :string
     field :url, :string
@@ -12,6 +12,7 @@ defmodule Ledger.Accounts.Account do
     field :note, :string
     field :logo, :binary
     field :logo_mime, :string
+    field :logo_hash, :string
     field :balance, :integer, virtual: true
     field :balance_pending, :integer, virtual: true
     field :deposit_count, :integer, virtual: true
@@ -24,7 +25,7 @@ defmodule Ledger.Accounts.Account do
   @doc false
   def changeset(account, attrs) do
     account
-    |> cast(attrs, [:name, :opened_on, :closed_on, :url, :note, :logo, :logo_mime])
+    |> cast(attrs, [:name, :opened_on, :closed_on, :url, :note, :logo, :logo_mime, :logo_hash])
     |> validate_required([:name])
     |> unique_constraint(:name)
   end

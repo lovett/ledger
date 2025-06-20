@@ -12,6 +12,7 @@ export class Account {
     total_pending = 0;
     last_active?: Date;
     logo_mime = '';
+    logo_hash = '';
     logo_upload?: File;
     existing_logo_action = 'keep';
     withdrawl_count = 0;
@@ -48,6 +49,7 @@ export class Account {
         a.url = record.url ?? '';
         a.note = record.note ?? '';
         a.logo_mime = record.logo_mime ?? '';
+        a.logo_hash = record.logo_hash ?? '';
 
         return a;
     }
@@ -75,7 +77,11 @@ export class Account {
 
     get logoUrl(): string {
         if (!this.logo_mime) return '';
-        return `/api/accounts/${this.id}/logo`;
+        const path = `/api/accounts/${this.id}/logo`;
+        if (this.logo_hash) {
+            return `${path}/${this.logo_hash}`;
+        }
+        return path;
     }
 
     get formData(): FormData {

@@ -27,6 +27,7 @@ defmodule Ledger.Accounts do
                     :closed_on,
                     :note,
                     :logo_mime,
+                    :logo_hash
                   ],
                   order_by: [asc_nulls_first: a.closed_on, desc: a.opened_on]
   end
@@ -54,14 +55,15 @@ defmodule Ledger.Accounts do
                      :opened_on,
                      :closed_on,
                      :note,
-                     :logo_mime
+                     :logo_mime,
+                     :logo_hash
                    ],
                    where: a.id == ^id
   end
 
   def get_account_logo!(id) do
     Repo.one! from a in Account,
-                   select: [:logo, :logo_mime],
+                   select: [:logo, :logo_mime, :logo_hash],
                    where: a.id == ^id
   end
 

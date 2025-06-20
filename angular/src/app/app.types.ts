@@ -42,6 +42,7 @@ export type AccountRecord = {
     total_pending: number;
     last_active?: string;
     logo_mime?: string;
+    logo_hash?: string;
     deposit_count: number;
     withdrawl_count: number;
 };

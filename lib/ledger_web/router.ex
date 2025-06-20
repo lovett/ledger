@@ -30,7 +30,8 @@ defmodule LedgerWeb.Router do
   scope "/api", LedgerWeb do
     pipe_through :api
     resources "/accounts", AccountController, except: [:new, :edit] do
-      resources "/logo", LogoController, only: [:show], singleton: true
+      get "/logo/:hash", LogoController, :show
+      get "/logo", LogoController, :show
     end
     resources "/transactions", TransactionController, except: [:new, :edit] do
       resources "/receipt", ReceiptController, only: [:show], singleton: true

@@ -63,6 +63,7 @@ defmodule LedgerWeb.AccountController do
       {:ok, contents} ->
         account_params
         |> Map.put("logo_mime", logo_upload.content_type)
+        |> Map.put("logo_hash", logo_hash(contents))
         |> Map.put("logo", contents)
       {:error, reason} ->
         IO.inspect(reason, label: "logo upload error")
@@ -75,8 +76,15 @@ defmodule LedgerWeb.AccountController do
   def discard_existing_logo(%{"existing_logo_action" => "discard"} = account_params) do
     account_params
     |> Map.put("logo_mime", nil)
+    |> Map.put("logo_hash", nil)
     |> Map.put("logo", nil)
   end
 
   def discard_existing_logo(account_params), do: account_params
+
+  defp logo_hash(contents) do
+    :crypto.hash(:md5, contents)
+    |> Base.encode16()
+    |> String.downcase()
+  end
 end

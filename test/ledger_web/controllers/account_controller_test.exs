@@ -13,6 +13,7 @@ defmodule LedgerWeb.AccountControllerTest do
     note: "some note",
     logo: "some logo",
     logo_mime: "some logo_mime"
+    logo_hash: "123456"
   }
   @update_attrs %{
     name: "some updated name",
