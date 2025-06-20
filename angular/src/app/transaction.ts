@@ -57,7 +57,7 @@ export class Transaction {
         return {
             id: this.id.toString(),
             payee: this.payee,
-            amount: this.amount,
+            amount: this.amount.toFixed(2),
             accounts: {
                 account_id: this.account?.id,
                 destination_id: this.destination?.id,
@@ -73,7 +73,7 @@ export class Transaction {
     get formValuesForAutocomplete(): object {
         return {
             payee: this.payee,
-            amount: this.amount,
+            amount: this.amount.toFixed(2),
             accounts: {
                 account_id: this.account?.id,
                 destination_id: this.destination?.id,
