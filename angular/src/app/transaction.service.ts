@@ -25,6 +25,7 @@ export class TransactionService {
     selection$ = this.selectionSubject.asObservable();
     selections: Transaction[] = [];
     filterSessionKey = 'transaction:filters';
+    previousFilterSessionKey = 'transaction:filters:previous';
 
     constructor(private http: HttpClient) {}
 
@@ -49,8 +50,27 @@ export class TransactionService {
         return params;
     }
 
+    canRestorePreviousFilter(): boolean {
+        const value = window.sessionStorage.getItem(this.previousFilterSessionKey) || '';
+        return value !== '';
+    }
+
+    restorePreviousFilter() {
+        const value = window.sessionStorage.getItem(this.previousFilterSessionKey) || '';
+        this.storeFilters(value);
+        window.sessionStorage.removeItem(this.previousFilterSessionKey);
+    }
+
+    clearPreviousFilter() {
+        window.sessionStorage.removeItem(this.previousFilterSessionKey);
+    }
+
     clearStoredFilters() {
-        window.sessionStorage.removeItem(this.filterSessionKey);
+        const currentFilters = window.sessionStorage.getItem(this.filterSessionKey) || '';
+        if (currentFilters !== '') {
+            window.sessionStorage.setItem(this.previousFilterSessionKey, currentFilters);
+            window.sessionStorage.removeItem(this.filterSessionKey);
+        }
     }
 
     getTransactions(

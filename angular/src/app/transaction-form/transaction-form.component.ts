@@ -278,7 +278,9 @@ export class TransactionFormComponent implements OnInit {
 
         this.transactionService.saveTransaction(t).subscribe({
             next: () => {
-                this.transactionService.clearStoredFilters();
+                if (t.isNew) {
+                    this.transactionService.clearStoredFilters();
+                }
                 this.router.navigate(this.returnRoute);
             },
             error: (error) => {

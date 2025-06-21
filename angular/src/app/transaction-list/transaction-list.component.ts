@@ -66,6 +66,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     selections: Transaction[] = [];
     loading = false;
     filters: FilterTuple[] = [];
+    canRestorePreviousFilter = false;
     selectionSubscription?: Subscription;
 
     constructor(
@@ -82,6 +83,13 @@ export class TransactionListComponent implements OnInit, OnDestroy {
             );
 
         const filters = this.transactionService.recallStoredFilters();
+        if (Object.keys(filters).length > 0) {
+            this.transactionService.clearPreviousFilter();
+            this.canRestorePreviousFilter = false;
+        } else {
+            this.canRestorePreviousFilter = this.transactionService.canRestorePreviousFilter();
+        }
+
         if (window.location.search === '' && Object.keys(filters).length > 0) {
             this.router.navigate([], {
                 relativeTo: this.route,
@@ -146,6 +154,17 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         }
     }
 
+    restoreFilters(event?: Event) {
+        if (event) event.preventDefault();
+        this.transactionService.restorePreviousFilter();
+        const filters = this.transactionService.recallStoredFilters();
+        this.canRestorePreviousFilter = false;
+        this.router.navigate([], {
+            relativeTo: this.route,
+            queryParams: filters,
+        });
+    }
+
     clearFilter(name: string, event?: Event) {
         if (event) event.preventDefault();
 
@@ -170,6 +189,8 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     }
 
     search() {
+        this.transactionService.clearPreviousFilter();
+        this.canRestorePreviousFilter = false;
         this.router.navigate([], {
             relativeTo: this.route,
             queryParams: { query: this.query.value || null, offset: 0 },

@@ -101,6 +101,10 @@ export class Transaction {
         return Boolean(this.account) && Boolean(this.destination);
     }
 
+    get isNew(): boolean {
+        return this.id === 0;
+    }
+
     get rowClasses(): Record<string, boolean> {
         return {
             cleared: !!this.cleared_on,
@@ -152,7 +156,6 @@ export class Transaction {
             this.existing_receipt_action,
         );
         formData.set('transaction[tags]', this.delimitedTags);
-        console.log(formData);
         return formData;
     }
 }

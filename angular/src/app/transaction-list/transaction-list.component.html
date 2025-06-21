@@ -1,4 +1,10 @@
 <ng-template #filtersFragment>
+    @if (filters.length === 0 && canRestorePreviousFilter) {
+    <ul class="filters">
+        <li>Search filters were cleared. <a href="#" (click)="restoreFilters($event)">Restore</a></li>
+    </ul>
+    }
+
     @if (filters.length > 0) {
     <ul class="filters">
         @for (scope of filters; track scope[0]) {
