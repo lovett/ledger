@@ -6,10 +6,12 @@ alias Ledger.Repo
 alias Ledger.Accounts.Account
 alias Ledger.Transactions.Transaction
 alias Ledger.Tags.Tag
+alias Ledger.Drafts.Draft
 
 Repo.delete_all Account
 Repo.delete_all Transaction
 Repo.delete_all Tag
+Repo.delete_all Draft
 
 Repo.insert! %Account{
   id: 1,
@@ -65,4 +67,10 @@ Repo.insert! %Transaction{
   tags: [
     %Tag{id: 3, name: "second"},
   ]
+}
+
+Repo.insert! %Draft{
+  id: 1,
+  source: "email",
+  initial_content: "some initial content",
 }

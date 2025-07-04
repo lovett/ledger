@@ -1,0 +1,60 @@
+.draft {
+    border: 1px solid #ccc;
+    border-radius: .5em .5em 0 0;
+    margin-bottom: 1em;
+}
+
+.draft > * {
+    padding: 1em;
+}
+
+.draft header {
+    background-color: #eee;
+    border-radius: .5em .5em 0 0;
+    margin: 0;
+}
+
+.draft footer {
+    display: flex;
+    justify-content: flex-end;
+    font-size: .75em;
+}
+
+.draft dl {
+    margin: 0;
+    column-count: 2;
+}
+
+.draft dt {
+    font-weight: bold;
+    display: inline;
+    line-height: 2;
+}
+
+.draft dt:after {
+    content: ': ';
+}
+
+dt:before {
+    content: "";
+    display: block;
+}
+
+.draft dd {
+    display: inline;
+    margin-left: 0;
+}
+
+
+.draft summary {
+    cursor: pointer;
+}
+
+details .wrapper {
+    font-family: monospace;
+    font-size: .85em;
+    border-left: 5px solid #B8CDF8;
+    white-space: pre-line;
+    margin: 1em 0;
+    padding: 0 1em;
+}

@@ -1,0 +1,54 @@
+<header>
+    <h1>Drafts</h1>
+</header>
+
+@for (draft of (drafts$ | async); track draft.id) {
+<div class="draft">
+    <header>
+        <dl>
+            <dt>ID</dt>
+            <dd>#{{ draft.id }}</dd>
+            <dt>Source</dt>
+            <dd>{{ draft.source }}</dd>
+            <dt>Created</dt>
+            <dd>{{ draft.createdAt|date: datetimeFormat }}</dd>
+            <dt>Revisions</dt>
+            <dd>{{ draft.transformationCount }}</dd>
+            <dt>Completion</dt>
+            <dd>{{ draft.percentComplete }}%</dd>
+            @if (draft.createdAt.getTime() !== draft.updatedAt.getTime() ) {
+            <dt>Updated</dt>
+            <dd>{{ draft.updatedAt|date: datetimeFormat }}</dd>
+            }
+        </dl>
+    </header>
+
+    <div>
+        @if (draft.transformedContent) {
+        <app-transaction-form [draft]="draft.transformedContent" [showHeader]="false" />
+        } @else {
+        <em>A proposed transaction is not yet available.</em>
+        }
+    </div>
+    <details>
+        <summary>Initial content</summary>
+        <div class="wrapper">{{ draft.initialContent }}</div>
+    </details>
+
+    <footer>
+        <app-button
+            (confirmed)="delete($event, draft.id)"
+            label="Delete"
+            type="delete"
+            icon="trash"
+            confirmationMessage="Delete this draft?"></app-button>
+    </footer>
+</div>
+
+} @empty {
+<p>
+    @if (!loading) {
+    Nothing found.
+    }
+</p>
+}

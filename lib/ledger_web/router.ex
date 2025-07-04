@@ -25,6 +25,7 @@ defmodule LedgerWeb.Router do
     get "/transactions/new", PageController, :home
     get "/transactions/:id/edit", PageController, :home
     get "/tags", PageController, :home
+    get "/drafts", PageController, :home
   end
 
   scope "/api", LedgerWeb do
@@ -38,6 +39,10 @@ defmodule LedgerWeb.Router do
     end
     get "/tags/autocomplete", TagController, :autocomplete
     resources "/tags", TagController, except: [:new, :edit]
+
+    get "/drafts/count", DraftController, :count
+    get "/drafts/pickups", DraftController, :pickups
+    resources "/drafts", DraftController, except: [:new, :edit]
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

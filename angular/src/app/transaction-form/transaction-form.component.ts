@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, viewChild } from '@angular/core';
+import { Component, input, OnInit, ElementRef, viewChild } from '@angular/core';
 import {
     ReactiveFormsModule,
     FormArray,
@@ -70,6 +70,9 @@ export class TransactionFormComponent implements OnInit {
     tagCandidates$: Observable<Tag[]> = of([]);
     autocompleteCandidates$: Observable<Transaction[]> = of([]);
 
+    draft = input<Transaction>();
+    showHeader = input<boolean>(false);
+
     transactionForm = new FormGroup({
         id: new FormControl(0),
         accounts: new FormGroup(
@@ -128,6 +131,11 @@ export class TransactionFormComponent implements OnInit {
 
             if (account_id > 0 && transaction_type === 'withdrawl') {
                 this.accountId.setValue(account_id);
+            }
+
+            const draft = this.draft();
+            if (draft) {
+                this.transactionForm.patchValue(draft.formValuesForPartial);
             }
         }
 

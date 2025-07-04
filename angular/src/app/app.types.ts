@@ -30,6 +30,19 @@ export type TagRecord = {
     last_used?: string;
 };
 
+export type DraftRecord = {
+    id: number,
+    source: string,
+    initial_content: string,
+    transformed_content: TransactionRecord;
+    transformation_type: string,
+    transformation_count: number,
+    percent_complete: number,
+    content_id: string;
+    inserted_at: string;
+    updated_at: string;
+};
+
 export type AccountRecord = {
     id: number;
     name: string;
@@ -61,6 +74,7 @@ export type TransactionRecord = {
 };
 
 export type TransactionList = [Transaction[], number, TransactionFilter?];
+
 
 export type TransactionListResponse = ApiResponse<TransactionRecord[]> & {
     filter?: TransactionFilter;

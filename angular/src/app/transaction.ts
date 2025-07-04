@@ -46,8 +46,10 @@ export class Transaction {
             t.destination = Account.fromRecord(record.destination);
         }
 
-        for (const item of record.tags) {
-            t.tags.push(Tag.fromRecord(item));
+        if (record.tags) {
+            for (const item of record.tags) {
+                t.tags.push(Tag.fromRecord(item));
+            }
         }
 
         return t;
@@ -78,6 +80,20 @@ export class Transaction {
                 account_id: this.account?.id,
                 destination_id: this.destination?.id,
             },
+            note: this.note,
+            tags: this.delimitedTags,
+        };
+    }
+
+    get formValuesForPartial(): object {
+        return {
+            payee: this.payee,
+            amount: this.amount.toFixed(2),
+            accounts: {
+                account_id: this.account?.id,
+                destination_id: this.destination?.id,
+            },
+            occurred_on: this.ymd(this.occurred_on),
             note: this.note,
             tags: this.delimitedTags,
         };
