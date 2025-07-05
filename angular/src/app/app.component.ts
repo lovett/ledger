@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { ErrorMessageComponent } from './error-message/error-message.component';
 import { SelectionSummaryComponent } from './selection-summary/selection-summary.component';
 import { ErrorService } from './error.service';
@@ -22,17 +23,22 @@ export class AppComponent {
     title = 'Ledger';
     errorMessage = '';
     errorHttpCode = 0;
-    noDraftsAvailable = true;
+    draftCount = 0;
+    draftDeletionSubscription: Subscription;
 
     constructor(
         private draftService: DraftService,
         private errorService: ErrorService
-    ) {}
+    ) {
+        this.draftDeletionSubscription = this.draftService.draftDeleted$.subscribe(() => {
+            this.draftCount--;
+        });
+    }
 
     ngOnInit() {
         this.draftService.getCount().subscribe({
             next: (count) => {
-                this.noDraftsAvailable = count == 0;
+                this.draftCount = count;
             }
         });
 

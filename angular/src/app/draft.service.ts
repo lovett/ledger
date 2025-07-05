@@ -1,8 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map, pipe } from 'rxjs';
 import { Draft } from './draft';
 import { DraftRecord, ApiResponse } from './app.types';
+import { Subject } from 'rxjs';
 
 type DraftList = Draft[];
 type ListResponse = ApiResponse<DraftRecord[]>;
@@ -11,6 +12,8 @@ type ListResponse = ApiResponse<DraftRecord[]>;
   providedIn: 'root'
 })
 export class DraftService {
+    private draftDeletionSource = new Subject<void>();
+    draftDeleted$ = this.draftDeletionSource.asObservable();
 
     constructor(private http: HttpClient) {}
 
@@ -34,6 +37,7 @@ export class DraftService {
     }
 
     deleteDraft(id: number): Observable<void> {
+        this.draftDeletionSource.next();
         return this.http.delete<void>(`/api/drafts/${id}`);
     }
 }

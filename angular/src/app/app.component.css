@@ -34,6 +34,10 @@
     text-decoration: none;
 }
 
+#shell nav a.active span {
+    font-weight: normal;
+}
+
 #shell nav ul {
     list-style-type: none;
     margin-left: auto;

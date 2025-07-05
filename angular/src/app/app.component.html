@@ -8,7 +8,7 @@
                 <li><a routerLink="/tags" routerLinkActive="active">Tags</a></li>
                 <li><a routerLink="/drafts"
                        routerLinkActive="active"
-                       [hidden]="noDraftsAvailable">Drafts</a></li>
+                       [hidden]="draftCount === 0">Drafts <span>({{ draftCount }})</span></a></li>
             </ul>
             <app-selection-summary></app-selection-summary>
         </nav>
