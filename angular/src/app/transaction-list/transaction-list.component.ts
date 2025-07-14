@@ -13,14 +13,7 @@ import {
     Validators,
 } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
-import {
-    CurrencyPipe,
-    DatePipe,
-    AsyncPipe,
-    DecimalPipe,
-    NgTemplateOutlet,
-    CommonModule,
-} from '@angular/common';
+import { CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, NgTemplateOutlet, CommonModule } from '@angular/common';
 import {
     RouterLink,
     Router,

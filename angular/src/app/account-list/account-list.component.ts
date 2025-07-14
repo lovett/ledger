@@ -1,10 +1,5 @@
 import { Component } from '@angular/core';
-import {
-    CurrencyPipe,
-    DatePipe,
-    AsyncPipe,
-    CommonModule,
-} from '@angular/common';
+import { CurrencyPipe, DatePipe, AsyncPipe, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Account } from '../account';
 import { AccountService } from '../account.service';
