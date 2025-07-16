@@ -29,8 +29,7 @@
 
             @if (!account.closed_on) {
             <li class="transaction">
-                <app-button [routerLink]="'/transactions/new'" [queryParams]="{account_id: account.id, type: 'deposit'}" label="Deposit" [icon]="'add'"></app-button>
-                <app-button [routerLink]="'/transactions/new'" [queryParams]="{account_id: account.id, type: 'withdrawl'}" label="Withdrawl" [icon]="'add'"></app-button>
+                <app-button [routerLink]="'/transactions/new'" [queryParams]="{account_id: account.id}" label="Transaction" [icon]="'add'"></app-button>
             </li>
             }
         </ul>
