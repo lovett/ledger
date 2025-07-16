@@ -152,6 +152,15 @@ TR.cleared .minibanner {
     background-color: lightgreen;
 }
 
+TR.future TD {
+    background-color: rgba(204, 204, 204, 0.5);
+    color: #999;
+}
+
+TR.future .minibanner {
+    background-color: none;
+}
+
 TABLE TR.selected TD {
     background-color: lemonchiffon;
 }

@@ -166,6 +166,8 @@
         <td class="align-center">
             @if (transaction.cleared_on) {
             <div class="minibanner">Cleared</div>
+            } @else if (transaction.isFuture) {
+            <div class="minibanner">Future</div>
             } @else {
             <div class="minibanner">Pending</div>
             <p><a href="#" (click)="clearTransaction($event, transaction)">Clear</a></p>

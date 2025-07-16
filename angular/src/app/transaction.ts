@@ -4,7 +4,7 @@ import { TransactionRecord } from './app.types';
 
 export class Transaction {
     id = 0;
-    occurred_on?: Date = new Date();
+    occurred_on: Date = new Date();
     cleared_on?: Date;
     amount = 0;
     payee = '';
@@ -16,6 +16,7 @@ export class Transaction {
     existing_receipt_action = 'keep';
     tags: Tag[] = [];
     selected = false;
+    today = new Date();
 
     ymd(d?: Date) {
         if (!d) return '';
@@ -121,13 +122,19 @@ export class Transaction {
         return this.id === 0;
     }
 
+    get isFuture(): boolean {
+        return this.occurred_on > this.today;
+    }
+
     get rowClasses(): Record<string, boolean> {
         return {
             cleared: !!this.cleared_on,
             pending: !this.cleared_on,
             selected: this.selected,
+            future: this.isFuture,
         };
     }
+
 
     get receiptUrl(): string {
         if (!this.receipt_mime) return '';
