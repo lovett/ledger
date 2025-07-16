@@ -71,7 +71,7 @@ export class TransactionFormComponent implements OnInit {
     autocompleteCandidates$: Observable<Transaction[]> = of([]);
 
     draft = input<Transaction>();
-    showHeader = input<boolean>(false);
+    showHeader = input<boolean>(true);
 
     transactionForm = new FormGroup({
         id: new FormControl(0),

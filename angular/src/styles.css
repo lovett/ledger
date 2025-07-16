@@ -47,6 +47,11 @@ h1 {
     margin-bottom: 1em;
 }
 
+h1 + .cancel {
+    display: block;
+    margin-top: 0.5em;
+}
+
 @media (min-width: 850px) {
     h1 {
         margin-bottom: 0;

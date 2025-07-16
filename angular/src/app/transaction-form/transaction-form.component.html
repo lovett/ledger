@@ -1,15 +1,25 @@
 @if (showHeader()) {
 <header>
-    <a [routerLink]="returnRoute">Cancel</a>
+    <div>
+        @if (id.value > 0) {
+        <h1>Edit Transaction</h1>
+        } @else {
+        <h1>New Transaction</h1>
+        }
+
+        <a class="cancel" [routerLink]="returnRoute">Cancel</a>
+    </div>
 
     @if (canDelete()) {
     <app-button
         (confirmed)="delete($event)"
         type="delete"
-        label="Delete transaction"
+        label="Delete"
         icon="trash"
         confirmationMessage="Delete this transaction?"></app-button>
     }
+
+
 </header>
 }
 
@@ -146,6 +156,6 @@
             [disabled]="transactionForm.invalid || transactionForm.pristine"
             type="save"
             icon="floppy"
-            label="Save transaction"></app-button>
+            label="Save"></app-button>
     </footer>
 </form>
