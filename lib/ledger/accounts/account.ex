@@ -13,6 +13,8 @@ defmodule Ledger.Accounts.Account do
     field :logo, :binary
     field :logo_mime, :string
     field :logo_hash, :string
+    field :routing_number, :string
+    field :account_number, :string
     field :balance, :integer, virtual: true
     field :balance_pending, :integer, virtual: true
     field :deposit_count, :integer, virtual: true
@@ -25,7 +27,7 @@ defmodule Ledger.Accounts.Account do
   @doc false
   def changeset(account, attrs) do
     account
-    |> cast(attrs, [:name, :opened_on, :closed_on, :url, :note, :logo, :logo_mime, :logo_hash])
+    |> cast(attrs, [:name, :opened_on, :closed_on, :url, :note, :logo, :logo_mime, :logo_hash, :account_number, :routing_number])
     |> validate_required([:name])
     |> unique_constraint(:name)
   end

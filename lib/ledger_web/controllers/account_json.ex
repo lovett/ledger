@@ -29,6 +29,8 @@ defmodule LedgerWeb.AccountJSON do
       balance_pending: account.balance_pending,
       withdrawl_count: account.withdrawl_count,
       deposit_count: account.deposit_count,
+      routing_number: account.routing_number,
+      account_number: account.account_number,
     }
   end
 end

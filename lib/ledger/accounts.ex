@@ -27,7 +27,9 @@ defmodule Ledger.Accounts do
                     :closed_on,
                     :note,
                     :logo_mime,
-                    :logo_hash
+                    :logo_hash,
+                    :account_number,
+                    :routing_number,
                   ],
                   order_by: [asc_nulls_first: a.closed_on, desc: a.opened_on]
   end
@@ -56,7 +58,9 @@ defmodule Ledger.Accounts do
                      :closed_on,
                      :note,
                      :logo_mime,
-                     :logo_hash
+                     :logo_hash,
+                     :account_number,
+                     :routing_number,
                    ],
                    where: a.id == ^id
   end

@@ -58,6 +58,8 @@ export type AccountRecord = {
     logo_hash?: string;
     deposit_count: number;
     withdrawl_count: number;
+    account_number?: string;
+    routing_number?: string;
 };
 
 export type TransactionRecord = {

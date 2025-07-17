@@ -42,6 +42,8 @@ export class AccountFormComponent implements OnInit {
             note: new FormControl(''),
             logo_url: new FormControl(''),
             existing_logo_action: new FormControl(''),
+            account_number: new FormControl(''),
+            routing_number: new FormControl(''),
         },
         { validators: accountDatesValidator },
     );
@@ -92,6 +94,14 @@ export class AccountFormComponent implements OnInit {
         return this.accountForm.get('existing_logo_action') as FormControl;
     }
 
+    get accountNumber() {
+        return this.accountForm.get('account_number') as FormControl;
+    }
+
+    get routingNumber() {
+        return this.accountForm.get('routing_number') as FormControl;
+    }
+
     delete(confirmed: boolean) {
         if (!confirmed) return;
         this.accountService.deleteAccount(this.id.value).subscribe({
@@ -122,6 +132,9 @@ export class AccountFormComponent implements OnInit {
 
         a.url = this.accountForm.value.url || '';
         a.note = this.accountForm.value.note || '';
+        a.account_number = this.accountForm.value.account_number || '';
+        a.routing_number = this.accountForm.value.routing_number || '';
+
         a.existing_logo_action =
             this.accountForm.value.existing_logo_action || '';
 
@@ -166,8 +179,6 @@ export class AccountFormComponent implements OnInit {
     populate(account: Account) {
         this.accountForm.reset();
         this.accountForm.patchValue(account.formValues);
-
-        console.log('count', account.transactionCount);
 
         if (account.transactionCount === 0) {
             this.deletionConfirmationMessage =

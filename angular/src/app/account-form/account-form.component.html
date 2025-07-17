@@ -28,6 +28,16 @@
     </div>
 
     <div>
+        <app-label [control]="accountNumber" text="Account Number" />
+        <input id="accountNumber" type="text" formControlName="account_number" />
+    </div>
+
+    <div>
+        <app-label [control]="routingNumber" text="Routing Number" />
+        <input id="routingNumber" type="text" formControlName="routing_number" />
+    </div>
+
+    <div>
         <app-label [control]="openedOn" text="Opened On" [customMessage]="accountForm.getError('accountDates')?.value" />
         <input id="accountOpened" type="date" formControlName="opened_on" max="today" />
         <div class="shortcuts">

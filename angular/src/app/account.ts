@@ -17,6 +17,8 @@ export class Account {
     existing_logo_action = 'keep';
     withdrawl_count = 0;
     deposit_count = 0;
+    account_number = '';
+    routing_number = '';
 
     static fromRecord(record: AccountRecord | Partial<AccountRecord>): Account {
         const a = new Account();
@@ -25,6 +27,8 @@ export class Account {
         a.balance = (record.balance ?? 0) / 100;
         a.balance_pending = (record.balance_pending ?? 0) / 100;
         a.total_pending = record.total_pending ?? 0;
+        a.account_number = record.account_number ?? '';
+        a.routing_number = record.routing_number ?? '';
 
         if (record.deposit_count) {
             a.deposit_count = record.deposit_count;
@@ -70,6 +74,8 @@ export class Account {
             url: this.url,
             opened_on: this.ymd(this.opened_on),
             closed_on: this.ymd(this.closed_on),
+            account_number: this.account_number,
+            routing_number: this.routing_number,
             note: this.note,
             logo_url: this.logo_mime ? this.logoUrl : '',
         };
@@ -89,20 +95,17 @@ export class Account {
         formData.set('id', this.id.toString() || '0');
 
         formData.set('account[name]', this.name);
+        formData.set('account[url]', this.url);
+        formData.set('account[note]', this.note);
+        formData.set('account[account_number]', this.account_number);
+        formData.set('account[routing_number]', this.routing_number);
+
         if (this.opened_on) {
             formData.set('account[opened_on]', this.ymd(this.opened_on));
         }
 
         if (this.closed_on) {
             formData.set('account[closed_on]', this.ymd(this.closed_on));
-        }
-
-        if (this.url) {
-            formData.set('account[url]', this.url);
-        }
-
-        if (this.note) {
-            formData.set('account[note]', this.note);
         }
 
         if (this.logo_upload) {
