@@ -353,6 +353,7 @@ export class TransactionFormComponent implements OnInit {
         this.autocompleteCandidates$ = this.payee.valueChanges.pipe(
             debounceTime(300),
             switchMap((value) => {
+                if (value === '') return of([])
                 return this.transactionService
                     .getTransactions(0, 0, '', `payee:${value}`, 3, 'active')
                     .pipe(

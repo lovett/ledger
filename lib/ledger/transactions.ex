@@ -90,11 +90,14 @@ defmodule Ledger.Transactions do
   end
 
   @spec filter_search(search:: String.t()) :: Ecto.Query.t()
-  def filter_search(search \\ "") do
-    if search == "" do
-      dynamic(true)
-    else
-      dynamic([t], t.id in subquery(from(row in Fts, select: row.id, where: fragment("transactions_fts MATCH ?", ^fts_escape(search)))))
+  def filter_search(search) do
+    cond do
+      search == "" -> dynamic(true)
+      String.ends_with?(search, ":") -> dynamic(false)
+      true -> dynamic(
+                [t],
+                t.id in subquery(from(row in Fts, select: row.id, where: fragment("transactions_fts MATCH ?", ^fts_escape(search))))
+              )
     end
   end
 
