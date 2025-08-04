@@ -354,7 +354,7 @@ export class TransactionFormComponent implements OnInit {
             debounceTime(300),
             switchMap((value) => {
                 return this.transactionService
-                    .getTransactions(0, 0, '', `payee:${value}`, 3)
+                    .getTransactions(0, 0, '', `payee:${value}`, 3, 'active')
                     .pipe(
                         catchError((error: Error) => {
                             return of([]);

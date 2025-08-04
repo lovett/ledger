@@ -18,6 +18,7 @@ defmodule LedgerWeb.TransactionController do
       search: Map.get(params, "query", ""),
       offset: String.to_integer(Map.get(params, "offset", "0")),
       limit: String.to_integer(Map.get(params, "limit", "100")),
+      account_scope: Map.get(params, "account_scope", ""),
     }
 
     transactions = Transactions.list_transactions(filter)

@@ -28,6 +28,7 @@ defmodule Ledger.Transactions do
     query = from base_query(filter.tag),
                  select: [:id, :occurred_on, :cleared_on, :amount, :payee, :note, :account_id, :destination_id, :receipt_mime],
                  where: ^filter_account(filter),
+                 where: ^filter_account_scope(filter),
                  where: ^filter_search(filter.search),
                  order_by: [desc: :occurred_on],
                  order_by: [desc: :inserted_at],
@@ -74,6 +75,18 @@ defmodule Ledger.Transactions do
     else
       dynamic([t], t.account_id == ^filter.account.id or t.destination_id == ^filter.account.id)
     end
+  end
+
+  @spec filter_account_scope(%TransactionFilter{}) :: Ecto.Query.t()
+  def filter_account_scope(%{account_scope: "active"}) do
+    accounts = from(row in Account, select: row.id, where: is_nil(row.closed_on))
+    dynamic([t],
+            t.account_id in subquery(accounts) or is_nil(t.account_id)
+            and t.destination_id in subquery(accounts) or is_nil(t.destination_id))
+  end
+
+  def filter_account_scope(%{}) do
+    dynamic(true)
   end
 
   @spec filter_search(search:: String.t()) :: Ecto.Query.t()

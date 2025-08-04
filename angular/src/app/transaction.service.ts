@@ -79,6 +79,7 @@ export class TransactionService {
         tag = '',
         query = '',
         limit = 0,
+        account_scope = 'all'
     ): Observable<TransactionList> {
         let params = new HttpParams();
 
@@ -92,6 +93,8 @@ export class TransactionService {
 
         if (account_id > 0) {
             params = params.set('account_id', account_id);
+        } else {
+            params = params.set('account_scope', account_scope);
         }
 
         if (tag) {
