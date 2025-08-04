@@ -14,14 +14,10 @@ form {
 }
 
 .autocomplete .candidates {
-    position: relative;
-    display: inline-block;
-    margin: -1em auto;
-    padding: 1em;
-    border-radius: .5em;
-    font-size: .85em;
     background-color: #f9eae1;
-    border: 1px solid #333;
+    width: 100%;
+    padding: 1em;
+    position: relative;
 }
 
 .autocomplete .candidates .candidate {

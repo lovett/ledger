@@ -26,6 +26,40 @@
 <form (ngSubmit)="save()" [formGroup]="transactionForm" autocomplete="off">
     <input type="hidden" formControlName="id" />
 
+    @if (autocompleteCandidates$ | async; as candidates) {
+
+    @if (candidates.length > 0) {
+    <div class="autocomplete double-wide">
+        <div class="candidates">
+            <a class="close" href="#" (click)="hideAutocompleteCandidates($event)">
+                <svg class="icon"><use xlink:href="#close"></use></svg>
+            </a>
+
+            <strong>Similar Transactions</strong>
+            @for (transaction of candidates; track transaction.id) {
+            <div class="candidate">
+                <a href="#" (click)="autocomplete($event, transaction)">
+                    {{ transaction.amount|currency }}
+
+
+                    @if (transaction.account) {
+                    from {{ transaction.account.name }}
+                    }
+
+                    @if (transaction.destination) {
+                    to {{ transaction.destination.name }}
+                    }
+
+                    for {{ transaction.payee }}
+                </a>
+            </div>
+            }
+        </div>
+    </div>
+    }
+    }
+
+
     <div>
         <app-label [control]="payee" text="Payee" />
         <input id="payee" type="text" formControlName="payee" />
@@ -35,47 +69,6 @@
         <app-label [control]="amount" text="Amount" />
         <input id="amount" type="number" formControlName="amount" pattern="[0-9.]*" min="0.01" step=".01" required />
     </div>
-
-    @if (autocompleteCandidates$ | async; as candidates) {
-    @if (candidates.length > 0) {
-    <div class="autocomplete double-wide">
-        <div class="candidates">
-            <a class="close" href="#" (click)="hideAutocompleteCandidates($event)">
-                <svg class="icon"><use xlink:href="#close"></use></svg>
-            </a>
-
-            <strong>Autocomplete from:</strong>
-            @for (transaction of candidates; track transaction.id) {
-            <div class="candidate">
-                <span>
-                    <a href="#" (click)="autocomplete($event, transaction)">
-                        {{ transaction.payee }}
-                    </a>: {{ transaction.amount|currency }}
-
-                    @if (transaction.destination) {
-                    to {{ transaction.destination.name }}
-                    }
-
-                    @if (transaction.account) {
-                    from {{ transaction.account.name }}
-                    }
-
-                    on {{ transaction.occurred_on|date:'longDate' }}
-                </span>
-
-                @if (transaction.delimitedTags) {
-                <span>
-                    <svg class="icon"><use xlink:href="#tag"></use></svg>
-                    {{ transaction.delimitedTags }}
-                </span>
-                }
-            </div>
-            }
-        </div>
-    </div>
-    }
-    }
-
 
     <div>
         <app-account-menu
