@@ -16,7 +16,7 @@ import { Account } from '../account';
 import { Tag } from '../tag';
 import { TransactionService } from '../transaction.service';
 import { TagService } from '../tag.service';
-import { Observable, switchMap, debounceTime, of, catchError, map } from 'rxjs';
+import { Observable, switchMap, debounceTime, distinctUntilChanged, of, catchError, map } from 'rxjs';
 import { ButtonComponent } from '../button/button.component';
 import { AccountMenuComponent } from '../account-menu/account-menu.component';
 import { LabelComponent } from '../label/label.component';
@@ -149,6 +149,14 @@ export class TransactionFormComponent implements OnInit {
                 );
             }),
         );
+
+        this.amount.valueChanges.pipe(
+            debounceTime(300),
+            distinctUntilChanged()
+        ).subscribe(value => {
+            const filteredValue = value.replace(/[^0-9.]/g, '');
+            this.amount.setValue(filteredValue);
+        });
     }
 
     get id() {
