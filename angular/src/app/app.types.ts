@@ -75,9 +75,10 @@ export type TransactionRecord = {
     tags: TagRecord[];
 };
 
-export type TransactionList = [Transaction[], number, TransactionFilter?];
+export type TransactionList = [Transaction[], number, number, TransactionFilter?];
 
 
 export type TransactionListResponse = ApiResponse<TransactionRecord[]> & {
     filter?: TransactionFilter;
+    count_future: number;
 };

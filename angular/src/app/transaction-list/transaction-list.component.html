@@ -51,6 +51,10 @@
         @if (hasPending && selections.length > 0) {
         <a href="#" (click)="select('not-pending', $event)">Unselect pending</a>
         }
+
+        @if (futureCount > 0 && paging.offset === 0) {
+        <a href="#" (click)="toggleFuture($event)">{{ canShowFuture ? 'Hide' : 'Show' }} {{ futureCount }} future {{ futureCount === 1 ? 'transaction' : 'transactions' }}</a>
+        }
     </div>
 </ng-template>
 
@@ -78,7 +82,7 @@
     </div>
 </header>
 
-<table #tableRef>
+<table #tableRef [class]="{showFuture: canShowFuture}">
     @for (transaction of (transactions$ | async); track transaction.id) {
 
     @if ($first) {
@@ -92,6 +96,7 @@
             </th>
         </tr>
     </thead>
+
     <thead>
         <tr>
             <th></th>
@@ -104,6 +109,7 @@
         </tr>
     </thead>
     }
+
     <tr [class]="transaction.rowClasses">
         <td><input type="checkbox" (click)="toggleSelection(transaction)" [checked]="transaction.selected" /></td>
         <td>

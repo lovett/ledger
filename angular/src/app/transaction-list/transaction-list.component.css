@@ -165,6 +165,14 @@ TABLE TR.selected TD {
     background-color: lemonchiffon;
 }
 
+TABLE TR.future {
+    display: none;
+}
+
+TABLE.showFuture TR.future {
+    display: table-row;
+}
+
 .selection-summary > div {
     padding: 1em 0;
 }

@@ -61,6 +61,8 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     filters: FilterTuple[] = [];
     canRestorePreviousFilter = false;
     selectionSubscription?: Subscription;
+    futureCount = 0;
+    canShowFuture = false;
 
     constructor(
         private transactionService: TransactionService,
@@ -120,9 +122,10 @@ export class TransactionListComponent implements OnInit, OnDestroy {
                             this.paging = new Paging(
                                 data[0].length,
                                 data[1],
-                                data[2]?.offset || 0,
+                                data[3]?.offset || 0,
                             );
-                            this.setFilters(data[2]);
+                            this.futureCount = data[2];
+                            this.setFilters(data[3]);
                         }
                     }),
                     map((data) => (data.length > 0 ? data[0] : [])),
@@ -249,6 +252,11 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         for (const checkbox of checkboxes) {
             checkbox.click();
         }
+    }
+
+    toggleFuture(event?: MouseEvent) {
+        if (event) event.preventDefault();
+        this.canShowFuture = !this.canShowFuture;
     }
 
     /**

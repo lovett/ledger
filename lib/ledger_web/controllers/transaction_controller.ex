@@ -23,7 +23,8 @@ defmodule LedgerWeb.TransactionController do
 
     transactions = Transactions.list_transactions(filter)
     count = Transactions.count_transactions(filter)
-    render(conn, :index, transactions: transactions, count: count, filter: filter)
+    count_future = Transactions.count_future_transactions(filter)
+    render(conn, :index, transactions: transactions, count: count, count_future: count_future, filter: filter)
   end
 
   def create(conn, %{"transaction" => transaction_params}) do

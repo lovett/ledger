@@ -68,6 +68,26 @@ defmodule Ledger.Transactions do
     Repo.one query
   end
 
+  @doc """
+  Returns a count of transactions that occur in the future.
+
+  ## Examples
+
+      iex> count_future_transactions()
+      1
+
+  """
+  @spec count_future_transactions(filter:: %TransactionFilter{}) :: Ecto.Query.t()
+  def count_future_transactions(filter) do
+    query = from t in base_query(filter.tag),
+                 select: count(),
+                 where: ^filter_account(filter),
+                 where: ^filter_search(filter.search),
+                 where: t.occurred_on > ^Date.utc_today()
+    Repo.one query
+  end
+
+
   @spec filter_account(%TransactionFilter{}) :: Ecto.Query.t()
   def filter_account(filter) do
     if is_nil(filter.account) do

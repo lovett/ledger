@@ -113,7 +113,8 @@ export class TransactionService {
                         Transaction.fromRecord(record),
                     );
                     const count = response.count;
-                    return [transactions, count, response.filter];
+                    const count_future = response.count_future;
+                    return [transactions, count, count_future, response.filter];
                 }),
             );
     }

@@ -10,7 +10,7 @@ import {
     ValidationErrors,
 } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
-import { CurrencyPipe, DatePipe, AsyncPipe, formatDate } from '@angular/common';
+import { CurrencyPipe, AsyncPipe, formatDate } from '@angular/common';
 import { Transaction } from '../transaction';
 import { Account } from '../account';
 import { Tag } from '../tag';
@@ -54,7 +54,6 @@ function dateRange(group: AbstractControl): ValidationErrors | null {
         LabelComponent,
         RouterLink,
         CurrencyPipe,
-        DatePipe,
         AsyncPipe,
     ],
     templateUrl: './transaction-form.component.html',
