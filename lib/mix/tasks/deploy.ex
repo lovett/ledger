@@ -4,9 +4,9 @@ defmodule Mix.Tasks.Deploy do
   @moduledoc """
   Run this task after `mix build.app` to perform a 2-step deployment.
 
-  Two arguments are required:
-    - container_registry: The destination for `podman push`
-    - remote_host: The place to run `podman pull`
+  Two environment variables are required:
+    - LEDGER_CONTAINER_REGISTRY: The destination for `podman push`
+    - LEDGER_REMOTE_HOST: The place to run `podman pull`
 
   Step one is to get the local application image over to the
   designated container registry.
@@ -46,13 +46,32 @@ defmodule Mix.Tasks.Deploy do
 
   """
 
+  @podman_auth_path ".config/containers/auth.json"
+
   use Mix.Task
 
-  def run([container_registry, remote_host]) do
-    run(["prod", container_registry, remote_host])
+  def run([]) do
+    run(["prod"])
   end
 
-  def run([mix_env, container_registry, remote_host]) do
+  def run([mix_env]) do
+    container_registry = System.get_env("LEDGER_CONTAINER_REGISTRY")
+    remote_host = System.get_env("LEDGER_REMOTE_HOST")
+
+    if is_nil(container_registry) do
+      IO.puts(:stderr, "LEDGER_CONTAINER_REGISTRY is not set. Cannot continue.")
+      exit(:missing_env)
+    end
+
+    if is_nil(remote_host) do
+      IO.puts(:stderr, "LEDGER_REMOTE_HOST is not set. Cannot continue.")
+      exit(:missing_env)
+    end
+
+    home = System.get_env("HOME")
+    local_auth_path = "#{home}/#{@podman_auth_path}"
+    remote_auth_path = "/root/#{@podman_auth_path}"
+
     version = Application.spec(:ledger, :vsn)
     |> List.to_string()
     |> String.replace("+", ".")
@@ -60,6 +79,8 @@ defmodule Mix.Tasks.Deploy do
     # This version tag is just for reference.
     System.cmd("podman", [
       "push",
+      "--authfile",
+      local_auth_path,
       "ledger:#{mix_env}-#{version}",
       "#{container_registry}/ledger:#{mix_env}-#{version}",
     ],
@@ -70,6 +91,8 @@ defmodule Mix.Tasks.Deploy do
     # The latest tag is what is referenced by the Quadlet file.
     System.cmd("podman", [
       "push",
+      "--authfile",
+      local_auth_path,
       "ledger:#{mix_env}-#{version}",
       "#{container_registry}/ledger:latest",
     ],
@@ -99,7 +122,7 @@ defmodule Mix.Tasks.Deploy do
 
     System.cmd(
       "ssh",
-      [remote_host, "sudo podman pull ledger"],
+      [remote_host, "sudo podman pull --authfile=#{remote_auth_path} ledger"],
       into: IO.stream(),
       stderr_to_stdout: true
     )
