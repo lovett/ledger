@@ -34,6 +34,7 @@ defmodule Mix.Tasks.Deploy do
   ```
   [Image]
   Image=my-container-registry.example.com/myusername/ledger:latest
+  RetryDelay=5s
   ```
 
   If the registry runs on the same host and is itself a container, add:
