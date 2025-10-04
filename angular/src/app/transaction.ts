@@ -81,7 +81,6 @@ export class Transaction {
                 account_id: this.account?.id,
                 destination_id: this.destination?.id,
             },
-            note: this.note,
             tags: this.delimitedTags,
         };
     }
