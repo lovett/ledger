@@ -1,4 +1,8 @@
-FROM registry.fedoraproject.org/fedora-minimal:42
+# Actual FROM is provided via command-line flag. See base.ex.
+#
+# Scratch is only used as a placeholder to avoid the error "stage 1
+# requires a FROM instruction".
+FROM scratch
 
 RUN microdnf -y install glibc-langpack-en --nodocs --setopt install_weak_deps=False && \
     microdnf -y clean all && \

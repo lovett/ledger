@@ -29,14 +29,26 @@ defmodule Mix.Tasks.Build.Base do
   """
   use Mix.Task
 
-  def run(_args) do
+  def run([]) do
+    from = "registry.fedoraproject.org/fedora-minimal:42"
     System.cmd("podman", [
       "build",
-      "-f",
-      "Containerfile-base",
-      "-t",
-      "ledger-base",
+      "--from=#{from}",
+      "--inherit-labels=false",
+      "-f=Containerfile-base",
+      "-t=ledger-base",
+	  "--label",
+      "org.opencontainers.image.base.name=#{from}",
       "."
+    ],
+      into: IO.stream(),
+      stderr_to_stdout: true
+    )
+
+    System.cmd("podman", [
+      "image",
+      "prune",
+      "-f"
     ],
       into: IO.stream(),
       stderr_to_stdout: true

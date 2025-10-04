@@ -40,12 +40,23 @@ defmodule Mix.Tasks.Build.App do
   end
 
   def run(args) do
+    Mix.Task.run("app.start")
+
     mix_env = hd(args)
     version = Application.spec(:ledger, :vsn)
     |> List.to_string()
     |> String.replace("+", ".")
 
-    System.cmd("mix", ["deps.get", "--only", "prod"],
+    tz = Application.fetch_env!(:ledger, :timezone)
+
+    now = Timex.now(tz)
+    |> Timex.format!("{YYYY}-{0M}-{0D} {h24}:{m}:{s}{Z:}")
+
+    revision = System.cmd("git", ["rev-parse", "HEAD"])
+    |> elem(0)
+    |> String.trim
+
+    System.cmd("mix", ["deps.get", "--only=prod"],
       into: IO.stream(),
       stderr_to_stdout: true
     )
@@ -69,17 +80,47 @@ defmodule Mix.Tasks.Build.App do
 
     System.cmd("podman", [
       "build",
-      "-f",
-      "Containerfile-app",
-      "-t",
-      "ledger:#{mix_env}-#{version}",
-      "-t",
-      "ledger:#{mix_env}",
+      "-f=Containerfile-app",
+      "-t=ledger:#{mix_env}-#{version}",
+      "-t=ledger:#{mix_env}",
+	  "--label",
+      "org.opencontainers.image.created=#{now}",
+	  "--label",
+      "org.opencontainers.image.description=A web application for balance tracking and financial history.",
+	  "--label",
+      "org.opencontainers.image.version=#{version}",
+	  "--label",
+      "org.opencontainers.image.revision=#{revision}",
+	  "--label",
+      "org.opencontainers.image.title=ledger",
+	  "--label",
+      "org.opencontainers.image.url=https://github.com/lovett/ledger",
       "."
     ],
       into: IO.stream(),
       stderr_to_stdout: true
     )
 
+    IO.puts("\n\nPruning images...")
+
+    System.cmd("podman", [
+      "image",
+      "prune",
+      "-f"
+    ],
+      into: IO.stream(),
+      stderr_to_stdout: true
+    )
+
+    IO.puts("\n\nLabels:")
+    System.cmd("podman", [
+      "image",
+      "inspect",
+      "--format={{range $key, $value := .Config.Labels}}{{$key}}: {{$value}}\n{{end}}",
+      "ledger:#{mix_env}-#{version}"
+      ],
+        into: IO.stream(),
+        stderr_to_stdout: true
+    )
   end
 end
