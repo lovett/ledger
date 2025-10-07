@@ -4,7 +4,10 @@
 # requires a FROM instruction".
 FROM scratch
 
-RUN microdnf -y install glibc-langpack-en --nodocs --setopt install_weak_deps=False && \
+RUN rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo && \
+    rm -f /etc/yum.repos.d/fedora-updates-testing.repo && \
+    rm -f /etc/yum.repos.d/fedora-updates.repo && \
+    microdnf -y install glibc-langpack-en --nodocs --setopt install_weak_deps=False && \
     microdnf -y clean all && \
     echo "LANG=\"en_US.UTF-8\"" > /etc/locale.conf
 
