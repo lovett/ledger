@@ -204,16 +204,6 @@ export class TransactionFormComponent implements OnInit {
             Intl.DateTimeFormat().resolvedOptions().locale,
         );
     }
-    get yesterday() {
-        const d = new Date();
-        d.setDate(d.getDate() - 1);
-        return formatDate(
-            d,
-            'yyyy-MM-dd',
-            Intl.DateTimeFormat().resolvedOptions().locale,
-        );
-    }
-
     clearShortcut(event: Event, field: string) {
         event.preventDefault();
         this.transactionForm.get(field)?.reset();
@@ -226,9 +216,34 @@ export class TransactionFormComponent implements OnInit {
         this.transactionForm.markAsDirty();
     }
 
-    yesterdayShortcut(event: Event, field: string) {
+    dayStepShortcut(event: Event, fieldName: string, step: number) {
         event.preventDefault();
-        this.transactionForm.get(field)?.setValue(this.yesterday);
+
+        const field = this.transactionForm.get(fieldName);
+        if (!field) {
+            return;
+        }
+
+        let fieldDate;
+        if (field.value.trim() === '') {
+            fieldDate = new Date();
+        } else {
+            fieldDate = new Date(field.value);
+        }
+
+        const newDate = new Date(
+            fieldDate.getUTCFullYear(),
+            fieldDate.getUTCMonth(),
+            fieldDate.getUTCDate() + step
+        );
+
+        const newDateFormatted = formatDate(
+            newDate,
+            'yyyy-MM-dd',
+            Intl.DateTimeFormat().resolvedOptions().locale,
+        );
+
+        field.setValue(newDateFormatted);
         this.transactionForm.markAsDirty();
     }
 
