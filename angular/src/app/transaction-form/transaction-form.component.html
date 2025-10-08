@@ -91,8 +91,8 @@
         <input id="occurredOn" type="date" formControlName="occurred_on" />
         <div class="shortcuts">
             <a href="#" (click)="todayShortcut($event, 'occurred_on')">Today</a>
-            <a href="#" (click)="dayStepShortcut($event, 'occurred_on', -1)">Backward 1 Day</a>
-            <a href="#" (click)="dayStepShortcut($event, 'occurred_on', 1)">Forward 1 Day</a>
+            <a href="#" (click)="dayStepShortcut($event, 'occurred_on', -1)">Back</a>
+            <a href="#" (click)="dayStepShortcut($event, 'occurred_on', 1)">Forward</a>
         </div>
     </div>
 
@@ -101,8 +101,8 @@
         <input id="clearedOn" type="date" formControlName="cleared_on" />
         <div class="shortcuts">
             <a href="#" (click)="todayShortcut($event, 'cleared_on')">Today</a>
-            <a href="#" (click)="dayStepShortcut($event, 'cleared_on', -1)">Backward 1 Day</a>
-            <a href="#" (click)="dayStepShortcut($event, 'cleared_on', 1)">Forward 1 Day</a>
+            <a href="#" (click)="dayStepShortcut($event, 'cleared_on', -1)">Back</a>
+            <a href="#" (click)="dayStepShortcut($event, 'cleared_on', 1)">Forward</a>
             <a href="#" (click)="clearShortcut($event, 'cleared_on')">Clear</a>
         </div>
     </div>
