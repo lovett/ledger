@@ -82,118 +82,121 @@
     </div>
 </header>
 
-<table #tableRef [class]="{showFuture: canShowFuture}">
-    @for (transaction of (transactions$ | async); track transaction.id) {
+<div class="sleeve">
+    <table #tableRef [class]="{showFuture: canShowFuture}">
+        @for (transaction of (transactions$ | async); track transaction.id) {
 
-    @if ($first) {
-    <thead>
-        <tr>
-            <th colspan="7">
-                <div>
-                    <ng-container [ngTemplateOutlet]="selectorsFragment"></ng-container>
-                    <ng-container [ngTemplateOutlet]="countsFragment"></ng-container>
-                </div>
-            </th>
-        </tr>
-    </thead>
+        @if ($first) {
+        <thead>
+            <tr>
+                <th colspan="7">
+                    <div>
+                        <ng-container [ngTemplateOutlet]="selectorsFragment"></ng-container>
+                        <ng-container [ngTemplateOutlet]="countsFragment"></ng-container>
+                    </div>
+                </th>
+            </tr>
+        </thead>
 
-    <thead>
-        <tr>
-            <th></th>
-            <th>ID</th>
-            <th class="align-left">Date</th>
-            <th class="align-left">Account</th>
-            <th class="align-left">Details</th>
-            <th class="align-right">Amount</th>
-            <th class="align-center">Status</th>
-        </tr>
-    </thead>
-    }
-
-    <tr [class]="transaction.rowClasses">
-        <td><input type="checkbox" (click)="toggleSelection(transaction)" [checked]="transaction.selected" /></td>
-        <td>
-            <a [routerLink]="['/transactions', transaction.id, 'edit']">{{ transaction.id }}</a>
-        </td>
-        <td class="nowrap">
-            {{ transaction.occurred_on|date:'longDate' }}
-        </td>
-        <td class="nowrap">
-            @if (transaction.account) {
-            <a [routerLink]="[]" [queryParams]="{account_id: transaction.account.id}" queryParamsHandling="merge">
-                {{ transaction.account.name }}
-            </a>
-            }
-
-            @if (transaction.isTransfer) {
-            <div>↓</div>
-            }
-
-            @if (transaction.destination) {
-            <a [routerLink]="[]" [queryParams]="{account_id: transaction.destination.id}" queryParamsHandling="merge">
-                {{ transaction.destination.name }}
-            </a>
-            }
-        </td>
-        <td>
-            @if (transaction.payee) {
-            <p><a [routerLink]="[]" [queryParams]="{query: 'payee:' + transaction.payee}" queryParamsHandling="merge">{{ transaction.payee }}</a></p>
-            } @else {
-            <p>No payee</p>
-            }
-
-            @if (transaction.note) {
-            <p><em>{{ transaction.note }}</em></p>
-            }
-
-            <ul class="tag-list">
-                @for (tag of transaction.tags; track tag.id) {
-                <li>
-                    @if ($first) {
-                    <svg class="icon"><use xlink:href="#tag"></use></svg>
-                    }
-                    <a [routerLink]="['/transactions']"
-                       [queryParams]="{tag: tag.name}"
-                       queryParamsHandling="merge">{{ tag.name }}</a>
-                </li>
-                }
-            </ul>
-        </td>
-        <td class="align-right nowrap">
-            {{ transaction.amount | currency }}
-            <div class="transaction-type">{{ transaction.transactionType }}</div>
-            @if (transaction.receipt_mime) {
-            <div class="receipt">
-                <svg class="icon"><use xlink:href="#scroll"></use></svg>
-                <a target="_blank" href="{{ transaction.receiptUrl }}">Receipt</a>
-            </div>
-            }
-        </td>
-        <td class="align-center">
-            @if (transaction.cleared_on) {
-            <div class="minibanner">Cleared</div>
-            } @else if (transaction.isFuture) {
-            <div class="minibanner">Future</div>
-            } @else {
-            <div class="minibanner">Pending</div>
-            <p><a href="#" (click)="clearTransaction($event, transaction)">Clear</a></p>
-            }
-        </td>
-    </tr>
-    } @empty {
-    <tr class="empty">
-        @if (!loading) {
-        <td>
-            <p>Nothing found.</p>
-
-            @if (route.snapshot.queryParamMap.keys.length > 0) {
-            <p><a href="#" (click)="clearFilter('all', $event)">View all transactions</a></p>
-            }
-        </td>
+        <thead>
+            <tr>
+                <th></th>
+                <th class="align-right">ID</th>
+                <th class="align-right">Amount</th>
+                <th class="align-left">Details</th>
+                <th class="align-left">Account</th>
+                <th class="align-right">Date</th>
+                <th class="align-center">Status</th>
+            </tr>
+        </thead>
         }
-    </tr>
-    }
-</table>
+
+        <tr [class]="transaction.rowClasses">
+            <td><input type="checkbox" (click)="toggleSelection(transaction)" [checked]="transaction.selected" /></td>
+            <td class="align-right nowrap">
+                <a [routerLink]="['/transactions', transaction.id, 'edit']">{{ transaction.id }}</a>
+            </td>
+            <td class="align-right nowrap">
+                {{ transaction.amount | currency }}
+                <div class="transaction-type">{{ transaction.transactionType }}</div>
+                @if (transaction.receipt_mime) {
+                <div class="receipt">
+                    <svg class="icon"><use xlink:href="#scroll"></use></svg>
+                    <a target="_blank" href="{{ transaction.receiptUrl }}">Receipt</a>
+                </div>
+                }
+            </td>
+            <td>
+                @if (transaction.payee) {
+                <p><a [routerLink]="[]" [queryParams]="{query: 'payee:' + transaction.payee}" queryParamsHandling="merge">{{ transaction.payee }}</a></p>
+                } @else {
+                <p>No payee</p>
+                }
+
+                @if (transaction.note) {
+                <p><em>{{ transaction.note }}</em></p>
+                }
+
+                <ul class="tag-list">
+                    @for (tag of transaction.tags; track tag.id) {
+                    <li>
+                        @if ($first) {
+                        <svg class="icon"><use xlink:href="#tag"></use></svg>
+                        }
+                        <a [routerLink]="['/transactions']"
+                           [queryParams]="{tag: tag.name}"
+                           queryParamsHandling="merge">{{ tag.name }}</a>
+                    </li>
+                    }
+                </ul>
+            </td>
+            <td class="nowrap">
+                @if (transaction.account) {
+                <a [routerLink]="[]" [queryParams]="{account_id: transaction.account.id}" queryParamsHandling="merge">
+                    {{ transaction.account.name }}
+                </a>
+                }
+
+                @if (transaction.isTransfer) {
+                <div>↓</div>
+                }
+
+                @if (transaction.destination) {
+                <a [routerLink]="[]" [queryParams]="{account_id: transaction.destination.id}" queryParamsHandling="merge">
+                    {{ transaction.destination.name }}
+                </a>
+                }
+            </td>
+            <td class="align-right">
+                {{ transaction.occurred_on|date:'yyyy\-MM\-dd' }}
+            </td>
+
+            <td class="align-center">
+                @if (transaction.cleared_on) {
+                <div class="minibanner">Cleared</div>
+                } @else if (transaction.isFuture) {
+                <div class="minibanner">Future</div>
+                } @else {
+                <div class="minibanner">Pending</div>
+                <p><a href="#" (click)="clearTransaction($event, transaction)">Clear</a></p>
+                }
+            </td>
+        </tr>
+        } @empty {
+        <tr class="empty">
+            @if (!loading) {
+            <td>
+                <p>Nothing found.</p>
+
+                @if (route.snapshot.queryParamMap.keys.length > 0) {
+                <p><a href="#" (click)="clearFilter('all', $event)">View all transactions</a></p>
+                }
+            </td>
+            }
+        </tr>
+        }
+    </table>
+</div>
 
 @if (paging.total > 0) {
 <div class="pager">

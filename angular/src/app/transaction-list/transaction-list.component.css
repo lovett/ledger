@@ -176,3 +176,7 @@ TABLE.showFuture TR.future {
 .selection-summary > div {
     padding: 1em 0;
 }
+
+.sleeve {
+    overflow: scroll;
+}
