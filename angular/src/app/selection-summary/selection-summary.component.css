@@ -1,9 +1,11 @@
 aside {
+    text-align: left;
     background-color: lemonchiffon;
     border: 1px solid #e6c700;
-    padding: 0 1em;
+    padding: 0 0.5em;
     position: relative;
     box-sizing: border-box;
+    margin-bottom: 2em;
 }
 
 .close {
@@ -12,4 +14,8 @@ aside {
     right: 0.25em;
     font-size: 1.25em;
     text-decoration: none;
+}
+
+aside > div {
+    padding: 0.5em 0;
 }

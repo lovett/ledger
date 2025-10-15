@@ -227,10 +227,6 @@ TABLE.showFuture TR.future {
     display: table-row;
 }
 
-.selection-summary > div {
-    padding: 1em 0;
-}
-
 .sleeve {
     overflow: scroll;
 }
