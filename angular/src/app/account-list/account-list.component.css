@@ -1,3 +1,25 @@
+#app-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1em;
+    align-items: end;
+    justify-content: space-between;
+    grid-template-areas:
+        "title action";
+}
+
+#app-header h1 {
+    margin: 0;
+    padding: 0;
+    grid-area: title;
+}
+
+#app-header app-button {
+    grid-area: action;
+    justify-self: end;
+}
+
+
 @media (min-width: 850px) {
     .cards {
         display: grid;

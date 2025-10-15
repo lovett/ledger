@@ -66,9 +66,8 @@ h1 + .cancel .icon {
 }
 
 header {
-    margin-bottom: 3em;
+    margin-bottom: 2em;
     display: grid;
-    justify-content: center;
 }
 
 @media (max-width: 850px) {
@@ -86,23 +85,13 @@ header {
     }
 }
 
-header h1 {
-    display: none;
-}
-
-@media (min-width: 850px) {
-    header h1 {
-        display: block;
-    }
-}
-
-@media (min-width: 850px) {
-    header > *:last-child:not(:first-child) {
-        display: grid;
-        justify-items: end;
-        gap: 1em;
-    }
-}
+/* @media (min-width: 850px) { */
+/*     header > *:last-child:not(:first-child) { */
+/*         display: grid; */
+/*         justify-items: end; */
+/*         gap: 1em; */
+/*     } */
+/* } */
 
 input,
 select,

@@ -6,17 +6,6 @@ fieldset {
     gap: 1em;
 }
 
-input[type="search"] ~ button {
-    border-radius: 0;
-    border: 1px solid #333;
-    padding: 0.25em 1em;
-}
-
-input[type="search"] ~ button svg {
-    width: 1.5em;
-    height: 1.5em;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
@@ -105,32 +94,97 @@ td .tag-list LI .icon {
 }
 
 .pager {
-    padding: 1em 0;
     display: flex;
     justify-content: center;
     gap: 1em;
 }
 
-.filters {
+#app-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1em;
+    align-items: end;
+    justify-content: space-between;
+    grid-template-areas:
+        "title action"
+        "counts counts"
+        "filters filters"
+        "search search";
+}
+
+@media (min-width: 850px) {
+    #app-header {
+        grid-template-areas:
+            "title action"
+            "counts counts"
+            "filters search";
+    }
+}
+#app-header h1 {
+    margin: 0;
+    padding: 0;
+    grid-area: title;
+}
+
+#app-header app-button {
+    grid-area: action;
+    justify-self: end;
+}
+
+#app-header form {
+    grid-area: search;
+}
+
+#app-header .counts {
+    grid-area: counts;
+}
+
+#filters {
+    grid-area: filters;
     list-style-type: none;
-    margin-left: 0;
+    margin: 0;
     padding: 0;
 }
 
-.filters li {
-    padding-bottom: .5em;
+@media (min-width: 850px) {
+    #filters {
+        font-size: inherit;
+    }
 }
 
-.filters li a:last-child:not(:first-child) {
-    margin-left: 1em;
+#filters li {
+    margin-bottom: 0.5em;
+    display: flex;
+    align-items: center;
 }
 
-.filters .name {
+#filters .name {
+    font-style: italic;
+    padding: 0 0.5em;
+}
+
+#filters .value {
+    padding: 0 0.5em;
     font-weight: bold;
 }
 
-.filters .value {
-    font-style: italic;
+#filters .remove {
+    margin-right: 0.5em;
+    display: flex;
+    gap: 0 0.5em;
+    align-items: center;
+
+}
+
+#filters .remove .icon {
+    color: red;
+}
+
+@media (min-width: 850px) {
+    #filters .value {
+        display: inline;
+        margin-left: 0;
+    }
 }
 
 .receipt {

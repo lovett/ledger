@@ -1,36 +1,37 @@
 <ng-template #filtersFragment>
     @if (filters.length === 0 && canRestorePreviousFilter) {
-    <ul class="filters">
+    <ul id="filters">
         <li>Search filters were cleared. <a href="#" (click)="restoreFilters($event)">Restore</a></li>
     </ul>
     }
 
     @if (filters.length > 0) {
-    <ul class="filters">
+    <ul id="filters">
         @for (scope of filters; track scope[0]) {
         <li>
-            @if ($first) {
-            Where
-            } @else {
-            …and
-            }
-            <span class="name">{{ scope[0] }}</span> matches <span class="value">{{ scope[1] }}</span>
             @if (scope[0] == "account") {
-            <a class="remove" href="#" (click)="clearFilter('account', $event)">Remove</a>
+            <a class="remove" href="#" (click)="clearFilter('account', $event)"><svg class="icon"><use xlink:href="#close-circle"></use></svg></a>
             }
 
             @if (scope[0] == "tag") {
-            <a href="#" (click)="clearFilter('tag', $event)">Remove</a>
+            <a class="remove" href="#" (click)="clearFilter('tag', $event)"><svg class="icon"><use xlink:href="#close-circle"></use></svg></a>
             }
 
             @if (scope[0] == "search") {
-            <a href="#" (click)="clearFilter('search', $event)">Remove</a>
+            <a class="remove" href="#" (click)="clearFilter('search', $event)"><svg class="icon"><use xlink:href="#close-circle"></use></svg></a>
             }
+
+            @if ($first) {
+            With
+            } @else {
+            …and
+            }
+            <span class="name">{{ scope[0] }}</span> matching <span class="value">{{ scope[1] }}</span>
         </li>
         }
 
         @if (filters.length > 1) {
-        <li><a href="#" (click)="clearFilter('all', $event)">Remove all</a></li>
+        <li><a class="remove" href="#" (click)="clearFilter('all', $event)"><svg class="icon"><use xlink:href="#filter-off"></use></svg> Remove all filters</a></li>
         }
     </ul>
     }
@@ -58,28 +59,23 @@
     </div>
 </ng-template>
 
-<ng-template #countsFragment>
+<header id="app-header">
+    <h1>Transactions</h1>
+    <ng-container [ngTemplateOutlet]="filtersFragment"></ng-container>
+
+    <app-button label="Add" icon="add" routerLink="/transactions/new"></app-button>
+    <form (ngSubmit)="search()" [formGroup]="searchForm" autocomplete="off">
+        <input (input)="onSearchInput($event)" type="search" formControlName="query" placeholder="Search transactions" />
+    </form>
+
     <div class="counts">
         @if (paging.isVisible) {
-        {{ paging.displayStart | number }} to {{ paging.displayEnd | number }} of {{ paging.total | number }}
+        Showing {{ paging.displayStart | number }} to {{ paging.displayEnd | number }} of {{ paging.total | number }}
         } @else {
-        0 of {{ paging.total | number }}
+        Showing 0 of {{ paging.total | number }}
         }
     </div>
-</ng-template>
 
-<header>
-    <div>
-        <h1>Transactions</h1>
-        <ng-container [ngTemplateOutlet]="filtersFragment"></ng-container>
-    </div>
-
-    <div>
-        <app-button label="Add" icon="add" routerLink="/transactions/new"></app-button>
-        <form (ngSubmit)="search()" [formGroup]="searchForm" autocomplete="off">
-            <input (input)="onSearchInput($event)" type="search" formControlName="query" placeholder="Search transactions" />
-        </form>
-    </div>
 </header>
 
 <div class="sleeve">
@@ -92,7 +88,6 @@
                 <th colspan="7">
                     <div>
                         <ng-container [ngTemplateOutlet]="selectorsFragment"></ng-container>
-                        <ng-container [ngTemplateOutlet]="countsFragment"></ng-container>
                     </div>
                 </th>
             </tr>
