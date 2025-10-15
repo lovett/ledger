@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ErrorMessageComponent } from './error-message/error-message.component';
-import { SelectionSummaryComponent } from './selection-summary/selection-summary.component';
 import { ErrorService } from './error.service';
 import { DraftService } from './draft.service';
 import { ErrorTuple } from './app.types';
@@ -14,7 +13,6 @@ import { ErrorTuple } from './app.types';
         RouterLinkActive,
         RouterOutlet,
         ErrorMessageComponent,
-        SelectionSummaryComponent,
     ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',

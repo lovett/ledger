@@ -1,6 +1,6 @@
 :root {
     --smaller: 0.85em;
-    --big: 2em;
+    --big: 1.75em;
 }
 
 ::backdrop {
@@ -20,7 +20,7 @@ a:hover {
 
 body {
     font-family: system-ui, sans-serif;
-    margin: 0 1em 1em 1em;
+    margin: 0;
 }
 
 @media (min-width: 850px) {
@@ -65,34 +65,6 @@ h1 + .cancel .icon {
     }
 }
 
-header {
-    margin-bottom: 2em;
-    display: grid;
-}
-
-@media (max-width: 850px) {
-    header.snug {
-        margin-bottom: 0;
-    }
-}
-
-@media (min-width: 850px) {
-    header {
-        align-items: center;
-        margin-top: 4em;
-        grid-template-columns: 1fr auto;
-        justify-content: space-between;
-    }
-}
-
-/* @media (min-width: 850px) { */
-/*     header > *:last-child:not(:first-child) { */
-/*         display: grid; */
-/*         justify-items: end; */
-/*         gap: 1em; */
-/*     } */
-/* } */
-
 input,
 select,
 textarea {
@@ -129,16 +101,46 @@ textarea {
     height: 5em;
 }
 
-#app-logo {
-    margin-top: 1em;
-    width: 5em;
+#page-header {
+    display: grid;
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    padding: 0.5em;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    grid-template-areas:
+        "title action"
+        "cancel cancel";
+}
+
+#page-header h1 {
+    margin: 0;
+    padding: 0;
+    grid-area: title;
+    align-items: center;
+    grid-template-columns: 1fr auto;
+    justify-content: space-between;
+}
+
+#page-header app-button {
+    grid-area: action;
+    justify-self: end;
+}
+
+#page-header .cancel {
+    grid-area: cancel;
+}
+
+#page-content {
+    margin: 0 0.5em;
 }
 
 @media (min-width: 850px) {
-    #app-logo {
-        margin-top: 2.5em;
-        width: 5em;
-    }
+    margin: 0;
 }
 
 .icon {

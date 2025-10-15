@@ -1,7 +1,3 @@
 @if (count > 0) {
-<aside>
-    <p>{{ count }} selected</p>
-    <p><strong>{{ amount | currency }}</strong></p>
-    <a href="#" class="close" (click)="clear($event)">×</a>
-</aside>
+<div>{{ count }} selected, <strong>{{ amount | currency }}</strong></div>
 }

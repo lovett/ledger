@@ -59,11 +59,12 @@
     </div>
 </ng-template>
 
-<header id="app-header">
+<header id="page-header">
     <h1>Transactions</h1>
     <ng-container [ngTemplateOutlet]="filtersFragment"></ng-container>
 
     <app-button label="Add" icon="add" routerLink="/transactions/new"></app-button>
+
     <form (ngSubmit)="search()" [formGroup]="searchForm" autocomplete="off">
         <input (input)="onSearchInput($event)" type="search" formControlName="query" placeholder="Search transactions" />
     </form>
@@ -76,23 +77,16 @@
         }
     </div>
 
+    <ng-container [ngTemplateOutlet]="selectorsFragment"></ng-container>
+    <app-selection-summary></app-selection-summary>
+
 </header>
 
-<div class="sleeve">
+<div id="page-content" class="sleeve">
     <table #tableRef [class]="{showFuture: canShowFuture}">
         @for (transaction of (transactions$ | async); track transaction.id) {
 
         @if ($first) {
-        <thead>
-            <tr>
-                <th colspan="7">
-                    <div>
-                        <ng-container [ngTemplateOutlet]="selectorsFragment"></ng-container>
-                    </div>
-                </th>
-            </tr>
-        </thead>
-
         <thead>
             <tr>
                 <th></th>

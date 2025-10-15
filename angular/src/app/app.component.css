@@ -1,70 +1,80 @@
-#shell {
-    margin: auto;
-}
-
-#shell > div:first-child {
-    text-align: center;
-}
-
 @media (min-width: 850px) {
     #shell {
+        margin: auto;
+        padding: 0 1em;
         display: grid;
+        align-items: start;
         grid-column-gap: 1em;
         grid-template-columns: 10em 1fr;
         max-width: 75em;
     }
+}
 
-    #shell > div:first-child {
-        text-align: left;
+#app-nav {
+    background-color: #fff;
+    box-shadow: 0 5px 5px -5px #ccc;
+    position: sticky;
+    top: 0;
+    display: grid;
+    align-items: center;
+    gap: 0 1em;
+    padding: 0 0.5em;
+    grid-template-columns: auto 1fr;
+}
+
+@media (min-width: 850px) {
+    #app-nav {
+        display: block;
+        box-shadow: none;
     }
 }
 
-#shell nav {
-    position: sticky;
-    top: 0;
+#app-logo {
+    width: 3em;
+    display: block;
 }
 
-#shell nav a {
+@media (min-width: 850px) {
+    #app-logo {
+        width: 5em;
+        margin: 0 0 1em 0;
+    }
+}
+
+#app-logo img {
+    width: 100%;
+}
+
+#app-nav ul {
+    justify-self: center;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 0.5em 1.5em;
+    list-style-type: none;
+    justify-content: start;
+    margin: 0;
+    padding: 0.5em 0;
+}
+
+@media (min-width: 850px) {
+    #app-nav ul {
+        gap: 1em;
+        flex-flow: column nowrap;
+    }
+}
+
+#app-nav a {
     text-decoration: none;
 }
 
-#shell nav a.active {
+#app-nav a.active {
     color: currentColor;
     font-weight: bold;
     text-decoration: none;
 }
 
-#shell nav a.active span {
+#app-nav a.active span {
     font-weight: normal;
-}
-
-#shell nav ul {
-    list-style-type: none;
-    margin-left: auto;
-    margin-right: auto;
-    padding-left: 0;
-}
-
-@media (min-width: 850px) {
-    #shell nav ul {
-        display: block;
-    }
-}
-
-#shell nav ul li {
-    display: inline-block;
-    padding: 0.5em;
-}
-
-@media (min-width: 850px) {
-    #shell nav ul li {
-        display: block;
-        padding: 0;
-    }
-}
-
-#shell nav li {
-    margin-bottom: 1em;
 }
 
 #shell > svg {

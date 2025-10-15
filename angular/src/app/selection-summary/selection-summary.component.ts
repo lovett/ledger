@@ -25,9 +25,4 @@ export class SelectionSummaryComponent implements OnInit {
             }
         });
     }
-
-    clear(e: MouseEvent) {
-        e.preventDefault();
-        this.transactionService.selectionSubject.next([]);
-    }
 }

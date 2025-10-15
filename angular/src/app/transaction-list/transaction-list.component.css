@@ -59,8 +59,10 @@ td p {
 }
 
 .selectors {
+    grid-area: selectors;
     display: flex;
     gap: 1em;
+    padding-top: 1em;
 }
 
 .tag-list {
@@ -99,44 +101,45 @@ td .tag-list LI .icon {
     gap: 1em;
 }
 
-#app-header {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    gap: 1em;
-    align-items: end;
-    justify-content: space-between;
+#page-header {
     grid-template-areas:
         "title action"
         "counts counts"
         "filters filters"
-        "search search";
+        "search search"
+        "selectors selectors"
+        "selection-summary selection-summary";
 }
 
 @media (min-width: 850px) {
-    #app-header {
+    #page-header {
         grid-template-areas:
             "title action"
-            "counts counts"
-            "filters search";
+            "counts search"
+            "filters filters"
+            "selectors selection-summary";
     }
 }
-#app-header h1 {
-    margin: 0;
-    padding: 0;
-    grid-area: title;
+
+#page-header app-selection-summary {
+    padding-top: 1em;
+    grid-area: selection-summary;
 }
 
-#app-header app-button {
-    grid-area: action;
-    justify-self: end;
+@media (min-width: 850px) {
+    #page-header app-selection-summary {
+        text-align: right;
+    }
 }
 
-#app-header form {
+#page-header form {
+    padding-top: 1em;
     grid-area: search;
 }
 
-#app-header .counts {
+#page-header .counts {
     grid-area: counts;
+    padding-top: 1em;
 }
 
 #filters {

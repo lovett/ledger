@@ -1,14 +1,12 @@
 @if (showHeader()) {
-<header>
-    <div>
-        @if (id.value > 0) {
-        <h1>Edit Transaction</h1>
-        } @else {
-        <h1>New Transaction</h1>
-        }
+<header id="page-header">
+    @if (id.value > 0) {
+    <h1>Edit Transaction</h1>
+    } @else {
+    <h1>New Transaction</h1>
+    }
 
-        <a class="cancel" [routerLink]="returnRoute"><svg class="icon"><use xlink:href="#arrow" /></svg> Cancel</a>
-    </div>
+    <a class="cancel" [routerLink]="returnRoute"><svg class="icon"><use xlink:href="#arrow" /></svg> Cancel</a>
 
     @if (canDelete()) {
     <app-button
@@ -23,7 +21,7 @@
 </header>
 }
 
-<form (ngSubmit)="save()" [formGroup]="transactionForm" autocomplete="off">
+<form  id="page-content" (ngSubmit)="save()" [formGroup]="transactionForm" autocomplete="off">
     <input type="hidden" formControlName="id" />
 
     @if (autocompleteCandidates$ | async; as candidates) {

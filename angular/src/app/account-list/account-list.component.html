@@ -1,9 +1,9 @@
-<header id="app-header">
+<header id="page-header">
     <h1>Accounts</h1>
     <app-button [routerLink]="'/accounts/new'" label="Add" [icon]="'add'"></app-button>
 </header>
 
-<div class="cards">
+<div id="page-content" class="cards">
     @for (account of (accounts$ | async); track account.id) {
     <div class="card" [class.inactive]="account.closed_on">
         <div class="title">

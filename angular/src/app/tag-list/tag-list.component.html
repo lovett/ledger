@@ -1,21 +1,23 @@
-<header class="snug">
+<header id="page-header">
     <h1>Tags</h1>
 </header>
 
-<ul id="tag-list">
-    @for (tag of (tags$ | async); track tag.id) {
-    <li>
-        <svg class="icon"><use xlink:href="#tag"></use></svg>
-        <a href="#" (click)="selectTag($event, tag)">{{ tag.name }}</a>
-    </li>
-    } @empty {
-    <li>
-        @if (!loading) {
-        Nothing found.
+<div id="page-content">
+    <ul id="tag-list">
+        @for (tag of (tags$ | async); track tag.id) {
+        <li>
+            <svg class="icon"><use xlink:href="#tag"></use></svg>
+            <a href="#" (click)="selectTag($event, tag)">{{ tag.name }}</a>
+        </li>
+        } @empty {
+        <li>
+            @if (!loading) {
+            Nothing found.
+            }
+        </li>
         }
-    </li>
-    }
-</ul>
+    </ul>
+</div>
 
 <dialog #dialogRef>
     <form method="dialog">

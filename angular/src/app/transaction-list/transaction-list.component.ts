@@ -28,6 +28,7 @@ import { Transaction } from '../transaction';
 import { Paging } from '../paging';
 import { TransactionFilter, TransactionQueryParams } from '../app.types';
 import { ErrorService } from '../error.service';
+import { SelectionSummaryComponent } from '../selection-summary/selection-summary.component';
 
 type FilterTuple = [string, string];
 
@@ -37,6 +38,7 @@ type FilterTuple = [string, string];
         ReactiveFormsModule,
         RouterLink,
         CurrencyPipe,
+        SelectionSummaryComponent,
         DatePipe,
         AsyncPipe,
         DecimalPipe,

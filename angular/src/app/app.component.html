@@ -1,18 +1,15 @@
 <div id="shell">
-    <div>
-        <nav>
-            <a href="/"><img id="app-logo" src="/ledger.svg" /></a>
-            <ul>
-                <li><a routerLink="/accounts" routerLinkActive="active">Accounts</a></li>
-                <li><a routerLink="/transactions" routerLinkActive="active">Transactions</a></li>
-                <li><a routerLink="/tags" routerLinkActive="active">Tags</a></li>
-                <li><a routerLink="/drafts"
-                       routerLinkActive="active"
-                       [hidden]="draftCount === 0">Drafts <span>({{ draftCount }})</span></a></li>
-            </ul>
-            <app-selection-summary></app-selection-summary>
-        </nav>
-    </div>
+    <nav id="app-nav">
+        <a id="app-logo" href="/"><img src="/ledger.svg" alt="Ledger" title="" /></a>
+        <ul>
+            <li><a routerLink="/accounts" routerLinkActive="active">Accounts</a></li>
+            <li><a routerLink="/transactions" routerLinkActive="active">Transactions</a></li>
+            <li><a routerLink="/tags" routerLinkActive="active">Tags</a></li>
+            <li><a routerLink="/drafts"
+                   routerLinkActive="active"
+                   [hidden]="draftCount === 0">Drafts <span>({{ draftCount }})</span></a></li>
+        </ul>
+    </nav>
 
     <div>
         <app-error-message [message]="errorMessage" [httpCode]="errorHttpCode"></app-error-message>
