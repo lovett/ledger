@@ -1,11 +1,3 @@
-fieldset {
-    border: 0;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: 1em;
-}
-
 table {
     width: 100%;
     border-collapse: collapse;
@@ -62,7 +54,7 @@ td p {
     grid-area: selectors;
     display: flex;
     gap: 1em;
-    padding-top: 1em;
+    margin-top: 1em;
 }
 
 .tag-list {

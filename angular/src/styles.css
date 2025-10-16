@@ -34,12 +34,6 @@ button {
     font-size: inherit;
 }
 
-fieldset {
-    padding: 0;
-    border: 0;
-    margin: 0;
-}
-
 h1 {
     font-size: var(--big);
     line-height: 1;
@@ -107,9 +101,10 @@ textarea {
     top: 0;
     background-color: #fff;
     grid-template-columns: 1fr auto;
-    align-items: center;
+    align-items: start;
     justify-content: space-between;
-    padding: 1em 0;
+    padding-top: 1em;
+    padding-bottom: 2em;
     grid-template-areas:
         "title action"
         "cancel cancel";

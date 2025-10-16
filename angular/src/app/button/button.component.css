@@ -1,15 +1,15 @@
 BUTTON {
     border: 0;
     margin: 0;
-    padding: .5em 1em;
+    padding: 0 1em;
+    line-height: 1.75;
     display: flex;
-    gap: 0.5em;
+    gap: 0 0.25em;
     align-items: center;
-    border-radius: .75em;
+    border-radius: .25em;
     background-color: #5f816a;
     color: #fff;
     cursor: pointer;
-    height: 2.5em;
 }
 
 BUTTON:hover {
@@ -26,6 +26,11 @@ BUTTON[disabled]:active {
     background-color: #666;
     color: currentColor;
     opacity: 0.5;
+}
+
+BUTTON .icon {
+    width: 1em;
+    height: 1em;
 }
 
 .delete {
