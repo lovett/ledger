@@ -82,7 +82,7 @@
 
 </header>
 
-<div id="page-content" class="sleeve">
+<div class="sleeve">
     <table #tableRef [class]="{showFuture: canShowFuture}">
         @for (transaction of (transactions$ | async); track transaction.id) {
 

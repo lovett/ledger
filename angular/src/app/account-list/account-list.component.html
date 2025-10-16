@@ -3,7 +3,7 @@
     <app-button [routerLink]="'/accounts/new'" label="Add" [icon]="'add'"></app-button>
 </header>
 
-<div id="page-content" class="cards">
+<div class="cards">
     @for (account of (accounts$ | async); track account.id) {
     <div class="card" [class.inactive]="account.closed_on">
         <div class="title">

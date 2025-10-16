@@ -21,7 +21,7 @@
 </header>
 }
 
-<form  id="page-content" (ngSubmit)="save()" [formGroup]="transactionForm" autocomplete="off">
+<form (ngSubmit)="save()" [formGroup]="transactionForm" autocomplete="off">
     <input type="hidden" formControlName="id" />
 
     @if (autocompleteCandidates$ | async; as candidates) {

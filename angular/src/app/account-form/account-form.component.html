@@ -13,7 +13,7 @@
 </header>
 
 
-<form id="page-content" (ngSubmit)="save()" [formGroup]="accountForm" autocomplete="off">
+<form (ngSubmit)="save()" [formGroup]="accountForm" autocomplete="off">
     <input type="hidden" formControlName="id" />
     <div>
         <app-label [control]="name" text="Name" />

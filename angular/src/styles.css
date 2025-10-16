@@ -106,12 +106,10 @@ textarea {
     position: sticky;
     top: 0;
     background-color: #fff;
-    padding: 0.5em;
     grid-template-columns: 1fr auto;
     align-items: center;
     justify-content: space-between;
-    padding-top: 1em;
-    padding-bottom: 1em;
+    padding: 1em 0;
     grid-template-areas:
         "title action"
         "cancel cancel";
@@ -133,14 +131,6 @@ textarea {
 
 #page-header .cancel {
     grid-area: cancel;
-}
-
-#page-content {
-    margin: 0 0.5em;
-}
-
-@media (min-width: 850px) {
-    margin: 0;
 }
 
 .icon {
