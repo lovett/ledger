@@ -1,6 +1,6 @@
 <header id="page-header">
     <h1>Accounts</h1>
-    <app-button [routerLink]="'/accounts/new'" label="Add" [icon]="'add'"></app-button>
+    <app-button [routerLink]="'/accounts/new'" label="Add Account" [icon]="'add'"></app-button>
 </header>
 
 <div class="cards">
@@ -25,7 +25,17 @@
         <ul>
             <li [ngClass]="{balance: true, negative: account.balance < 0}">{{ account.balance! | currency }}</li>
 
-            <li [ngClass]="{secondary: true, pending: true, negative: account.balance_pending < 0}">{{ account.balance_pending! | currency }} pending</li>
+            @if (account.balance_pending !== 0) {
+            <li [ngClass]="{secondary: true, negative: account.balance_pending < 0}">{{ account.balance_pending! | currency }} pending</li>
+            }
+
+            @if (account.balance_future !== 0) {
+            <li [ngClass]="{secondary: true, negative: account.balance_future < 0}">{{ account.balance_future! | currency }} future</li>
+            }
+
+            @if (account.balance_final != account.balance) {
+            <li [ngClass]="{secondary: true, final: true, negative: account.balance_final < 0}">{{ account.balance_final! | currency }} final</li>
+            }
 
             @if (!account.closed_on) {
             <li class="transaction">

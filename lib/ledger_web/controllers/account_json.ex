@@ -27,6 +27,8 @@ defmodule LedgerWeb.AccountJSON do
       logo_hash: account.logo_hash,
       balance: account.balance,
       balance_pending: account.balance_pending,
+      balance_future: account.balance_future,
+      balance_final: account.balance_final,
       withdrawl_count: account.withdrawl_count,
       deposit_count: account.deposit_count,
       routing_number: account.routing_number,

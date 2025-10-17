@@ -52,6 +52,8 @@ export type AccountRecord = {
     note?: string;
     balance: number;
     balance_pending: number;
+    balance_future: number;
+    balance_final: number;
     total_pending: number;
     last_active?: string;
     logo_mime?: string;

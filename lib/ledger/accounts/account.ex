@@ -17,6 +17,8 @@ defmodule Ledger.Accounts.Account do
     field :account_number, :string
     field :balance, :integer, virtual: true
     field :balance_pending, :integer, virtual: true
+    field :balance_future, :integer, virtual: true
+    field :balance_final, :integer, virtual: true
     field :deposit_count, :integer, virtual: true
     field :withdrawl_count, :integer, virtual: true
     has_many :transactions, Transaction

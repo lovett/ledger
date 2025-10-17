@@ -148,6 +148,18 @@ defmodule Ledger.Transactions do
     balance_map(deposits, withdrawls)
   end
 
+  def list_final_balances do
+    deposits = tally_final_deposits()
+    withdrawls = tally_final_withdrawls()
+    balance_map(deposits, withdrawls)
+  end
+
+  def list_future_balances do
+    deposits = tally_future_deposits()
+    withdrawls = tally_future_withdrawls()
+    balance_map(deposits, withdrawls)
+  end
+
   def list_pending_balances do
     deposits = tally_pending_deposits()
     withdrawls = tally_pending_withdrawls()
@@ -202,13 +214,23 @@ defmodule Ledger.Transactions do
                   where: t.account_id == ^account_id
   end
 
-  def tally_pending_deposits do
-    filter = dynamic([t], is_nil(t.cleared_on))
+  def tally_deposits() do
+    filter = dynamic([t], not is_nil(t.cleared_on))
     tally_deposits(filter)
   end
 
-  def tally_deposits() do
-    filter = dynamic([t], not is_nil(t.cleared_on))
+  def tally_pending_deposits do
+    filter = dynamic([t], is_nil(t.cleared_on) and t.occurred_on < ^Date.utc_today())
+    tally_deposits(filter)
+  end
+
+  def tally_future_deposits do
+    filter = dynamic([t], t.occurred_on > ^Date.utc_today())
+    tally_deposits(filter)
+  end
+
+  def tally_final_deposits() do
+    filter = dynamic(true)
     tally_deposits(filter)
   end
 
@@ -220,13 +242,23 @@ defmodule Ledger.Transactions do
                   select: %{account_id: t.destination_id, total_amount: sum(t.amount)}
   end
 
-  def tally_pending_withdrawls do
-    filter = dynamic([t], is_nil(t.cleared_on))
+  def tally_withdrawls do
+    filter = dynamic([t], not is_nil(t.cleared_on))
     tally_withdrawls(filter)
   end
 
-  def tally_withdrawls do
-    filter = dynamic([t], not is_nil(t.cleared_on))
+  def tally_pending_withdrawls do
+    filter = dynamic([t], is_nil(t.cleared_on) and t.occurred_on < ^Date.utc_today())
+    tally_withdrawls(filter)
+  end
+
+  def tally_future_withdrawls do
+    filter = dynamic([t], t.occurred_on > ^Date.utc_today())
+    tally_withdrawls(filter)
+  end
+
+  def tally_final_withdrawls() do
+    filter = dynamic(true)
     tally_withdrawls(filter)
   end
 

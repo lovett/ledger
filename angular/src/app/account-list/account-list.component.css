@@ -87,8 +87,15 @@
     padding-bottom: 0;
 }
 
-.card li.pending {
+.card li.secondary {
     font-size: var(--smaller);
+}
+
+.card li.final {
+    font-weight: bold;
+}
+
+.card li.secondary:last-of-type {
     padding-bottom: 2em;
 }
 

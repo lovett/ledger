@@ -10,13 +10,18 @@ defmodule LedgerWeb.AccountController do
   def index(conn, _params) do
     balances = Transactions.list_balances()
     pending_balances = Transactions.list_pending_balances()
+    future_balances = Transactions.list_future_balances()
+    final_balances = Transactions.list_final_balances()
     deposit_counts = Transactions.count_deposits()
     withdrawl_counts = Transactions.count_withdrawls()
     accounts = Accounts.list_accounts()
     |> Enum.map(fn account -> %{account | balance: Map.get(balances, account.id, 0)} end)
     |> Enum.map(fn account -> %{account | balance_pending: Map.get(pending_balances, account.id, 0)} end)
+    |> Enum.map(fn account -> %{account | balance_future: Map.get(future_balances, account.id, 0)} end)
+    |> Enum.map(fn account -> %{account | balance_final: Map.get(final_balances, account.id, 0)} end)
     |> Enum.map(fn account -> %{account | deposit_count: Map.get(deposit_counts, account.id, 0)} end)
     |> Enum.map(fn account -> %{account | withdrawl_count: Map.get(withdrawl_counts, account.id, 0)} end)
+
     render(conn, :index, accounts: accounts)
   end
 

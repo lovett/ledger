@@ -9,6 +9,8 @@ export class Account {
     note = '';
     balance = 0;
     balance_pending = 0;
+    balance_future = 0;
+    balance_final = 0;
     total_pending = 0;
     last_active?: Date;
     logo_mime = '';
@@ -26,6 +28,8 @@ export class Account {
         a.name = record.name ?? '';
         a.balance = (record.balance ?? 0) / 100;
         a.balance_pending = (record.balance_pending ?? 0) / 100;
+        a.balance_future = (record.balance_future ?? 0) / 100;
+        a.balance_final = (record.balance_final ?? 0) / 100;
         a.total_pending = record.total_pending ?? 0;
         a.account_number = record.account_number ?? '';
         a.routing_number = record.routing_number ?? '';
