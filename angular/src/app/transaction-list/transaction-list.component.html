@@ -90,11 +90,10 @@
         <thead>
             <tr>
                 <th></th>
-                <th class="align-right">ID</th>
                 <th class="align-right">Amount</th>
                 <th class="align-left">Details</th>
                 <th class="align-left">Account</th>
-                <th class="align-right">Date</th>
+                <th class="align-left">Date</th>
                 <th class="align-center">Status</th>
             </tr>
         </thead>
@@ -103,10 +102,7 @@
         <tr [class]="transaction.rowClasses">
             <td><input type="checkbox" (click)="toggleSelection(transaction)" [checked]="transaction.selected" /></td>
             <td class="align-right nowrap">
-                <a [routerLink]="['/transactions', transaction.id, 'edit']">{{ transaction.id }}</a>
-            </td>
-            <td class="align-right nowrap">
-                {{ transaction.amount | currency }}
+                <a [routerLink]="['/transactions', transaction.id, 'edit']">{{ transaction.amount | currency }}</a>
                 <div class="transaction-type">{{ transaction.transactionType }}</div>
                 @if (transaction.receipt_mime) {
                 <div class="receipt">
@@ -156,7 +152,7 @@
                 </a>
                 }
             </td>
-            <td class="align-right">
+            <td>
                 {{ transaction.occurred_on|date:'yyyy\-MM\-dd' }}
             </td>
 
