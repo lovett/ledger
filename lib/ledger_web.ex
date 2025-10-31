@@ -28,6 +28,7 @@ defmodule LedgerWeb do
     main
     polyfills
     styles
+    favicon
   )
 
   def router do
