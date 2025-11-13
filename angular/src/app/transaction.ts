@@ -146,7 +146,7 @@ export class Transaction {
         formData.set('transaction[payee]', this.payee);
         formData.set(
             'transaction[amount]',
-            Math.trunc(this.amount * 100).toString(),
+            (this.amount * 100).toFixed(),
         );
         formData.set('transaction[occurred_on]', this.ymd(this.occurred_on));
 
