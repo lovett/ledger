@@ -1,6 +1,6 @@
 :root {
     --smaller: 0.85em;
-    --big: 1.75em;
+    --big: 1.5em;
 }
 
 ::backdrop {
@@ -101,10 +101,10 @@ textarea {
     top: 0;
     background-color: #fff;
     grid-template-columns: 1fr auto;
-    align-items: start;
+    align-items: center;
     justify-content: space-between;
     padding-top: 1em;
-    padding-bottom: 2em;
+    padding-bottom: 1em;
     grid-template-areas:
         "title action"
         "cancel cancel";
