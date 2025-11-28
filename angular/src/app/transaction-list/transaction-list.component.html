@@ -69,6 +69,7 @@
         <input (input)="onSearchInput($event)" type="search" formControlName="query" placeholder="Search transactions" />
     </form>
 
+    @if (!loading) {
     <div class="counts">
         @if (paging.isVisible) {
         Showing {{ paging.displayStart | number }} to {{ paging.displayEnd | number }} of {{ paging.total | number }}
@@ -76,9 +77,12 @@
         Showing 0 of {{ paging.total | number }}
         }
     </div>
+    }
 
+    @if (!loading) {
     <ng-container [ngTemplateOutlet]="selectorsFragment"></ng-container>
     <app-selection-summary></app-selection-summary>
+    }
 
 </header>
 
