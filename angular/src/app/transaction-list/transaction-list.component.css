@@ -197,13 +197,17 @@ td .tag-list LI .icon {
     text-transform: uppercase;
 }
 
+TR.cleared TD {
+    background-color: #B4CFC7;
+}
+
 TR.cleared .minibanner {
     background-color: lightgreen;
 }
 
 TR.future TD {
-    background-color: rgba(204, 204, 204, 0.5);
-    color: #999;
+    background-color: #3E7CB1;
+    color: #fff;
 }
 
 TR.future .minibanner {
