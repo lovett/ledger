@@ -69,7 +69,7 @@ defmodule Ledger.Transactions do
   end
 
   @doc """
-  Returns a count of transactions that occur in the future.
+  Count transactions that occur after a cutoff date.
 
   ## Examples
 
@@ -77,13 +77,13 @@ defmodule Ledger.Transactions do
       1
 
   """
-  @spec count_future_transactions(filter:: %TransactionFilter{}) :: Ecto.Query.t()
-  def count_future_transactions(filter) do
+  @spec count_future_transactions(filter:: %TransactionFilter{}, cutoff:: Date.t()) :: Ecto.Query.t()
+  def count_future_transactions(filter, cutoff) do
     query = from t in base_query(filter.tag),
                  select: count(),
                  where: ^filter_account(filter),
                  where: ^filter_search(filter.search),
-                 where: t.occurred_on > ^Date.utc_today()
+                 where: t.occurred_on > ^cutoff
     Repo.one query
   end
 

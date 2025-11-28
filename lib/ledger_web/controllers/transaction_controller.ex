@@ -22,8 +22,15 @@ defmodule LedgerWeb.TransactionController do
     }
 
     transactions = Transactions.list_transactions(filter)
+
     count = Transactions.count_transactions(filter)
-    count_future = Transactions.count_future_transactions(filter)
+
+    today = Map.get(params, "today", "")
+    count_future = case Date.from_iso8601(today) do
+      {:ok, today} -> Transactions.count_future_transactions(filter, today)
+      _ -> Transactions.count_future_transactions(filter, Date.utc_today)
+    end
+
     render(conn, :index, transactions: transactions, count: count, count_future: count_future, filter: filter)
   end
 

@@ -83,6 +83,15 @@ export class TransactionService {
     ): Observable<TransactionList> {
         let params = new HttpParams();
 
+        const now = new Date();
+        const today = [
+            now.getFullYear(),
+            Number(now.getMonth() + 1).toString().padStart(2, "0"),
+            Number(now.getDate()).toString().padStart(2, "0")
+        ].join('-');
+
+        params = params.set('today', today);
+
         if (offset > 0) {
             params = params.set('offset', offset);
         }
