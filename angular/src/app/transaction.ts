@@ -129,8 +129,8 @@ export class Transaction {
         return {
             cleared: !!this.cleared_on,
             pending: !this.cleared_on,
-            selected: this.selected,
             future: this.isFuture,
+            visible: !this.isFuture,
         };
     }
 

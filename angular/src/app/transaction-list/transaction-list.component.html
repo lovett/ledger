@@ -39,23 +39,23 @@
 
 <ng-template #selectorsFragment>
     <div class="selectors">
-        @if (selections.length === 0) {
-        <a href="#" (click)="select('all', $event)">Select all</a>
-        } @else {
-        <a href="#" (click)="select('none', $event)">Unselect all</a>
-        }
+        <p>
+            Select
+            <a href="#" (click)="select('all', $event)">all</a>
+            <a href="#" (click)="select('none', $event)">none</a>
 
-        @if (hasPending && selections.length === 0) {
-        <a href="#" (click)="select('pending', $event)">Select pending</a>
-        }
+            @if (hasPending) {
+            <a href="#" (click)="select('pending', $event)">pending</a>
+            }
 
-        @if (hasPending && selections.length > 0) {
-        <a href="#" (click)="select('not-pending', $event)">Unselect pending</a>
-        }
+            @if (hasCleared) {
+            <a href="#" (click)="select('cleared', $event)">cleared</a>
+            }
 
-        @if (futureCount > 0 && paging.offset === 0) {
-        <a href="#" (click)="toggleFuture($event)">{{ canShowFuture ? 'Hide' : 'Show' }} {{ futureCount }} future {{ futureCount === 1 ? 'transaction' : 'transactions' }}</a>
-        }
+            @if (futureCount > 0 && paging.offset === 0) {
+            <a href="#" (click)="select('future', $event)">future ({{ futureCount }})</a>
+            }
+        </p>
     </div>
 </ng-template>
 

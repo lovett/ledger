@@ -58,6 +58,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
 
     paging: Paging = Paging.blank();
     hasPending = false;
+    hasCleared = false;
     selections: Transaction[] = [];
     loading = false;
     filters: FilterTuple[] = [];
@@ -119,6 +120,8 @@ export class TransactionListComponent implements OnInit, OnDestroy {
                             window.location.search,
                         );
                         if (data.length > 0) {
+                            this.hasCleared =
+                                data[0].filter((t) => t.cleared_on).length > 0;
                             this.hasPending =
                                 data[0].filter((t) => !t.cleared_on).length > 0;
                             this.paging = new Paging(
@@ -234,19 +237,30 @@ export class TransactionListComponent implements OnInit, OnDestroy {
 
         let selector = '';
         if (criteria === 'all') {
-            selector = 'input[type="checkbox"]';
+            selector = 'tr.visible input[type="checkbox"]:not(:checked)';
         }
 
         if (criteria === 'none') {
-            selector = 'input[type="checkbox"]:checked';
+            selector = 'tr.visible input[type="checkbox"]:checked';
         }
 
         if (criteria === 'pending') {
-            selector = 'tr.pending input[type="checkbox"]:not(:checked)';
+            selector = 'tr.visible.pending input[type="checkbox"]:not(:checked)';
         }
 
-        if (criteria === 'not-pending') {
-            selector = 'tr.pending input[type="checkbox"]:checked';
+        if (criteria === 'cleared') {
+            selector = 'tr.visible.cleared input[type="checkbox"]:not(:checked)';
+        }
+
+        if (criteria === 'future') {
+            this.canShowFuture = !this.canShowFuture;
+
+            selector = 'tr.future input[type="checkbox"]';
+            if (this.canShowFuture) {
+                selector += ':not(:checked)';
+            } else {
+                selector += ':checked';
+            }
         }
 
         const checkboxes =
@@ -254,11 +268,6 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         for (const checkbox of checkboxes) {
             checkbox.click();
         }
-    }
-
-    toggleFuture(event?: MouseEvent) {
-        if (event) event.preventDefault();
-        this.canShowFuture = !this.canShowFuture;
     }
 
     /**

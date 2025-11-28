@@ -52,9 +52,10 @@ td p {
 
 .selectors {
     grid-area: selectors;
-    display: flex;
-    gap: 1em;
-    margin-top: 1em;
+}
+
+.selectors a {
+    margin-right: 0.5em;
 }
 
 .tag-list {
@@ -94,6 +95,7 @@ td .tag-list LI .icon {
 }
 
 #page-header {
+    padding-bottom: 0;
     grid-template-areas:
         "title action"
         "counts counts"
@@ -114,7 +116,6 @@ td .tag-list LI .icon {
 }
 
 #page-header app-selection-summary {
-    padding-top: 1em;
     grid-area: selection-summary;
 }
 
@@ -197,6 +198,11 @@ td .tag-list LI .icon {
     text-transform: uppercase;
 }
 
+TR.future-toggle TD {
+    font-size: .85em;
+    text-align: center;
+}
+
 TR.cleared TD {
     background-color: #B4CFC7;
 }
@@ -212,10 +218,6 @@ TR.future TD {
 
 TR.future .minibanner {
     background-color: none;
-}
-
-TABLE TR.selected TD {
-    background-color: lemonchiffon;
 }
 
 TABLE TR.future {
