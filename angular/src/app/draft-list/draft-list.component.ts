@@ -2,7 +2,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { Observable, of, tap } from 'rxjs';
 import { DraftService } from '../draft.service';
-import { ErrorService } from '../error.service';
 import { Draft } from '../draft';
 import { ButtonComponent } from '../button/button.component';
 import { TransactionFormComponent } from '../transaction-form/transaction-form.component';
@@ -20,7 +19,6 @@ import { TransactionFormComponent } from '../transaction-form/transaction-form.c
 })
 export class DraftListComponent implements OnInit {
     private draftService = inject(DraftService);
-    private errorService = inject(ErrorService);
 
     loading = false;
     errorMessage?: string;

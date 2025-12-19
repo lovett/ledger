@@ -1,5 +1,5 @@
 import { Component, inject, input, OnInit, ElementRef, viewChild } from '@angular/core';
-import { ReactiveFormsModule, FormGroup, FormControl, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { CurrencyPipe, AsyncPipe, formatDate } from '@angular/common';
 import { Transaction } from '../transaction';
@@ -38,7 +38,6 @@ function atLeastOneAccount(group: AbstractControl): ValidationErrors | null {
 export class TransactionFormComponent implements OnInit {
     private router = inject(Router);
     private route = inject(ActivatedRoute);
-    private formBuilder = inject(FormBuilder);
     private transactionService = inject(TransactionService);
     private tagService = inject(TagService);
 
@@ -197,10 +196,8 @@ export class TransactionFormComponent implements OnInit {
             return;
         }
 
-        let fieldDate;
-        if (field.value.trim() === '') {
-            fieldDate = new Date();
-        } else {
+        let fieldDate = new Date();
+        if (field.value.trim() !== '') {
             fieldDate = new Date(field.value);
         }
 

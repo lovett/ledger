@@ -30,12 +30,13 @@ export class TransactionService {
     }
 
     recallStoredFilters(): Params {
-        const storedValue =
-            window.sessionStorage.getItem(this.filterSessionKey) || '';
+        const storedValue = window.sessionStorage.getItem(this.filterSessionKey) || '';
 
         const searchParams = new URLSearchParams(storedValue);
         const params: Params = {};
-        searchParams.forEach((v, k) => (params[k] = v));
+        searchParams.forEach((v, k) => {
+            params[k] = v;
+        });
         return params;
     }
 
