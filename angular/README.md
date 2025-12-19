@@ -2,6 +2,10 @@
 
 The browser UI of Ledger uses [Angular v21](https://angular.dev/overview).
 
+Interaction with Angular's `ng` is wrapped by a mix task of the same name. A similar approach is used for `biome`.
+
+Aliases in `mix.exs` are available for common tasks.
+
 ## Development server
 
 To start a local development server, go to the repository root and run:
@@ -18,13 +22,13 @@ All interaction with `ng` should happen at the repository root through `mix`. Se
 To generate a new component, run:
 
 ```bash
-mix angular.ng generate component component-name
+mix ng.ng generate component component-name
 ```
 
 For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
 
 ```bash
-mix angular.ng generate --help
+mix ng.ng generate --help
 ```
 
 ## Building
@@ -32,7 +36,7 @@ mix angular.ng generate --help
 To build the project, run:
 
 ```bash
-mix angular.build
+mix ng.build
 ```
 
 Build artifacts will be placed in `priv/angular/browser`.
@@ -42,7 +46,7 @@ Build artifacts will be placed in `priv/angular/browser`.
 To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
 
 ```bash
-mix angular.test
+mix ng.test
 ```
 
 ## Running end-to-end tests
@@ -50,7 +54,7 @@ mix angular.test
 For end-to-end (e2e) testing, run:
 
 ```bash
-mix angular.e2e
+mix ng.e2e
 ```
 
 ## Resources

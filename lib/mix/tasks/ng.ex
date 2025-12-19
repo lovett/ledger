@@ -1,5 +1,5 @@
-defmodule Mix.Tasks.Angular.Ng do
-  @shortdoc "Run ng commands"
+defmodule Mix.Tasks.Ng do
+  @shortdoc "Run arbitrary ng commands"
 
   @moduledoc """
   A wrapper for Angular's ng utility.
