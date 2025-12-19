@@ -71,7 +71,7 @@ defmodule Ledger.MixProject do
         "assets.deploy"
       ],
       "angular.test": [
-        "angualr.ng test"
+        "angular.ng test"
       ],
       "angular.e2e": [
         "angular.ng e2e"
