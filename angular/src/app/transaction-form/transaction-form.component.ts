@@ -1,14 +1,5 @@
-import { Component, input, OnInit, ElementRef, viewChild } from '@angular/core';
-import {
-    ReactiveFormsModule,
-    FormArray,
-    FormGroup,
-    FormControl,
-    FormBuilder,
-    Validators,
-    AbstractControl,
-    ValidationErrors,
-} from '@angular/forms';
+import { Component, inject, input, OnInit, ElementRef, viewChild } from '@angular/core';
+import { ReactiveFormsModule, FormGroup, FormControl, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router, RouterLink, ActivatedRoute } from '@angular/router';
 import { CurrencyPipe, AsyncPipe, formatDate } from '@angular/common';
 import { Transaction } from '../transaction';
@@ -30,21 +21,6 @@ function atLeastOneAccount(group: AbstractControl): ValidationErrors | null {
     return { atLeastOneAccount: 'Specify at least one account' };
 }
 
-function dateRange(group: AbstractControl): ValidationErrors | null {
-    // const occurredOn = group.get('occurred_on')!.value;
-    // const clearedOn = group.get('cleared_on')!.value;
-
-    // if (!clearedOn) {
-    //     return null;
-    // }
-
-    // if (clearedOn >= occurredOn) {
-    //     return null;
-    // }
-
-    return { daterange: true };
-}
-
 @Component({
     selector: 'app-transaction-form',
     imports: [
@@ -60,6 +36,12 @@ function dateRange(group: AbstractControl): ValidationErrors | null {
     styleUrl: './transaction-form.component.css',
 })
 export class TransactionFormComponent implements OnInit {
+    private router = inject(Router);
+    private route = inject(ActivatedRoute);
+    private formBuilder = inject(FormBuilder);
+    private transactionService = inject(TransactionService);
+    private tagService = inject(TagService);
+
     tagsRef = viewChild.required<ElementRef>('tagsRef');
     transaction?: Transaction;
     errorMessage?: string;
@@ -92,15 +74,6 @@ export class TransactionFormComponent implements OnInit {
         receipt_url: new FormControl(''),
         existing_receipt_action: new FormControl(''),
     });
-    //}, {validators: dateRange});
-
-    constructor(
-        private router: Router,
-        private route: ActivatedRoute,
-        private formBuilder: FormBuilder,
-        private transactionService: TransactionService,
-        private tagService: TagService,
-    ) {}
 
     ngOnInit(): void {
         this.occurredOn.setValue(this.today);
@@ -143,7 +116,7 @@ export class TransactionFormComponent implements OnInit {
             switchMap((value: string) => {
                 const lastTag = value.split(',').pop()?.trim() || '';
                 return this.tagService.autocomplete(lastTag).pipe(
-                    catchError((error: Error) => {
+                    catchError(() => {
                         return of([]);
                     }),
                 );
@@ -379,7 +352,7 @@ export class TransactionFormComponent implements OnInit {
                 return this.transactionService
                     .getTransactions(0, 0, '', `payee:${value}`, 3, 'active')
                     .pipe(
-                        catchError((error: Error) => {
+                        catchError(() => {
                             return of([]);
                         }),
                         map((data) => (data.length > 0 ? data[0] : [])),

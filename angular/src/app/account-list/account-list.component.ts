@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CurrencyPipe, DatePipe, AsyncPipe, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Account } from '../account';
@@ -19,11 +19,11 @@ import { Observable, of, tap } from 'rxjs';
     templateUrl: './account-list.component.html',
     styleUrl: './account-list.component.css',
 })
-export class AccountListComponent {
+export class AccountListComponent implements OnInit {
+    private accountService = inject(AccountService);
+
     accounts$: Observable<Account[]> = of([]);
     loading = false;
-
-    constructor(private accountService: AccountService) {}
 
     ngOnInit() {
         this.loading = true;

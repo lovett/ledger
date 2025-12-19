@@ -1,10 +1,7 @@
+import { inject } from '@angular/core';
 import { Observable, map, throwError, catchError } from 'rxjs';
 import { Injectable } from '@angular/core';
-import {
-    HttpClient,
-    HttpContext,
-    HttpErrorResponse,
-} from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { Account } from './account';
 import { AccountRecord, ApiResponse } from './app.types';
 import { CACHEABLE, CLEARABLES } from './caching.interceptor';
@@ -13,7 +10,7 @@ import { CACHEABLE, CLEARABLES } from './caching.interceptor';
     providedIn: 'root',
 })
 export class AccountService {
-    constructor(private http: HttpClient) {}
+    private http = inject(HttpClient);
 
     cacheableContext(): HttpContext {
         return new HttpContext().set(CACHEABLE, true);

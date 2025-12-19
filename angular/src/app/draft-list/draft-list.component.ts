@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { Observable, of, tap } from 'rxjs';
 import { DraftService } from '../draft.service';
@@ -19,15 +19,13 @@ import { TransactionFormComponent } from '../transaction-form/transaction-form.c
     styleUrl: './draft-list.component.css'
 })
 export class DraftListComponent implements OnInit {
+    private draftService = inject(DraftService);
+    private errorService = inject(ErrorService);
+
     loading = false;
     errorMessage?: string;
     drafts$: Observable<Draft[]> = of([]);
     datetimeFormat = "EEEE MMMM d 'at' h:mm a";
-
-    constructor(
-        private draftService: DraftService,
-        private errorService: ErrorService,
-    ) {}
 
     ngOnInit() {
         this.getDrafts();

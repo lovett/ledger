@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ErrorMessageComponent } from './error-message/error-message.component';
@@ -17,17 +17,16 @@ import { ErrorTuple } from './app.types';
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
+    private draftService = inject(DraftService);
+    private errorService = inject(ErrorService);
     title = 'Ledger';
     errorMessage = '';
     errorHttpCode = 0;
     draftCount = 0;
     draftDeletionSubscription: Subscription;
 
-    constructor(
-        private draftService: DraftService,
-        private errorService: ErrorService
-    ) {
+    constructor() {
         this.draftDeletionSubscription = this.draftService.draftDeleted$.subscribe(() => {
             this.draftCount--;
         });

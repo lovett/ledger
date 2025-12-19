@@ -9,15 +9,15 @@
     <ul id="filters">
         @for (scope of filters; track scope[0]) {
         <li>
-            @if (scope[0] == "account") {
+            @if (scope[0] === "account") {
             <a class="remove" href="#" (click)="clearFilter('account', $event)"><svg class="icon"><use xlink:href="#close-circle"></use></svg></a>
             }
 
-            @if (scope[0] == "tag") {
+            @if (scope[0] === "tag") {
             <a class="remove" href="#" (click)="clearFilter('tag', $event)"><svg class="icon"><use xlink:href="#close-circle"></use></svg></a>
             }
 
-            @if (scope[0] == "search") {
+            @if (scope[0] === "search") {
             <a class="remove" href="#" (click)="clearFilter('search', $event)"><svg class="icon"><use xlink:href="#close-circle"></use></svg></a>
             }
 
@@ -66,7 +66,7 @@
     <app-button label="Add" icon="add" routerLink="/transactions/new"></app-button>
 
     <form (ngSubmit)="search()" [formGroup]="searchForm" autocomplete="off">
-        <input (input)="onSearchInput($event)" type="search" formControlName="query" placeholder="Search transactions" />
+        <input (input)="onSearchInput()" type="search" formControlName="query" placeholder="Search transactions" />
     </form>
 
     @if (!loading) {

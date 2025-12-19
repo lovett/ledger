@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, viewChild } from '@angular/core';
+import { Component, inject, OnInit, ElementRef, viewChild } from '@angular/core';
 import { AsyncPipe, DecimalPipe, CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Observable, of, tap } from 'rxjs';
@@ -18,14 +18,13 @@ import { ButtonComponent } from '../button/button.component';
     templateUrl: './tag-list.component.html',
     styleUrl: './tag-list.component.css',
 })
-export class TagListComponent {
+export class TagListComponent implements OnInit {
+    private tagService = inject(TagService);
     dialogRef = viewChild.required<ElementRef>('dialogRef');
 
     tags$: Observable<Tag[]> = of([]);
     selectedTag?: Tag;
     loading = false;
-
-    constructor(private tagService: TagService) {}
 
     ngOnInit() {
         this.loading = true;

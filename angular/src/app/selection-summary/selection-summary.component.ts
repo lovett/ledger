@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CurrencyPipe, CommonModule } from '@angular/common';
 import { TransactionService } from '../transaction.service';
-import { Transaction } from '../transaction';
 
 @Component({
     selector: 'app-selection-summary',
@@ -10,10 +9,10 @@ import { Transaction } from '../transaction';
     styleUrl: './selection-summary.component.css',
 })
 export class SelectionSummaryComponent implements OnInit {
+    private transactionService = inject(TransactionService);
+
     amount = 0;
     count = 0;
-
-    constructor(private transactionService: TransactionService) {}
 
     ngOnInit() {
         this.transactionService.selection$.subscribe((selection) => {

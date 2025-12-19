@@ -1,4 +1,4 @@
-import { Component, input, OnInit, OnChanges } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { AsyncPipe } from '@angular/common';
 import { Observable } from 'rxjs';
 import { ReactiveFormsModule, FormControl } from '@angular/forms';
@@ -18,7 +18,8 @@ function numeric(value: number | string | undefined): number {
     templateUrl: './account-menu.component.html',
     styleUrl: './account-menu.component.css',
 })
-export class AccountMenuComponent implements OnInit, OnChanges {
+export class AccountMenuComponent {
+    private accountService = inject(AccountService);
     control = input<FormControl>();
     label = input<string>();
     selectedId = input(0, { transform: numeric });
@@ -26,25 +27,8 @@ export class AccountMenuComponent implements OnInit, OnChanges {
     error = input<string>();
     accounts$: Observable<Account[]>;
 
-    constructor(private accountService: AccountService) {
+    constructor() {
         this.accounts$ = this.accountService.getAccounts();
-    }
-
-    ngOnChanges() {}
-
-    ngOnInit() {
-        // this.accountService.getAccounts().subscribe({
-        //     next: (account: Account) => {
-        //         for (const acjsonAccount of accountList.accounts) {
-        //             const  a = Account.fromJson(jsonAccount);
-        //             if (a.closed_on && a.uid !== this.control.value) {
-        //                 continue;
-        //             }
-        //             this.accounts.push(a);
-        //         }
-        //     },
-        //     error: (err: Error) => console.log(err),
-        // });
     }
 
     compare(a1: Account, a2: Account): boolean {
@@ -73,7 +57,7 @@ export class AccountMenuComponent implements OnInit, OnChanges {
     }
 
     disabledReason(account: Account): string {
-        if (account.id === this.block()) '(Already selected)';
+        if (account.id === this.block()) return '(Already selected)';
         if (account.closed_on) return '(Closed)';
         return '';
     }

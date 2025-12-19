@@ -1,4 +1,6 @@
 export class Paging {
+    readonly firstOffset = 0;
+
     currentlyShowing = 0;
     total = 0;
     offset = 0;
@@ -23,10 +25,6 @@ export class Paging {
 
     get isVisible(): boolean {
         return this.total > 0;
-    }
-
-    get firstOffset(): number {
-        return 0;
     }
 
     get lastOffset(): number {

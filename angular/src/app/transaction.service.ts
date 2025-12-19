@@ -1,33 +1,22 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Params } from '@angular/router';
-import {
-    HttpClient,
-    HttpContext,
-    HttpErrorResponse,
-    HttpParams,
-} from '@angular/common/http';
-import { Observable, Subject, map, throwError } from 'rxjs';
+import { HttpClient, HttpContext, HttpParams } from '@angular/common/http';
+import { Observable, Subject, map } from 'rxjs';
 import { Transaction } from './transaction';
-import {
-    TransactionListResponse,
-    TransactionList,
-    TransactionRecord,
-    ApiResponse,
-    TransactionFilter,
-} from './app.types';
-import { CACHEABLE, CLEARABLES } from './caching.interceptor';
+import { TransactionListResponse, TransactionList, TransactionRecord, ApiResponse } from './app.types';
+import { CLEARABLES } from './caching.interceptor';
 
 @Injectable({
     providedIn: 'root',
 })
 export class TransactionService {
+    private http = inject(HttpClient);
+
     selectionSubject = new Subject<Transaction[]>();
     selection$ = this.selectionSubject.asObservable();
     selections: Transaction[] = [];
     filterSessionKey = 'transaction:filters';
     previousFilterSessionKey = 'transaction:filters:previous';
-
-    constructor(private http: HttpClient) {}
 
     clearableContext(): HttpContext {
         return new HttpContext().set(CLEARABLES, [

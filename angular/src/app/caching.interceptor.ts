@@ -1,9 +1,5 @@
-import {
-    HttpResponse,
-    HttpInterceptorFn,
-    HttpContextToken,
-} from '@angular/common/http';
-import { Observable, of, tap } from 'rxjs';
+import { HttpResponse, HttpInterceptorFn, HttpContextToken } from '@angular/common/http';
+import { of, tap } from 'rxjs';
 
 export const CACHEABLE = new HttpContextToken(() => false);
 export const CLEARABLES = new HttpContextToken(() => []);

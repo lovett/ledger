@@ -1,26 +1,8 @@
-import {
-    Component,
-    output,
-    OnDestroy,
-    OnInit,
-    ElementRef,
-    viewChild,
-} from '@angular/core';
-import {
-    ReactiveFormsModule,
-    FormGroup,
-    FormControl,
-    Validators,
-} from '@angular/forms';
+import { Component, inject, OnDestroy, OnInit, ElementRef, viewChild } from '@angular/core';
+import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { ButtonComponent } from '../button/button.component';
-import { CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, NgTemplateOutlet, CommonModule } from '@angular/common';
-import {
-    RouterLink,
-    Router,
-    ActivatedRoute,
-    Params,
-    ParamMap,
-} from '@angular/router';
+import { CurrencyPipe, DatePipe, AsyncPipe, DecimalPipe, CommonModule } from '@angular/common';
+import { RouterLink, Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { TransactionService } from '../transaction.service';
 import { Observable, Subscription, of, map, tap, catchError } from 'rxjs';
@@ -49,7 +31,13 @@ type FilterTuple = [string, string];
     styleUrl: './transaction-list.component.css',
 })
 export class TransactionListComponent implements OnInit, OnDestroy {
+    private transactionService = inject(TransactionService);
+    private errorService = inject(ErrorService);
+    private router = inject(Router);
+    public route = inject(ActivatedRoute);
+
     tableRef = viewChild.required<ElementRef>('tableRef');
+
     transactions$: Observable<Transaction[]> = of([]);
 
     searchForm = new FormGroup({
@@ -66,13 +54,6 @@ export class TransactionListComponent implements OnInit, OnDestroy {
     selectionSubscription?: Subscription;
     futureCount = 0;
     canShowFuture = false;
-
-    constructor(
-        private transactionService: TransactionService,
-        private errorService: ErrorService,
-        public route: ActivatedRoute,
-        private router: Router,
-    ) {}
 
     ngOnInit() {
         this.selectionSubscription =
@@ -149,7 +130,7 @@ export class TransactionListComponent implements OnInit, OnDestroy {
         return this.searchForm.get('query') as FormControl;
     }
 
-    onSearchInput(event: Event) {
+    onSearchInput() {
         if (this.query.value === '') {
             this.clearFilter('search');
         }

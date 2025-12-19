@@ -1,5 +1,5 @@
 import { Observable, map, throwError, catchError } from 'rxjs';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import {
     HttpClient,
     HttpContext,
@@ -17,7 +17,7 @@ type ListResponse = ApiResponse<TagRecord[]>;
     providedIn: 'root',
 })
 export class TagService {
-    constructor(private http: HttpClient) {}
+    private http = inject(HttpClient);
 
     cacheableContext(): HttpContext {
         return new HttpContext().set(CACHEABLE, true);

@@ -3,19 +3,19 @@ import { Transaction } from './transaction';
 
 export type ErrorTuple = [HttpErrorResponse, string?];
 
-export type ApiResponse<T> = {
+export interface ApiResponse<T> {
     data: T;
     count: number;
 };
 
-export type TransactionQueryParams = {
+export interface TransactionQueryParams {
     account_id?: number | null;
     tag?: string | null;
     query?: string | null;
     offset?: number | null;
 };
 
-export type TransactionFilter = {
+export interface TransactionFilter {
     offset: number;
     tag: string;
     search: string;
@@ -23,14 +23,14 @@ export type TransactionFilter = {
     account: AccountRecord;
 };
 
-export type TagRecord = {
+export interface TagRecord {
     id: number;
     name: string;
     transaction_count: number;
     last_used?: string;
 };
 
-export type DraftRecord = {
+export interface DraftRecord {
     id: number,
     source: string,
     initial_content: string,
@@ -43,7 +43,7 @@ export type DraftRecord = {
     updated_at: string;
 };
 
-export type AccountRecord = {
+export interface AccountRecord {
     id: number;
     name: string;
     opened_on: string;
@@ -64,7 +64,7 @@ export type AccountRecord = {
     routing_number?: string;
 };
 
-export type TransactionRecord = {
+export interface TransactionRecord {
     id: number;
     occurred_on: string;
     cleared_on?: string;

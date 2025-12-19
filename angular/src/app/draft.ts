@@ -1,4 +1,4 @@
-import { DraftRecord, TransactionRecord } from './app.types';
+import { DraftRecord } from './app.types';
 import { Transaction } from './transaction';
 
 

@@ -33,7 +33,7 @@
             <li [ngClass]="{secondary: true, negative: account.balance_future < 0}">{{ account.balance_future! | currency }} future</li>
             }
 
-            @if (account.balance_final != account.balance) {
+            @if (account.balance_final !== account.balance) {
             <li [ngClass]="{secondary: true, final: true, negative: account.balance_final < 0}">{{ account.balance_final! | currency }} final</li>
             }
 

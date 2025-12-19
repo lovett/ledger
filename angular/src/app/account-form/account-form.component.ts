@@ -1,12 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import {
-    ReactiveFormsModule,
-    FormGroup,
-    FormControl,
-    FormBuilder,
-    Validators,
-    AsyncValidatorFn,
-} from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { accountDatesValidator } from './account-dates.directive';
 import { Router, ActivatedRoute, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -14,7 +7,6 @@ import { Account } from '../account';
 import { AccountService } from '../account.service';
 import { ButtonComponent } from '../button/button.component';
 import { LabelComponent } from '../label/label.component';
-import { Observable, map, of } from 'rxjs';
 import { ErrorService } from '../error.service';
 
 @Component({
@@ -29,6 +21,10 @@ export class AccountFormComponent implements OnInit {
     deletionConfirmationMessage?: string;
     errorMessage?: string;
     returnRoute = ['/accounts'];
+    private accountService = inject(AccountService);
+    private errorService = inject(ErrorService);
+    private router = inject(Router);
+    private route = inject(ActivatedRoute);
 
     accountForm = new FormGroup(
         {
@@ -47,14 +43,6 @@ export class AccountFormComponent implements OnInit {
         },
         { validators: accountDatesValidator },
     );
-
-    constructor(
-        private router: Router,
-        private route: ActivatedRoute,
-        private formBuilder: FormBuilder,
-        private accountService: AccountService,
-        private errorService: ErrorService,
-    ) {}
 
     ngOnInit(): void {
         const id = Number(this.route.snapshot.paramMap.get('id') || 0);
