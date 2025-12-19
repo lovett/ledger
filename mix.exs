@@ -67,6 +67,7 @@ defmodule Ledger.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
+      lint: [ "ng lint", "biome lint"],
       "ng.build": [
         "ng.ng build --configuration production",
         "assets.deploy"
@@ -85,9 +86,6 @@ defmodule Ledger.MixProject do
       ],
       "assets.deploy": [
         "phx.digest priv/angular/browser"
-      ],
-      "biome.lint": [
-        "biome lint"
       ],
       "biome.format": [
         "biome format --fix"
