@@ -7,7 +7,11 @@ defmodule LedgerWeb.Router do
     plug :fetch_live_flash
     plug :put_root_layout, html: {LedgerWeb.Layouts, :root}
     plug :protect_from_forgery
-    plug :put_secure_browser_headers
+    plug :put_secure_browser_headers, %{
+      "referrer-policy" => "no-referrer",
+      "x-frame-options" => "deny",
+      "content-security-policy" => "default-src 'self' 'unsafe-inline'; img-src 'self' data:; script-src 'self'",
+    }
   end
 
   pipeline :api do
