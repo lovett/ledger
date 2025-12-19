@@ -1,7 +1,8 @@
-# Actual FROM is provided via command-line flag. See base.ex.
+# Actual FROM is provided via command-line flag.
+# See lib/mix/tasks/build/base.ex.
 #
-# Scratch is only used as a placeholder to avoid the error "stage 1
-# requires a FROM instruction".
+# Scratch is only used as a placeholder to avoid the error
+# "stage 1 requires a FROM instruction".
 FROM scratch
 
 RUN rm -f /etc/yum.repos.d/fedora-cisco-openh264.repo && \

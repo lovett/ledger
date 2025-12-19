@@ -5,7 +5,7 @@ defmodule Mix.Tasks.Build.Base do
   The base image is a minor modification to an official Fedora image
   that sets the default locale to UTF-8.
 
-  Out of the box, UTF-8 is not available and server startup produces
+  By default, UTF-8 is not available and server startup produces
   the following warnings:
 
   > sh: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8):
@@ -30,7 +30,7 @@ defmodule Mix.Tasks.Build.Base do
   use Mix.Task
 
   def run([]) do
-    from = "registry.fedoraproject.org/fedora-minimal:42"
+    from = "registry.fedoraproject.org/fedora-minimal:43"
     System.cmd("podman", [
       "build",
       "--from=#{from}",
@@ -41,8 +41,8 @@ defmodule Mix.Tasks.Build.Base do
       "org.opencontainers.image.base.name=#{from}",
       "."
     ],
-      into: IO.stream(),
-      stderr_to_stdout: true
+               into: IO.stream(),
+               stderr_to_stdout: true
     )
 
     System.cmd("podman", [
@@ -50,8 +50,8 @@ defmodule Mix.Tasks.Build.Base do
       "prune",
       "-f"
     ],
-      into: IO.stream(),
-      stderr_to_stdout: true
+               into: IO.stream(),
+               stderr_to_stdout: true
     )
   end
 end
