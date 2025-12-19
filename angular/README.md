@@ -1,6 +1,6 @@
 # Angular
 
-This project was originally generated using Angular CLI version 19.1.6.
+The browser UI of Ledger uses [Angular v21](https://angular.dev/overview).
 
 ## Development server
 
