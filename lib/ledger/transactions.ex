@@ -160,6 +160,8 @@ defmodule Ledger.Transactions do
       end
 
     (value <> suffix)
+    # Prevent example.com from becoming examplecom.
+    |> String.replace(".", "*")
     |> String.replace(~r/[^\w :^*"]/, "")
     |> String.replace(~r"date:([\d*]+)", "occurred_on:^\\1*")
     |> String.replace(~r/(?<!\boccurred_on|\bamount|\bpayee|\bnote)\s*:\s*/, " ")
